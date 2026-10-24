@@ -9,10 +9,11 @@ const ORIGIN='https://w0980077002-create.github.io';
 const FUNCTION_URL='https://ksikzkrvuuhermhnbycn.supabase.co/functions/v1/territory-v2-api';
 const profile={telegramUserId:1234567,displayName:'Тестовый викинг',photoUrl:null,authDate:1780000000};
 const snapshot={registered:true,player:{id:'some-private-staging-id',displayName:profile.displayName,avatarRef:null},hero:null,wallets:[]};
-let verified=0,got=0,joined=0,klass='';
+let verified=0,got=0,joined=0,klass='',budgets=0;
 const deps={
   enabled:true,allowOrigin:ORIGIN,
   verify:async raw=>{verified++;if(raw!=='signed-raw-init-data')throw Error('bad signature');return profile;},
+  enforceRateLimit:async()=>{budgets++;return true;},
   getProfile:async user=>{got++;assert.deepEqual(user,profile);return snapshot;},
   register:async(user,c)=>{joined++;klass=c;assert.deepEqual(user,profile);return snapshot;}
 };
@@ -58,8 +59,17 @@ assert.equal(pr.headers.get('access-control-allow-headers'),'content-type');
 const failedPreflight=await handleV2GatewayRequest(new Request(FUNCTION_URL+'/profile',{method:'OPTIONS',headers:{Origin:'https://attacker.example'}}),deps);
 assert.equal(failedPreflight.status,403);
 assert.equal(verified,4,'unexpected requests must not invoke Telegram verification');
+assert.equal(budgets,3,'budget must follow verification but precede player database');
 assert.equal(got,1);
 assert.equal(joined,1);
+const rejectedByBudget=await handleV2GatewayRequest(new Request(FUNCTION_URL+'/join',{
+ method:'POST',headers:{Origin:ORIGIN,'Content-Type':'application/json'},
+ body:JSON.stringify({initData:'signed-raw-init-data',classId:'berserker'})
+}),{...deps,enforceRateLimit:async()=>false});
+assert.equal(rejectedByBudget.status,429);
+assert.deepEqual(await rejectedByBudget.json(),{error:'RATE_LIMITED'});
+assert.equal(rejectedByBudget.headers.get('cache-control'),'no-store');
+assert.equal(joined,1,'429 must not register player');
 const edge=readFileSync('supabase/functions/territory-v2-api/index.ts','utf8');
 assert(edge.includes('V2_ENABLE_TELEGRAM_GATEWAY') && edge.includes("==='yes'"));
 assert(edge.includes('TERRITORY_V2_BOT_TOKEN'));
@@ -69,6 +79,8 @@ assert(!edge.includes('wmyrdpbwlkzsktnhookx'),'V1 project ID in deployable code'
 assert(edge.includes('prepare:false'));
 assert(edge.includes('territory_v2.upsert_verified_telegram_player'));
 assert(edge.includes('territory_v2.create_character_once'));
+assert(edge.includes('territory_v2.try_gateway_rate_limit'));
+assert(edge.includes('enforceRateLimit'));
 assert(!edge.includes("Deno.env.get('BOT_TOKEN')"));
 assert(!edge.includes('SUPABASE_SERVICE_ROLE_KEY'),'No service role secret in runtime code');
 console.log('OK: V2 gateway disabled-by-default, strict Origin, no user ID injection, HMAC gate, class validation, CORS, sensitive data not cached');
