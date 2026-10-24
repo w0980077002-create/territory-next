@@ -4,6 +4,7 @@ import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, ty
 import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import { DEMO_START_CHAPTER, DEMO_WAVES_PER_CHAPTER, chooseDemoChapter, nextDemoChapterVictory, demoCombatSample } from './core/campaignFlow';
 import { V2_SKILL_CATEGORIES, type V2SkillCategory } from './core/buildLoadout';
+import { createDemoBuildSlots, saveDemoBuildSlot, loadDemoBuildSlot } from './core/previewBuilds';
 import {
   createV2DemoProgress,applyV2DemoVictory,statsFromV2Progress,nextXp,
   equipV2Item,unequipV2Item,salvageV2Item,upgradeV2Equipped,
@@ -109,6 +110,8 @@ export function NextApp() {
   const [chapter,setChapter] = useState(DEMO_START_CHAPTER);
   const [highestUnlockedChapter,setHighestUnlockedChapter] = useState(DEMO_START_CHAPTER);
   const [skillCategory,setSkillCategory] = useState<V2SkillCategory>('core');
+  const [demoBuilds,setDemoBuilds] = useState(()=>createDemoBuildSlots(3));
+  const [buildNotice,setBuildNotice] = useState('');
   const settledDemoEncounters = useRef<Set<number>>(new Set());
   const [wave,setWave] = useState(2);
   const [heroClass,setHeroClass] = useState<HeroClass>('berserker');
@@ -295,6 +298,27 @@ export function NextApp() {
           {overlay==='skills'&&<>
             <h3>Выбор класса · демонстрационная сборка</h3>
             {classes.map(x=><button className={'v2-choice'+(heroClass===x.id?' chosen':'')} key={x.id} onClick={()=>setHeroClass(x.id)}><b>{x.name}</b><span>{x.desc}</span>{heroClass===x.id&&<em>Активен</em>}</button>)}
+            <h3>Сборки героя · демонстрационные слоты</h3>
+            <p>Эти 3 пресета существуют только в текущей демосессии и не меняют настоящий аккаунт. Количество реальных слотов в TERRITORY ещё не утверждено.</p>
+            <div className="v2-build-presets">
+              {demoBuilds.map(slot=><div className="v2-build-preset" key={slot.slot}>
+                <b>Сборка {slot.slot}</b>
+                <small>{slot.build?classes.find(x=>x.id===slot.build?.heroClass)?.name+' · '+runeOptions.find(x=>x.id===slot.build?.rune)?.name+' · '+followerOptions.find(x=>x.id===slot.build?.companion)?.name:'Пустой слот'}</small>
+                <div>
+                  <button type="button" aria-label={'Сохранить сборку '+slot.slot} onClick={()=>{
+                    setDemoBuilds(s=>saveDemoBuildSlot(s,slot.slot,{heroClass,rune,companion}));
+                    setBuildNotice('Сборка '+slot.slot+' сохранена только в демо');
+                  }}>Сохранить</button>
+                  <button type="button" disabled={!slot.build} aria-label={'Применить сборку '+slot.slot} onClick={()=>{
+                    const selected=loadDemoBuildSlot(demoBuilds,slot.slot);
+                    if(!selected)return;
+                    setHeroClass(selected.heroClass);setRune(selected.rune);setCompanion(selected.companion);
+                    setBuildNotice('Сборка '+slot.slot+' применена к демо-бою');
+                  }}>Применить</button>
+                </div>
+              </div>)}
+            </div>
+            {buildNotice&&<p className="v2-preview-chip" role="status">{buildNotice}</p>}
             <h3>Категории боевых навыков</h3>
             <div className="v2-skill-tabs" role="group" aria-label="Категории навыков">
               {V2_SKILL_CATEGORIES.map(id=><button key={id} type="button" className={skillCategory===id?'chosen':''} onClick={()=>setSkillCategory(id)}>{skillCategories[id].label}</button>)}
