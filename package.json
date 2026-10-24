@@ -61,7 +61,10 @@
     "test:v2-inventory-ui": "node scripts/check-v2-inventory-ui.mjs",
     "test:v2-rune-companion-ui": "node scripts/check-v2-rune-companion-ui.mjs",
     "test:v2-gameplay-overhaul": "node scripts/check-v2-gameplay-overhaul.mjs",
-    "test:v2-owner-video": "node scripts/check-v2-owner-video-audit.mjs"
+    "test:v2-owner-video": "node scripts/check-v2-owner-video-audit.mjs",
+    "art:v2": "node scripts/generate-v2-original-art.mjs",
+    "prebuild": "npm run art:v2",
+    "pretest:v2": "npm run art:v2"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
