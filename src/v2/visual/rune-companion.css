@@ -104,3 +104,5 @@
 @media(prefers-reduced-motion:reduce){
  .v2-rune-gallery-card,.v2-companion-gallery-card{transition:none!important}
 }
+
+.v2-rune-gallery-art img,.v2-codex-emblem img{width:76%;height:76%;object-fit:contain;filter:drop-shadow(0 2px 4px #0d1a2a)}
