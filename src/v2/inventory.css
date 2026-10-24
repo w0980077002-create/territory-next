@@ -57,3 +57,8 @@
 .v2-quest-loot strong{font-size:12px;color:#ffdf90}
 .v2-quest-loot .v2-cta{margin-top:9px}
 @media(max-width:345px){.v2-item-browser{gap:4px}.v2-bag-item{height:70px}.v2-bag-item img{height:43px}.v2-gear-actionbar button{font-size:10px;padding:8px 2px}.v2-progress-wallet{font-size:9px}}
+
+/* Special companion: the grown-up armored cow is an actual selectable battle actor. */
+.v2-cow-preview img.v2-cow-sprite{display:block;flex:none;width:112px;max-width:36%;height:130px;object-fit:contain;filter:drop-shadow(0 5px 4px #0b1928aa)}
+.v2-cow-preview>div{flex:1;min-width:0}
+.v2-cow-select{border:1px solid #efc37d;color:#231b0a;font-size:10px;font-weight:950;padding:7px;border-radius:7px;background:linear-gradient(#fff0a6,#e5a136);margin-top:6px}
