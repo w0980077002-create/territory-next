@@ -11,6 +11,7 @@ import {
 } from './core/progression';
 import './next.css';
 import './navigation.css';
+import './approved-ui.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
@@ -201,6 +202,7 @@ export function NextApp() {
       <div className="v2-parallax" aria-hidden="true"/>
       <div className="v2-stagehead">
         <div className="v2-stage-track" role="progressbar" aria-label="Прогресс главы" aria-valuemin={0} aria-valuemax={DEMO_WAVES_PER_CHAPTER} aria-valuenow={wave-1}>
+          <div className="v2-stage-line" style={{width:chapterPercent*.8+'%'}} aria-hidden="true"/>
           {Array.from({length:DEMO_WAVES_PER_CHAPTER},(_,i)=><span key={i} className={(i+1<wave?'cleared ':i+1===wave?'current ':'')+(i===DEMO_WAVES_PER_CHAPTER-1?'boss-node':'')} aria-label={'Этап '+(i+1)}>{i===DEMO_WAVES_PER_CHAPTER-1?'☠':'◆'}</span>)}
         </div>
         <strong>[Глава {chapter}] Северные земли</strong>
