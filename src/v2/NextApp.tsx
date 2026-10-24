@@ -273,7 +273,7 @@ export function NextApp() {
       <div className="v2-command-actions">
         <button className={'v2-control v2-control--speed'+(speed===2?' is-active':'')} type="button" onClick={()=>setSpeed(s=>s===1?2:1)} aria-label={'Скорость боя: ×'+speed} aria-pressed={speed===2}>×{speed}</button>
         <button className={'v2-control repeat v2-control--auto'+(auto?' active':'')} type="button" onClick={()=>setAuto(a=>!a)} aria-pressed={auto} aria-label={auto?'Остановить автобой':'Начать автобой'}>⟳</button>
-        <button className="v2-control v2-control--ranking" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('ic-trophy.webp')} alt=""/></button>
+        <button className="v2-control v2-control--ranking" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('v2-ui-crown.svg')} alt=""/></button>
       </div>
     </section>
 
