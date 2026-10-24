@@ -2,8 +2,9 @@
 
 Новая самостоятельная Telegram RPG. Код, графика и интерфейс проекта TERRITORY 1.0 удалены из актуального дерева этого репозитория.
 
-**Утверждённое ТЗ:** [TERRITORY_2_0_MASTER_TZ_RU.md](docs/TERRITORY_2_0_MASTER_TZ_RU.md)  
-**Единственный утверждённый скрин:** [docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg](docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg)
+**ЕДИНОЕ ДЕЙСТВУЮЩЕЕ ТЗ (приоритет над всеми старыми черновиками):** [TERRITORY 2.0 — шесть экранов, каждый элемент и действие](docs/TERRITORY_2_0_CANON/SOURCE_OF_TRUTH_RU.md).  
+**Оригиналы всех шести снимков без изменений:** ChatGPT Library `/TERRITORY_2_0_CANON_2026-10-24/` и выданный владельцу ZIP; пять вновь присланных JPG **пока отсутствуют в GitHub** (не путать с кадрами видео в `docs/video-frames`). **Главный экран также здесь:** [эталон](docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg).  
+**Старое Master ТЗ (справочно, не нормативно):** [исторический документ](docs/TERRITORY_2_0_MASTER_TZ_RU.md).
 
 ## Неприкосновенные ограничения владельца
 
