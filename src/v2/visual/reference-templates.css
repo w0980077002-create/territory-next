@@ -2,9 +2,9 @@
    Keep the accepted winter landscape, 2-row inventory and 5-position footer.
    The game remains a bright snow scene with a dark wood/gold HUD, per reference. */
 .v2-shell .v2-healthrow{isolation:isolate}
-.v2-shell .v2-orb{overflow:visible}
+.v2-shell .v2-orb{overflow:hidden}
 .v2-shell .v2-orb-percent{
-  position:absolute;z-index:5;top:-7px;left:50%;transform:translateX(-50%);
+  position:absolute;z-index:5;top:2px;left:50%;transform:translateX(-50%);
   white-space:nowrap;min-width:31px;text-align:center;padding:1px 4px;
   border:1px solid #f6d093;border-radius:5px;
   background:linear-gradient(#473541,#211a2b);color:#fff3be;
@@ -13,7 +13,7 @@
 }
 .v2-shell .v2-orb.energy>div{border-radius:0 0 50% 50%;overflow:hidden}
 .v2-shell .v2-equipment{grid-template-rows:repeat(2,minmax(0,1fr))}
-.v2-shell .v2-bottom{position:relative;z-index:20;grid-template-columns:repeat(5,minmax(0,1fr))}
+.v2-shell .v2-bottom{position:relative;z-index:20;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr}
 .v2-shell .v2-bottom button[aria-current="page"]:not(.main){border-color:#f3d68e;filter:brightness(1.13)}
 .v2-shell .v2-bottom button:focus-visible,.v2-shell .v2-gear:focus-visible{outline:3px solid #80efff;outline-offset:1px}
 

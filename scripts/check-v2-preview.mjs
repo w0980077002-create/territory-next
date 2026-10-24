@@ -34,7 +34,8 @@ assert.equal(config.skills.length,3);
 assert.equal(config.companions.length,2);
 assert.equal(config.limits.maxActiveCompanions,1);
 assert(style.includes('grid-template-rows:repeat(2,minmax(0,1fr))'));
-assert(style.includes('grid-template-columns:repeat(5,minmax(0,1fr))'));
+assert(style.includes('grid-template-columns:1fr 1fr 1.25fr 1fr 1fr'));
+assert(style.includes('.v2-shell .v2-orb{overflow:hidden}'),'Orb filling must not leak outside round spheres');
 for(const id of ["port","skills","expedition","adventure","shop"])
  assert(nav.includes("id: '"+id+"'"),'Missing accepted navigation destination '+id);
 assert(existsSync('docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg'));
