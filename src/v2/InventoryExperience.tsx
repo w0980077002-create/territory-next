@@ -90,7 +90,7 @@ export function InventoryExperience({
         </div>
       </div>
       <div className="v2-gear-grid">
-        {slots.map(slot=><EquipmentSlot key={slot} slot={slot} item={progress.equipped[slot]} onClick={()=>showGearDetails(slot)}/>)}
+        {heroSlots.map(slot=><EquipmentSlot key={slot} slot={slot} item={progress.equipped[slot]} onClick={()=>showGearDetails(slot)}/>)}
       </div>
       <div className="v2-gear-panel">
         <strong>Выбрано: {V2_SLOT_LABEL[activeSlot]}</strong>
