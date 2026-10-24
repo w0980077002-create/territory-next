@@ -47,7 +47,7 @@ for(const file of [
   const executable=sql.replace(/--[^\n]*/g,'');
   assert(!executable.includes(cfg.production1ProjectRef),'V1 database reference in V2 migration SQL: '+file);
   assert(executable.includes('security invoker'),'Privileged schema function must be SECURITY INVOKER: '+file);
-  assert(executable.includes('from public, anon, authenticated'),'V2 private function must revoke all client roles: '+file);
+  assert(/from\s+public\s*,\s*anon\s*,\s*authenticated/i.test(executable),'V2 private function must revoke all client roles: '+file);
   assert(executable.includes('to service_role'),'V2 internal functions must explicitly grant service role only: '+file);
   assert(!/security\s+definer/i.test(executable),'Never add SECURITY DEFINER: '+file);
   assert(!/\b(?:drop|truncate)\s+(?:table|schema)/i.test(executable),'Destructive DDL forbidden: '+file);
