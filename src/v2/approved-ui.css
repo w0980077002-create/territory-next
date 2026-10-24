@@ -93,3 +93,14 @@
 @media(prefers-reduced-motion:reduce){
   .v2-stage-line{transition:none}
 }
+
+/* Session-only selectable combat presets; visibly distinct from real saves. */
+.v2-build-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:8px 0 12px}
+.v2-build-preset{min-width:0;display:flex;flex-direction:column;gap:7px;border:2px solid #9c825a;border-radius:10px;padding:7px;background:linear-gradient(#31597a,#182c4a)}
+.v2-build-preset b{font-size:12px;color:#ffdb8d}
+.v2-build-preset small{flex:1;min-height:38px;line-height:1.25;font-size:10px;color:#d4eafa;overflow-wrap:break-word}
+.v2-build-preset>div{display:grid;grid-template-columns:1fr;gap:4px}
+.v2-build-preset button{width:100%;padding:6px 2px;border:1px solid #d0b47f;border-radius:6px;font-weight:850;font-size:10px;background:linear-gradient(#7a5d36,#43301d)}
+.v2-build-preset button:disabled{opacity:.45;cursor:not-allowed}
+.v2-build-preset button:not(:disabled):last-child{background:linear-gradient(#2e88bd,#18446c)}
+@media(max-width:350px){.v2-build-preset{padding:5px}.v2-build-preset button{font-size:9px}}
