@@ -33,7 +33,7 @@ const companionArt: Record<CompanionKind, string> = {
   healer: asset('assets/territory/characters/followers/forest_healer/idle.webp'),
   hunter: asset('assets/territory/characters/followers/moon_hunter/idle.webp'),
   mage: asset('assets/territory/characters/followers/rune_mage/idle.webp'),
-  warcow: asset('assets/territory/v2/followers/battle-cow.svg'),
+  warcow: asset('v2-battle-cow-approved.webp'),
 };
 const enemies = [
   asset('assets/territory/characters/enemies/wolf/idle.webp'),
@@ -148,7 +148,7 @@ export function NextApp() {
   useEffect(()=>{
     if(!battle.finished) return;
     const status = battle.finished;
-    setNotice(status==='victory'?'Победа! Следующая волна':'Герой восстанавливается');
+    setNotice(status==='victory'?'Победа!':'Герой восстанавливается');
     const timeout=window.setTimeout(()=>{
       if(settledDemoEncounters.current.has(encounterId)) return;
       settledDemoEncounters.current.add(encounterId);
@@ -187,7 +187,7 @@ export function NextApp() {
     <div className="v2-prelabel" aria-label="Режим проверки">TERRITORY 2.0 <span>DEMO</span></div>
     <header className="v2-header">
       <button className="v2-profile" type="button" onClick={()=>open('hero')}>
-        <img src={altHeroAssets[heroClass]} alt="" />
+        <img src={heroClass==='berserker'?asset('v2-approved-avatar.webp'):altHeroAssets[heroClass]} alt="" />
         <span className="v2-level-badge">{progress.level}</span>
       </button>
       <div className="v2-identity">
@@ -277,7 +277,7 @@ export function NextApp() {
       {V2_BOTTOM_NAV.map(({id,label})=><button key={id} onClick={()=>open(id)}
         className={id==='expedition'?'main':''}
         type="button" aria-label={label||'Бой'}>
-        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo">ДЕМО</small></>}
+        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo">{progress.wins}</small></>}
       </button>)}
     </nav>
 

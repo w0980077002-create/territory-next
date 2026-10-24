@@ -58,7 +58,7 @@
 .v2-battle.v2-biome-3{
   background-image:
     linear-gradient(180deg,rgba(103,190,251,.07) 0%,rgba(235,250,255,.12) 52%,rgba(150,212,250,.14) 82%,rgba(217,239,248,.18) 100%),
-    url('/v2-snowy-approved-derived.webp');
+    url('/v2-winter-stage-v5.webp');
   background-position:center,center 46%;
   background-size:100% 100%,100% 100%;
   background-repeat:no-repeat;
@@ -389,4 +389,163 @@
 }
 @media(prefers-reduced-motion:reduce){
   .v2-battle .v2-parallax{animation:none}
+}
+
+/* 2026-10-24 mobile screenshot review round 2
+   Winter foreground now uses hand-painted source snow and wooden cliffs
+   extracted from the SAME approved reference, not the former polygon strips. */
+.v2-battle.v2-biome-0,
+.v2-battle.v2-biome-1,
+.v2-battle.v2-biome-2,
+.v2-battle.v2-biome-3 {
+  background-image:linear-gradient(180deg,#81c8ed0b,#c5e5ff09 55%,#91c7dd13 100%),url('/v2-winter-stage-v5.webp');
+  background-size:100% 100%,100% 100%;
+  background-position:center,center;
+  background-repeat:no-repeat;
+}
+.v2-battle::before {
+  background:linear-gradient(to bottom,transparent 0%,#cde9ff0d 70%,#132c4e1a 100%);
+}
+.v2-battle::after {
+  height:3%;
+  background:linear-gradient(transparent,#27486c29);
+}
+.v2-header {
+  background:linear-gradient(180deg,#38a7efe8,#53b6f9ed 74%,#74c5f7);
+  border-bottom:1px solid #d9f2ff;
+}
+.v2-profile img {
+  object-fit:cover;
+  object-position:center;
+  border-radius:4px;
+}
+/* Their pictograms and captions are ONE unit. Long labels wrap within their
+   columns instead of overlapping the cow and arena. */
+.v2-left-buttons {
+  top:70px;
+  bottom:6px;
+  left:0;
+  width:clamp(51px,14%,65px);
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:repeat(7,minmax(0,1fr));
+  z-index:9;
+  gap:0;
+}
+.v2-right-buttons {
+  top:68px;
+  bottom:28%;
+  right:0;
+  width:clamp(51px,14%,65px);
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  z-index:9;
+  gap:0;
+}
+.v2-left-buttons .v2-shortcut,
+.v2-right-buttons .v2-shortcut {
+  width:100%;
+  height:100%;
+  display:flex;
+  min-height:0;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:1px;
+  padding:1px 0;
+  filter:drop-shadow(0 2px 2px #071d33b0);
+}
+.v2-left-buttons .v2-shortcut b,
+.v2-right-buttons .v2-shortcut b {
+  display:grid;
+  place-items:center;
+  height:clamp(25px,5.3dvh,40px);
+  width:clamp(27px,5.5dvh,42px);
+  flex:0 0 auto;
+}
+.v2-shortcut b>img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.v2-left-buttons .v2-shortcut span,
+.v2-right-buttons .v2-shortcut span {
+  display:block;
+  max-width:100%;
+  font-size:clamp(8px,2.15vw,10.5px);
+  font-weight:950;
+  line-height:1.02;
+  text-align:center;
+  white-space:normal;
+  overflow-wrap:break-word;
+  word-break:normal;
+  text-shadow:0 2px 3px #081520,1px 0 2px #081520,0 0 2px black;
+}
+.v2-combatants>div {
+  bottom:19%;
+  filter:drop-shadow(0 4px 4px #13263a9c);
+}
+.v2-follow {
+  left:16.5%;
+  width:29%;
+  height:33%;
+  z-index:2;
+}
+.v2-follow img {
+  width:100%;height:100%;
+  object-fit:contain;
+  object-position:center bottom;
+}
+.v2-warrior {
+  left:37%;
+  width:29%;
+  height:39%;
+  z-index:3;
+}
+.v2-foe {
+  right:12%;
+  width:28%;
+  height:37%;
+  z-index:3;
+}
+.v2-foe.boss{
+  right:10%;width:32%;height:47%;
+}
+.v2-arena-button{
+  right:4px;
+  bottom:3px;
+  z-index:10;
+}
+.v2-combat-notice {
+  bottom:6%;
+  left:33%;
+  right:27%;
+  padding:4px 7px;
+  white-space:normal;
+  max-width:160px;
+  line-height:1.15;
+  font-size:10px;
+}
+.v2-extra-follower img{
+  width:78%;
+  height:92%;
+  object-fit:contain;
+  object-position:35% bottom;
+}
+@media(max-width:370px){
+  .v2-left-buttons{top:58px;bottom:3px;width:clamp(47px,14%,58px)}
+  .v2-right-buttons{top:57px;bottom:28%;width:clamp(47px,14%,58px)}
+  .v2-shortcut span{font-size:8px}
+  .v2-follow{left:15%;width:30%}
+  .v2-warrior{left:36%;width:30%}
+  .v2-foe{right:11%;width:28%}
+}
+@media(max-height:650px){
+  .v2-left-buttons{top:51px;bottom:2px}
+  .v2-right-buttons{top:50px;bottom:28%}
+  .v2-left-buttons .v2-shortcut b,
+  .v2-right-buttons .v2-shortcut b{height:22px;width:25px}
+  .v2-left-buttons .v2-shortcut span,
+  .v2-right-buttons .v2-shortcut span{font-size:7px}
 }
