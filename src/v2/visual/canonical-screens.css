@@ -148,3 +148,49 @@
 .v2-ref-storage-cell small{font-size:8px}
 .v2-ref-adventure-place strong{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.v2-ref-skill *,.v2-ref-adventure *,.v2-ref-gems *,.v2-ref-warehouse *{animation:none!important;transition:none!important}}
+
+
+/* Daily objectives: framed five-row overlay faithful to the supplied structure. */
+.v2-ref-daily .v2-quest-group-tabs{order:0;display:flex;gap:4px;margin:7px 1px 0}
+.v2-ref-daily .v2-quest-group-tabs button{flex:1;min-width:0;font-size:10px;padding:9px 4px;line-height:1.15;overflow-wrap:anywhere;color:#f8d6a0;
+  border:3px ridge #613e3a;background:linear-gradient(#60403d,#32242f);border-radius:5px}
+.v2-ref-daily .v2-quest-group-tabs button.selected{background:linear-gradient(#e5b843,#ac6c1b);color:#fff6dc;text-shadow:1px 2px #5e3224}
+.v2-ref-daily .v2-quest-period{font-size:10px;color:#fce3ad;padding:5px}
+.v2-ref-daily-board{display:flex;flex-direction:column;border:4px solid #241b22;border-radius:14px;overflow:hidden;background:white}
+.v2-ref-daily-heading{text-align:center;font-size:20px;font-weight:1000;padding:12px 8px;color:#ffdf9b;
+ text-shadow:2px 2px #2e1a1e;background:linear-gradient(#603937,#2f2024);border-bottom:4px ridge #98664b}
+.v2-ref-daily-meter{display:flex;align-items:center;gap:6px;min-height:118px;margin:10px 8px 14px;padding:13px 8px;
+ border:3px ridge #a86d35;border-radius:10px;background:radial-gradient(ellipse at center,#fff2af,#f8a832)}
+.v2-ref-daily-medal{font-size:39px;color:#bcc3d2;text-shadow:0 2px #43455d}
+.v2-ref-daily-meter>strong{font-size:10px;padding:4px;background:#f4f1e4;color:#555;border:2px solid #a2937f;border-radius:15px;white-space:nowrap}
+.v2-ref-daily-milestones{position:relative;flex:1;display:flex;justify-content:space-between;align-items:center;height:90px}
+.v2-ref-daily-bar{position:absolute;top:52px;left:5%;right:5%;height:10px;border-radius:8px;background:#cc8bdd;overflow:hidden;border:1px solid #8e4b95}
+.v2-ref-daily-bar span{display:block;height:100%;background:#19cb73}
+.v2-ref-daily-prize{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;color:#214632;gap:10px;justify-content:center}
+.v2-ref-daily-prize span{display:grid;place-items:center;width:clamp(30px,9vw,48px);height:clamp(30px,9vw,48px);
+ background:linear-gradient(#782827,#521e21);border:3px ridge #b27147;border-radius:6px;font-weight:1000;color:#67ff5b;font-size:25px;text-shadow:1px 2px #2a1417}
+.v2-ref-daily-prize:last-child span{background:linear-gradient(#ce421b,#9d292b);color:#ef9cff}
+.v2-ref-daily-prize small{font-size:10px;font-weight:1000;color:#3b6c31}
+.v2-ref-daily-tasklist{display:flex;flex-direction:column;gap:8px;padding:5px 10px 12px}
+.v2-ref-daily-task{display:flex;align-items:center;gap:7px;padding:9px 6px;min-height:90px;
+ background:linear-gradient(#ebc4a8,#f3d7bc);border:3px solid #bba28f;box-shadow:inset 0 0 0 2px #fcf4df;border-radius:11px;color:#422f29}
+.v2-ref-daily-scroll,.v2-ref-daily-coin{display:grid;place-items:center;flex:0 0 47px;width:47px;height:53px;
+ background:linear-gradient(#e56f1a,#a94d16);border:3px solid #52352b;border-radius:7px;box-shadow:inset 0 0 0 2px #f5aa4e;color:white;font-size:27px}
+.v2-ref-daily-coin{position:relative;background:linear-gradient(#508cec,#204ca6);font-size:28px;color:#dadce4}
+.v2-ref-daily-coin small{position:absolute;bottom:-2px;font-size:10px;color:white;text-shadow:1px 2px #101627;font-weight:950}
+.v2-ref-daily-taskdata{display:flex;flex:1;min-width:0;flex-direction:column;gap:6px}
+.v2-ref-daily-taskdata strong{font-size:clamp(10px,2.7vw,13px);line-height:1.16;font-weight:1000;color:#5d3c2a;text-shadow:0 1px #fff8d6}
+.v2-ref-daily-taskbar{width:100%;height:9px;background:#dadad9;border:2px solid #a9a39d;box-shadow:inset 0 1px 2px #85715f;border-radius:12px}
+.v2-ref-daily-taskdata small{font-size:9px;text-align:center;margin-top:-10px;color:#43403e;font-weight:bold}
+.v2-ref-daily-task>button{flex:0 0 auto;min-width:72px;padding:8px 7px;background:linear-gradient(#e56cfa,#9326cc)!important;
+ border:3px solid #3e1936!important;border-radius:14px;color:white!important;font-size:13px;font-weight:1000;white-space:nowrap;
+ text-shadow:1px 1px #41233f;box-shadow:inset 0 2px #ffb3f6}
+.v2-ref-daily-status{color:#64534c!important;font-size:10px!important;margin:1px 12px 12px!important;line-height:1.4}
+.v2-ref-skills-advanced{margin:8px;border:1px solid #836844;border-radius:6px;color:#ffe6ba;background:#3d3039}
+.v2-ref-skills-advanced>summary{cursor:pointer;padding:12px;font-size:12px;font-weight:900}
+.v2-ref-skills-advanced>div{padding:10px}
+.v2-shell:has(.v2-drawer[data-v2-screen="gems"]) .v2-bottom{display:none}
+.v2-shell:has(.v2-drawer[data-v2-screen="gems"]) .v2-mask{bottom:0}
+.v2-shell .v2-drawer[data-v2-screen="gems"]>.v2-drawer-content{padding:0}
+.v2-shell .v2-drawer[data-v2-screen="gems"]>header{display:none}
+@media(max-width:370px){.v2-ref-daily-task{gap:4px;padding:6px 4px}.v2-ref-daily-scroll,.v2-ref-daily-coin{flex-basis:38px;width:38px;height:43px;font-size:23px}.v2-ref-daily-task>button{min-width:65px;font-size:11px;padding:7px 4px}}
