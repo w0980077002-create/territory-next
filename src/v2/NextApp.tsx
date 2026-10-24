@@ -59,13 +59,13 @@ const companionArt: Record<CompanionKind, string> = {
 };
 const featureScreens:readonly string[]=[
   'arena','mail','trials','friends','invitation','socialRewards',
-  'specialMarket','welcomeBundle','seaBundle','clan','games',
+  'specialMarket','welcomeBundle','seaBundle','clan',
 ];
 const menuTileArt:Readonly<Record<string,string>>={
   hero:'art/avatar.svg',warehouse:'art/icons/armor.svg',
   runes:'art/icons/runes.svg',companions:'art/icons/companions.svg',
   clan:'art/icons/clan.svg',
-  games:'art/icons/games.svg',mail:'art/icons/mail.svg',settings:'art/icons/settings.svg',
+  mail:'art/icons/mail.svg',settings:'art/icons/settings.svg',
   ranking:'art/icons/ranking.svg',
 };
 const bottomIcon: Record<string, string> = {
@@ -84,7 +84,7 @@ const shortcutArt: Record<string,string> = {
 const shortcutIcon: Record<string, string> = {
   quests:'📜', events:'🎇', friends:'🤝', rewards:'🎁', specialMarket:'💰', trials:'🐲',
   welcomeBundle:'🎖', hero:'🛡', warehouse:'🎒', runes:'ᚱ', companions:'🐂', arena:'⚔',
-  clan:'🏰', games:'🎲', mail:'✉', settings:'⚙',
+  clan:'🏰', mail:'✉', settings:'⚙',
   port:'⚓', skills:'ᛟ', expedition:'⚔', adventure:'🗺', shop:'🏪',
   invitation:'✉', socialRewards:'🏅', seaBundle:'⛵',ranking:'🏆',
 };
@@ -286,7 +286,7 @@ export function NextApp() {
     setEncounterId(id=>id+1);setAuto(true);setOverlay(null);
   };
   const xpPct=progress.level>=300?100:Math.min(100,progress.xp/nextXp(progress.level)*100);
-  const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',games:'Игровой зал',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Первый взнос',settings:'Настройки',menu:'Меню',invitation:'Приглашение',socialRewards:'Социальные награды',seaBundle:'Морской набор',ranking:'Рейтинг'};
+  const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Первый взнос',settings:'Настройки',menu:'Меню',invitation:'Приглашение',socialRewards:'Социальные награды',seaBundle:'Морской набор',ranking:'Рейтинг'};
   const open = (id: V2ScreenId | 'menu')=>id==='expedition'?(setOverlay(null),setAuto(true)):setOverlay(id);
 
   return <div className="v2-shell">
