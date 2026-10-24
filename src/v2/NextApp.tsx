@@ -31,6 +31,7 @@ import './approved-ui.css';
 import './sunlit-reference-polish.css';
 import './owner-ui-controls.css';
 import './visual/reference-templates.css';
+import './visual/reference-audit-fixes.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
