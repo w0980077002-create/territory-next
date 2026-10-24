@@ -24,7 +24,8 @@ assert(!art.includes('Только яркая, насыщенная, качес�
 assert(!master.includes('яркие взрослые викингские помощники'));
 assert(!master.includes('не детская карикатура'));
 assert(!master.includes('взрослое героическое фэнтези'));
-assert(master.includes('только утверждённым скриншотом'));
+assert(master.includes('docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg')||master.includes('reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg'));
+assert(!master.includes('Игровой зал'));
 const pkg=JSON.parse(read('package.json'));
 assert(!('test:professions' in pkg.scripts));
 assert(pkg.scripts['test:v2'].includes('check-v2-owner-scope.mjs'));
