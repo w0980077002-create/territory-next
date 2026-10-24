@@ -1,8 +1,8 @@
-name: TERRITORY 2.0 - public demo preview (NO player data)
+name: TERRITORY 2.0 - isolated feature demo (NO player data)
 
 on:
   push:
-    branches: [main]
+    branches: [feature/v2-data-driven-mechanics]
   workflow_dispatch:
 
 permissions:
@@ -59,7 +59,7 @@ jobs:
 
   deploy-demo:
     name: Deploy PUBLIC demo only
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/feature/v2-data-driven-mechanics'
     needs: build-demo
     runs-on: ubuntu-latest
     timeout-minutes: 15
