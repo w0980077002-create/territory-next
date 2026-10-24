@@ -1,0 +1,17 @@
+{
+  "title": "TERRITORY 2.0 staging project allowlist and production denylist",
+  "approvedOn": "2026-10-24",
+  "organizationId": "ldnpudtmsxphzdeyssmr",
+  "stagingProjectRef": "ksikzkrvuuhermhnbycn",
+  "stagingProjectAtCreationName": "territory-game-builde",
+  "privateSchema": "territory_v2",
+  "initialMigration": "territory_v2_private_staging_initial_schema",
+  "production1ProjectRef": "wmyrdpbwlkzsktnhookx",
+  "production1Label": "bolt-native-database-71669285",
+  "frontendEntry": "src/v2/main.tsx",
+  "backendStatus": "private tables created, no player endpoint connected",
+  "liveLaunchAuthorized": false,
+  "clientDirectSchemaAccess": false,
+  "noSecretsCommitted": true,
+  "note": "Same Supabase organization and connector can administer different projects. This is NOT a shared game database or a shared client API key."
+}

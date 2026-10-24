@@ -38,6 +38,14 @@ Independent source repository. Based on approved development branch from TERRITO
 
 [Первый работающий пакет: интерфейс по эталону, этапы, навыки/сборки, тесты и приватная staging SQL-заготовка](docs/TERRITORY_2_0_IMPLEMENTATION_20261024_RU.md). Реальный сервер, сохранения игроков и платежи **не подключены**; код является изолированным preview, без публикации.
 
+## Раздельные базы: проверено 24.10.2026
+
+- **TERRITORY 1.0 — production:** `wmyrdpbwlkzsktnhookx` (`bolt-native-database-71669285`). Не изменять, не вызывать V2 API на этом проекте.
+- **TERRITORY 2.0 — staging:** `ksikzkrvuuhermhnbycn`, приватная схема `territory_v2`. В проекте создано 12 таблиц с включённым RLS, без клиентских SELECT/WRITE прав. **Действующие игроки 1.0 не мигрировали и не подключались.**
+- Клиент `index.html` запускает отдельный `src/v2/main.tsx`, не наследованный `src/main.tsx`.
+- [Подтверждённые ID и ограничения](server/staging/approved-project.json) · [аудит и история миграции](docs/TERRITORY_2_0_SUPABASE_REAL_PROJECT_AUDIT_20261024_RU.md).
+- Запускать `npm run test:project-isolation`. Одна организация или доступ администратора к двум проектам **не означает** общую базу или один игровой ключ.
+
 ## Status
 This is **development code**, not a live game and not safe to connect to the
 existing production Supabase project. The `main` branch here must not be

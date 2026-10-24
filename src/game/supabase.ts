@@ -13,10 +13,11 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL ?? '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
 const stagingApproved = import.meta.env.VITE_V2_STAGING_APPROVED === 'yes';
 const isLegacyProduction = supabaseUrl.includes('wmyrdpbwlkzsktnhookx');
+const isApprovedV2Staging = supabaseUrl === 'https://ksikzkrvuuhermhnbycn.supabase.co';
 
-if (!stagingApproved || isLegacyProduction || !supabaseUrl || !supabaseAnonKey) {
+if (!stagingApproved || isLegacyProduction || !isApprovedV2Staging || !supabaseAnonKey) {
   throw new Error(
-    'TERRITORY 2.0 cloud backend disabled. A separately approved staging Supabase project is required.'
+    'TERRITORY 2.0 cloud backend disabled. Only the approved V2 staging Supabase project is allowed.'
   );
 }
 
