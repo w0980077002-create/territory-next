@@ -34,9 +34,9 @@ assert(features.includes('onNavigate(\'adventure\')'));
 assert(!features.includes('Math.random(')&&!features.includes('fetch('));
 assert(!features.includes('supabase-js')&&!features.includes('localStorage')&&!features.includes('service_role'));
 assert(features.includes('Никакие предметы, VIP и валюты не выдаются'));
-for(const filename of ['public/ic-mail.webp','public/ic-trials.webp','public/nav-clan.webp',
- 'public/fortune/golden-chest.svg','public/monopoly/hero.webp',
- 'public/assets/territory/characters/bosses/northern_jarl/idle.webp']) {
+for(const filename of ['public-v2/art/icons/mail.svg','public-v2/art/icons/trials.svg','public-v2/art/icons/clan.svg',
+ 'public-v2/art/icons/treasure.svg','public-v2/art/icons/board.svg',
+ 'public-v2/art/bosses/northern_jarl.svg']) {
  assert(existsSync(filename),'Missing original V2 art: '+filename);
 }
 assert(!css.includes('.v2-battle{')&&!css.includes('.v2-biome-'),
