@@ -1,0 +1,15 @@
+/* Approved TERRITORY 2.0 mobile icon system: original assets instead of emoji. */
+.v2-shortcut b>img{display:block;width:31px;height:29px;max-width:100%;object-fit:contain;filter:drop-shadow(0 2px 2px #14151ca8)}
+.v2-bottom button>img{display:block;flex:none;width:35px;height:36px;max-width:90%;object-fit:contain;filter:drop-shadow(1px 2px 2px #080a16bc)}
+.v2-bottom button.main>img{width:50px;height:49px;max-width:96%;filter:drop-shadow(0 2px 4px #020b1bc0)}
+.v2-bottom button{gap:1px}
+.v2-bottom button span{max-width:100%;line-height:1.05;white-space:nowrap;letter-spacing:-.02em}
+@media(max-height:720px){
+  .v2-shortcut b>img{width:26px;height:24px}
+  .v2-bottom button>img{width:30px;height:30px}
+  .v2-bottom button.main>img{width:43px;height:42px}
+}
+@media(max-width:350px){
+  .v2-bottom button>img{width:29px;height:29px}
+  .v2-bottom button.main>img{width:42px;height:41px}
+}
