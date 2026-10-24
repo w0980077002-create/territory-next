@@ -3,6 +3,7 @@ import type {V2ScreenId} from '../interfaceContract';
 import type {V2Progression} from '../core/progression';
 import type {V2StageCampaign} from '../core/gameplayOverhaul';
 import './inner-panels.css';
+import {GameHallExperience} from './GameHallExperience';
 
 export type FeaturePanelId=Extract<V2ScreenId,
   'mail'|'trials'|'arena'|'friends'|'invitation'|'socialRewards'|
@@ -29,13 +30,6 @@ const trials=[
  {stage:90,name:'Тень хаоса',image:'art/bosses/chaos_shadow.svg'},
  {stage:100,name:'Демон бездны',image:'art/bosses/abyss_demon.svg'},
 ] as const;
-const hall=[
- {name:'Сокровищница',image:'art/icons/treasure.svg',description:'Сундуки и выбор сокровищ'},
- {name:'Монополия',image:'art/icons/board.svg',description:'Настольное путешествие'},
- {name:'Рунические барабаны',image:'art/icons/reels.svg',description:'Пять барабанов · игровой концепт'},
- {name:'Кости ярла',image:'art/icons/dice.svg',description:'Идея будущей мини-игры'},
- {name:'Колесо судьбы',image:'art/icons/wheel.svg',description:'Идея будущей мини-игры'},
-] as const;
 
 function HallTitle({eyebrow,title,detail,image}:{
  eyebrow:string;title:string;detail:string;image:string;
@@ -56,7 +50,6 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
  const [readMail,setReadMail]=useState<readonly string[]>([]);
  const [markedMail,setMarkedMail]=useState<readonly string[]>([]);
  const [selectedBoss,setSelectedBoss]=useState<number>(10);
- const [selectedGame,setSelectedGame]=useState(0);
  const [clanTab,setClanTab]=useState<'overview'|'roster'|'missions'>('overview');
  const unreads=mailItems.filter(m=>!readMail.includes(m.id)).length;
  const mail=mailItems.find(m=>m.id===openedMail)??mailItems[0];
@@ -118,23 +111,7 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
   </section>;
  }
 
- if(mode==='games')return <section className="v2-inner-screen" data-screen="games">
-  <HallTitle eyebrow="ЗАЛ РАЗВЛЕЧЕНИЙ" title="Игровой зал"
-   detail="Пять игровых направлений · без расходования билетов" image="art/icons/ranking.svg"/>
-  <div className="v2-game-grid" role="group" aria-label="Мини-игры">
-   {hall.map((g,i)=><button type="button" key={g.name}
-    className={'v2-game-card'+(selectedGame===i?' selected':'')} aria-pressed={selectedGame===i}
-    onClick={()=>setSelectedGame(i)}>
-    <img src={asset(g.image)} alt=""/><strong>{g.name}</strong><small>{i>=3?'Концепт':'В разработке'}</small>
-   </button>)}
-  </div>
-  <article className="v2-inner-parchment">
-   <small>ВЫБРАННАЯ ИГРА</small><h4>{hall[selectedGame].name}</h4><p>{hall[selectedGame].description}</p>
-   <div className="v2-inner-status"><span>Билеты</span><strong>Не подключены</strong></div>
-   <button className="v2-inner-action" type="button" disabled>Запуск после интеграции</button>
-  </article>
-  <p className="v2-inner-disclaimer">Игры не выдают награды и не списывают билеты. Запускать неготовый игровой автомат нельзя.</p>
- </section>;
+ if(mode==='games')return <GameHallExperience/>;
 
  if(mode==='friends'||mode==='invitation'||mode==='socialRewards')return <section className="v2-inner-screen" data-screen="social">
   <HallTitle eyebrow="СОЮЗЫ И ПРИГЛАШЕНИЯ" title={mode==='socialRewards'?'Награды за друзей':mode==='invitation'?'Пригласить в отряд':'Мои друзья'}
