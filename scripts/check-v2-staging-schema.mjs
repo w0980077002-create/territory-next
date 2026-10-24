@@ -35,8 +35,8 @@ try{
   const id4='77777777-7777-4777-8777-777777777777';
   await db.query("insert into territory_v2.currency_definitions(code,decimals) values('gold',0)");
   await assert.rejects(()=>db.query("insert into territory_v2.wallet_balances(player_id,currency_code,amount_minor) values($1,'gold',-1)",[id1]),/check/i,'negative wallet forbidden');
-  await db.query("insert into territory_v2.mining_jobs(id,player_id,profession_code,resource_code,status,finished_at) values($1,$2,'miner','iron','running',now()+interval '4 hours')",[id3,id1]);
-  await assert.rejects(()=>db.query("insert into territory_v2.mining_jobs(id,player_id,profession_code,resource_code,status,finished_at) values($1,$2,'miner','ore','running',now()+interval '4 hours')",[id4,id1]),/unique/i,'second simultaneous mining must fail');
+  await db.query("insert into territory_v2.mining_jobs(id,player_id,resource_code,status,finished_at) values($1,$2,'iron','running',now()+interval '4 hours')",[id3,id1]);
+  await assert.rejects(()=>db.query("insert into territory_v2.mining_jobs(id,player_id,resource_code,status,finished_at) values($1,$2,'ore','running',now()+interval '4 hours')",[id4,id1]),/unique/i,'second simultaneous mining must fail');
   await db.exec('set role anon;');
   await assert.rejects(()=>db.query('select * from territory_v2.wallet_balances'),/permission denied/i,'anon cannot inspect private wallet');
   await db.exec('reset role;');
