@@ -3,7 +3,7 @@
  * All content, formulas, triggers and effects originate in JSON, never code.
  * These client-side outcomes are not authoritative for rewards or PvP.
  */
-import rawConfig from './config/lootborn-modules.json';
+import rawConfig from './modules/lootborn/lootborn-modules.json';
 
 export type Formula=Readonly<{base:number;perLevel:number;perRank:number;min:number;max:number}>;
 export type Stat='damageDealt'|'damageTaken';

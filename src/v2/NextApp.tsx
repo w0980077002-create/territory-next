@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { encounterForChapter, type HeroClass, type RuneKind, type CompanionKind } from './core/autoBattle';
 import { nextPreviewTick, startPreviewEncounter } from './core/moduleCombat';
+import {LootbornSkillsTemplate,LootbornCompanionsTemplate} from './visual/LootbornTemplates';
 import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, type V2ScreenId } from './interfaceContract';
 import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import { QuestExperience } from './QuestExperience';
@@ -22,6 +23,7 @@ import './navigation.css';
 import './approved-ui.css';
 import './sunlit-reference-polish.css';
 import './owner-ui-controls.css';
+import './visual/reference-templates.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
@@ -272,18 +274,18 @@ export function NextApp() {
     </section>
 
     <section className="v2-healthrow" aria-label="Здоровье и энергия">
-      <div className="v2-orb hp"><b>HP</b></div>
+      <div className="v2-orb hp" aria-label={'Здоровье: '+Math.round(heroHpPct)+'%'}><b>HP</b><span className="v2-orb-percent" aria-hidden="true">{Math.round(heroHpPct)}%</span></div>
       <div className="v2-hp-wrap">
         <span className="v2-lvl">{progress.level}</span>
         <div className="v2-hp-bar"><div style={{width:heroHpPct+'%'}}/><strong>{battle.heroHp.toLocaleString('ru-RU')} / {config.hero.hp.toLocaleString('ru-RU')}</strong></div>
       </div>
       <button className="v2-hud-stat" onClick={()=>open('hero')} aria-label="Характеристики">▥</button>
-      <div className="v2-orb energy" title={'Энергия '+battle.mana}>
-        <div style={{height:energyPct+'%'}}/><b>{battle.mana}</b>
+      <div className="v2-orb energy" title={'Энергия '+battle.mana} aria-label={'Энергия: '+Math.round(energyPct)+'%'}>
+        <div style={{height:energyPct+'%'}}/><b>{battle.mana}</b><span className="v2-orb-percent" aria-hidden="true">{Math.round(energyPct)}%</span>
       </div>
     </section>
 
-    <section className="v2-equipment" aria-label="Экипировка">
+    <section className="v2-equipment" aria-label="Экипировка" data-layout="two-row-gear">
       {V2_GEAR_SLOTS.map(slot=><EquipmentSlot key={slot} slot={slot} item={progress.equipped[slot]} onClick={()=>{setGearFocus(slot);open('hero');}}/>)}
       <button className="v2-gear v2-extra-rune" type="button" onClick={()=>open('runes')} aria-label="Активная руна"><span className="v2-rune-glyph">ᚱ</span><small>Руна</small></button>
       <button className="v2-gear v2-extra-skill" type="button" onClick={()=>open('skills')} aria-label="Активные навыки"><img src={asset('ic-blessing.webp')} alt=""/><small>Навык</small></button>
@@ -303,10 +305,10 @@ export function NextApp() {
       </div>
     </section>
 
-    <nav className="v2-bottom" aria-label="Основная навигация">
+    <nav className="v2-bottom" aria-label="Основная навигация" data-layout="five-button-fixed">
       {V2_BOTTOM_NAV.map(({id,label})=><button key={id} onClick={()=>open(id)}
         className={id==='expedition'?'main':''}
-        type="button" aria-label={label||'Бой'}>
+        type="button" aria-current={overlay===id||(id==='expedition'&&overlay===null)?'page':undefined} aria-label={label||'Бой'}>
         <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo"><img src={asset('battle-stone.webp')} alt=""/>{progress.wins}</small></>}
       </button>)}
     </nav>
@@ -383,6 +385,8 @@ export function NextApp() {
               {skillCategory==='core'&&<button className="v2-cta" type="button" onClick={()=>open('runes')}>Изменить руну навыка</button>}
               <p className="v2-preview-chip">Навыки действительно влияют на автобой и хранятся только в локальной демоверсии. Это тестовые значения, не настоящие начисления.</p>
             </div>
+            <LootbornSkillsTemplate heroLevel={progress.level} levels={demoSkills.levels}
+              onFocus={setSkillCategory} onShowCompanions={()=>open('companions')}/>
           </>}
           {overlay==='runes'&&<>
             <p>Каждая руна изменяет ход демонстрационного боя. Выбор применяется сразу.</p>
@@ -392,6 +396,11 @@ export function NextApp() {
             <p>Выбран один активный спутник. Его роль изменяет бой.</p>
             <div className="v2-comp-list">{followerOptions.map(x=><button key={x.id} onClick={()=>setCompanion(x.id)} className={companion===x.id?'chosen':''}><img src={companionArt[x.id]} alt=""/><span><b>{x.name}</b><small>{x.desc}</small></span>{companion===x.id&&<strong>✓</strong>}</button>)}</div>
             <div className="v2-cow-preview"><img src={companionArt.warcow} alt="Боевая корова в доспехах" className="v2-cow-sprite"/><div><strong>Боевая корова</strong><p>Особенный шестой спутник! Таранит врагов и частично защищает героя. Авторский первый векторный арт — ещё будем совершенствовать перед выпуском.</p><button type="button" className="v2-cow-select" onClick={()=>setCompanion('warcow')}>Выбрать боевую корову</button></div></div>
+            <LootbornCompanionsTemplate selected={companion} level={progress.level}
+              onChoose={alias=>{
+                const chosen=followerOptions.find(x=>x.id===alias);
+                if(chosen)setCompanion(chosen.id);
+              }} onShowSkills={()=>open('skills')}/>
           </>}
           {overlay==='adventure'&&<>
             <p>Доступные главы демонстрационного похода · последняя открытая: {highestUnlockedChapter}. Следующая глава открывается только после победы над боссом текущей.</p>

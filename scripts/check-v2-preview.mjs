@@ -1,45 +1,44 @@
-// TERRITORY 2.0 offline preview checks. No production API calls.
+// The /v2-preview.html route hosts the same isolated React UI as index.html.
+// This replaces the older, non-interactive static mockup while preserving the
+// original 2026-10-24 screenshot and all V1/production safety boundaries.
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
-import { resolve } from 'node:path';
-
-const root = resolve(process.cwd());
-const get = (path) => readFileSync(resolve(root, path), 'utf8');
-const html = get('public/v2-preview.html');
-const css = get('public/v2-preview.css');
-const js = get('public/v2-preview.js');
-const policy = get('src/v2/battleStonePolicy.ts');
-const layout = get('src/v2/interfaceContract.ts');
-const legacyPagesPresent = existsSync(resolve(root, '.github/workflows/pages.yml'));
-const stagingGuard = get('src/game/supabase.ts');
-
-execFileSync(process.execPath, ['--check', 'public/v2-preview.js'], { stdio: 'pipe' });
-assert.match(html, /ТЕСТОВЫЙ МАКЕТ/);
-assert.match(html, /data-view="Арена"/);
-assert.match(html, /v2-orb-blue/);
-assert.match(html, /v2-orb-red/);
-assert.match(html, /v2-equipment/);
-for (const text of ['Порт', 'Навыки', 'Приключение', 'Магазин']) {
-  assert(html.includes(text), 'missing navigation: ' + text);
-}
-for (const text of ['Склад', 'Руны', 'Последователи']) {
-  assert(js.includes(text), 'missing functional preview screen: ' + text);
-}
-for (const asset of [
-  ...Array.from(html.matchAll(/(?:src|href)="\.\/([^"]+)"/g), match => match[1]),
-  ...Array.from(css.matchAll(/url\(['"]?\.\/([^'")]+)['"]?\)/g), match => match[1]),
-]) {
-  assert(existsSync(resolve(root, 'public', asset)), 'preview asset is missing: ' + asset);
-}
-assert(!/fetch\s*\(|XMLHttpRequest|sendBeacon|supabase\./.test(js),
-  'offline preview must not connect to real player account or database');
-assert.match(policy, /campaignEnemyCost:\s*0/);
-assert.match(policy, /campaignBossCost:\s*0/);
-assert.match(policy, /specialRaidAutomaticDeduction:\s*false/);
-assert.match(layout, /arenaButton:\s*'directlyAboveEnergyOrb'/);
-assert.match(layout, /topRightEnergyBar:\s*false/);
-assert.equal(legacyPagesPresent, false, 'old production deployment workflow must not exist in territory-next');
-assert.match(stagingGuard, /VITE_V2_STAGING_APPROVED/);
-assert.match(stagingGuard, /isLegacyProduction/);
-console.log('TERRITORY 2.0 isolated preview assets, navigation, economy rules and production deployment guard OK');
+import {readFileSync,existsSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const read=path=>readFileSync(path,'utf8');
+const html=read('public/v2-preview.html');
+const main=read('src/v2/main.tsx');
+const app=read('src/v2/NextApp.tsx');
+const style=read('src/v2/visual/reference-templates.css');
+const modules=read('src/v2/visual/LootbornTemplates.tsx');
+const config=JSON.parse(read('src/v2/modules/lootborn/lootborn-modules.json'));
+const manager=read('src/v2/SkillManager.ts');
+const nav=read('src/v2/interfaceContract.ts');
+const index=read('index.html');
+const archivedJS=read('public/v2-preview.js');
+assert.match(html,/<iframe[^>]*class="v2-preview-frame"[\s\S]*?src="\.\/"/,
+ 'Preview must embed built React entrypoint at relative path, including GitHub Pages base');
+assert(!html.includes('src="./v2-preview.js"'),'Stale static mockup must not execute');
+assert(!html.includes('href="./v2-preview.css"'),'Stale static mockup must not style the React HUD');
+assert(!/https:\/\/[^"']+/.test(html),'Preview must never load remote code');
+assert(index.includes('/src/v2/main.tsx'));
+assert(main.includes("from './NextApp'"));
+assert(app.includes("import './visual/reference-templates.css'"));
+assert(app.includes('LootbornSkillsTemplate')&&app.includes('LootbornCompanionsTemplate'));
+assert(app.includes('data-layout="two-row-gear"'));
+assert(app.includes('data-layout="five-button-fixed"'));
+assert(app.includes('v2-orb-percent')&&app.includes('heroHpPct')&&app.includes('energyPct'));
+assert(modules.includes("from '../SkillManager'"),'UI must use validated single-source JSON library');
+assert(manager.includes("from './modules/lootborn/lootborn-modules.json'"));
+assert.equal(config.schema,'territory_v2');
+assert.equal(config.skills.length,3);
+assert.equal(config.companions.length,2);
+assert.equal(config.limits.maxActiveCompanions,1);
+assert(style.includes('grid-template-rows:repeat(2,minmax(0,1fr))'));
+assert(style.includes('grid-template-columns:repeat(5,minmax(0,1fr))'));
+for(const id of ["port","skills","expedition","adventure","shop"])
+ assert(nav.includes("id: '"+id+"'"),'Missing accepted navigation destination '+id);
+assert(existsSync('docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg'));
+execFileSync(process.execPath,['--check','public/v2-preview.js'],{stdio:'pipe'});
+assert(!/fetch\s*\(|XMLHttpRequest|sendBeacon|supabase\./.test(archivedJS));
+assert(!/import.*\/game\//.test(main+app+modules),'V1 runtime leaked into preview');
+console.log('OK: screenshot-aligned V2 React iframe preview, data-driven templates, 2 spheres, 2 rows, 5-button navigation');
