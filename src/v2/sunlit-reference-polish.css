@@ -1,0 +1,392 @@
+/* TERRITORY 2.0 — screenshot-driven sunlit mobile polish, 24 October 2026.
+ * Derived from the single approved image:
+ * docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg
+ * This is a temporary art-direction correction, not a claim of pixel-perfect
+ * visual acceptance. The original owner's approved image remains unchanged.
+ */
+.v2-shell{
+  background:#caeaff;
+}
+.v2-prelabel{display:none}
+.v2-header{
+  min-height:68px;
+  height:68px;
+  border-bottom:2px solid #a9c0e2;
+  background:linear-gradient(180deg,#2b96ea,#76c0f8 85%,#96d9ff);
+  box-shadow:inset 0 -1px #f2fbff,0 1px 6px #20487588;
+  grid-template-columns:53px minmax(98px,1.05fr) minmax(166px,1.7fr);
+}
+.v2-profile{
+  width:51px;height:60px;
+  border:3px solid #f8d48d;
+  border-radius:8px;
+  background:linear-gradient(#375078,#162b48);
+}
+.v2-level-badge{
+  font-size:11px;
+  border:2px solid #f5d990;
+  background:#142946;
+}
+.v2-identity strong{
+  font-size:12px;
+  color:white;
+  text-shadow:0 2px 3px #142e55,0 0 4px #142e55;
+}
+.v2-power-banner{
+  border:2px solid #f1b26e;
+  border-radius:3px 12px 5px 3px;
+  background:linear-gradient(#ff473a,#b80b14);
+  box-shadow:0 1px 3px #253d5b99,inset 0 1px 0 #ffe4bd;
+}
+.v2-wallet button{
+  border:2px solid #efc67d;
+  background:linear-gradient(#6c4d3d,#352932);
+  box-shadow:0 2px 2px #2e506699,inset 0 1px 0 #fff8d275;
+  color:#fff3de;
+}
+.v2-wallet button b{
+  color:#fffbd8;
+  background:linear-gradient(#b48243,#674020);
+  border:1px solid #e2bc73;
+}
+
+/* Daytime, vivid mountains, waterfalls and a Viking settlement.
+   Existing placeholder image is only a stepping stone toward approved winter art. */
+.v2-battle.v2-biome-0,
+.v2-battle.v2-biome-1,
+.v2-battle.v2-biome-2,
+.v2-battle.v2-biome-3{
+  background-image:
+    linear-gradient(180deg,rgba(103,190,251,.07) 0%,rgba(235,250,255,.12) 52%,rgba(150,212,250,.14) 82%,rgba(217,239,248,.18) 100%),
+    url('/city-bg-vibrant.webp');
+  background-position:center,center 46%;
+  background-size:100% 100%,100% 100%;
+  background-repeat:no-repeat;
+  background-color:#a3ddff;
+}
+.v2-battle:before{
+  background:linear-gradient(180deg,#60b9ff05 0%,transparent 54%,#eefbff17 72%,#2f55791f 100%);
+}
+.v2-battle:after{
+  height:12%;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 56% 40% at 12% 80%,#faffff 0%,#def2ffad 82%,transparent 85%),
+    radial-gradient(ellipse 60% 37% at 87% 86%,#fff 0%,#d6eeffb5 83%,transparent 85%),
+    linear-gradient(180deg,transparent,#e9f8ffb8 68%,#b9dff7 100%);
+}
+.v2-parallax{
+  opacity:.22;
+  background-image:linear-gradient(110deg,transparent 40%,#fff9 52%,transparent 68%);
+  animation-duration:28s;
+}
+.v2-stagehead{
+  left:62px;right:60px;top:5px;gap:2px;
+  text-shadow:0 2px 2px #e6f5ff,0 1px 1px #2d4c79,1px 0 #c2def4;
+}
+.v2-stagehead strong{
+  color:#06365c;
+  font-size:clamp(11px,2.9vw,15px);
+  font-weight:1000;
+  line-height:1.1;
+  text-shadow:1px 1px #fff,0 0 3px #eefaff,0 2px 3px #4b8ebc;
+}
+.v2-stagehead small{
+  color:#0a355c;
+  font-weight:950;
+  font-size:clamp(11px,2.5vw,13px);
+  text-shadow:0 1px #fff,0 0 5px #fff;
+}
+.v2-stage-track{
+  height:23px;
+  justify-content:space-between;
+}
+.v2-stage-track:before{background:#7b5c37;box-shadow:0 1px 1px #ffffff8c}
+.v2-stage-track>span{width:23px;height:23px;border-color:#deba75;background:linear-gradient(#cfaa74,#69503c);color:#fdf9df}
+.v2-stage-track>span.current{border-color:#fff3bc;background:linear-gradient(#fcd476,#9c5225)}
+.v2-stage-track>span.boss-node{
+  width:29px;height:29px;
+  background:linear-gradient(#f44d38,#981523);
+  border-color:#edbd83;
+  box-shadow:0 2px 4px #43221e66;
+}
+.v2-stage-enter{
+  right:-57px;
+  top:0;
+  width:50px;height:51px;
+  border:none;
+  background:transparent;
+  box-shadow:none;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  padding:0;
+  font-size:10px;
+  text-shadow:0 1px 2px #000,0 0 3px #161b2c;
+}
+.v2-stage-enter .v2-portal-spark{
+  display:block;width:39px;height:39px;border-radius:50%;
+  background:radial-gradient(circle at 44% 47%,#efebfa 0%,#ffdd81 7%,#ff8c28 13%,#bb1d16 29%,#17113c 43%,#f8bd64 56%,#a94123 75%);
+  border:3px ridge #f6c477;
+  box-shadow:inset 0 0 5px #ffe596,0 2px 5px #13294c83;
+}
+.v2-stage-enter>span:last-child{font-size:11px;line-height:12px;color:white;font-weight:950}
+.v2-stage-enter:focus-visible{outline:2px solid #1b8de0}
+
+/* Side buttons: like the reference, float over the bright stage. */
+.v2-left-buttons{
+  width:66px;
+  top:70px;bottom:9px;left:1px;
+  display:grid;
+  grid-template-rows:repeat(7,minmax(0,1fr));
+  overflow:visible;
+}
+.v2-right-buttons{
+  width:65px;
+  top:72px;bottom:16%;right:1px;
+  display:grid;grid-template-rows:repeat(4,minmax(0,1fr));
+  overflow:visible;
+}
+.v2-shortcut{
+  filter:drop-shadow(0 1px 2px #12243b);
+  align-self:center;
+  width:100%;
+}
+.v2-shortcut b{
+  background:transparent;
+  border:0;
+  border-radius:7px;
+  box-shadow:none;
+  width:clamp(29px,5.7dvh,41px);
+  height:clamp(29px,5.7dvh,41px);
+}
+.v2-shortcut b>img{
+  width:100%;height:100%;
+  filter:drop-shadow(0 2px 2px #000a);
+}
+.v2-shortcut span{
+  max-width:65px;
+  font-size:clamp(8px,2.1vw,11px);
+  line-height:1.02;
+  color:#fff;
+  font-weight:1000;
+  text-shadow:0 2px 2px #000,1px 1px 2px #000,0 0 3px #000;
+  overflow-wrap:anywhere;
+}
+.v2-shortcut .v2-menu-glyph{
+  width:25px;height:25px;
+  border-radius:5px;
+  background:#202735!important;
+  box-shadow:0 2px 2px #1830499e!important;
+}
+.v2-menu-glyph:before{border-color:#fff;background:linear-gradient(90deg,transparent 42%,white 42%,white 58%,transparent 58%),linear-gradient(transparent 42%,white 42%,white 58%,transparent 58%)}
+
+/* Keep hero visually central, companion behind him, foes facing hero.
+   Stop the excessive oversized doubled-viking appearance. */
+.v2-combatants>div{
+  bottom:11%;
+  filter:drop-shadow(0 3px 3px #23445b8c);
+}
+.v2-follow{left:11%;width:30%;height:31%;z-index:1}
+.v2-follow img{height:95%;width:100%;object-fit:contain;object-position:center bottom}
+.v2-warrior{left:34%;width:31%;height:40%;z-index:2}
+.v2-foe{right:9%;width:28%;height:34%;z-index:3}
+.v2-foe.boss{right:6%;width:35%;height:45%}
+.v2-arena-button{
+  width:58px;right:2px;bottom:5px;font-size:11px;
+  text-shadow:0 1px 2px #000,0 0 3px #000;
+}
+.v2-arena-button img{width:45px;height:42px}
+.v2-foe-hp{border-color:#451b1d;background:#481e26;height:7px;top:-6px}
+.v2-combat-notice{
+  position:absolute;
+  z-index:6;
+  left:28%;right:21%;bottom:4%;
+  width:auto;
+  padding:4px 8px;
+  font-size:11px;
+  line-height:1.1;
+  border:1px solid #dfc083;
+  border-radius:15px;
+  background:#26364ed9;
+  box-shadow:0 2px 5px #28324687;
+  pointer-events:none;
+}
+
+/* Reference palette: burgundy/brown HUD, red HP and blue mana orbs. */
+.v2-healthrow{
+  height:47px;
+  background:linear-gradient(#6c4a40,#422f32);
+  border-top:3px solid #a77e5b;
+  border-bottom:3px solid #c5a27f;
+}
+.v2-orb{height:44px;width:44px;border-color:#6a5149;box-shadow:inset 1px 4px 5px #fff8,0 1px 2px #1e0b0b}
+.v2-orb.hp{background:radial-gradient(circle at 31% 26%,#ffaba0,#f33133 42%,#a30812 80%)}
+.v2-orb.energy{background:radial-gradient(circle at 30% 23%,#d3faff,#06c9fb 46%,#006eb9 83%)}
+.v2-lvl{background:linear-gradient(#67c633,#2e851a);border-color:#a8e880;color:white}
+.v2-hp-bar{border-color:#714c3c;border-radius:8px;background:#17292c}
+.v2-hp-bar>div{background:linear-gradient(#57e441,#12a225)}
+
+/* Compact cream-colored item tiles, never a giant dark second HUD. */
+.v2-equipment{
+  flex:none;
+  height:105px;
+  min-height:105px;
+  gap:3px;
+  padding:4px 5px;
+  background:linear-gradient(#ab8a6e,#6d4b45 50%,#49313a);
+  border-top:1px solid #e4c49c;
+  border-bottom:2px solid #cba275;
+}
+.v2-gear{
+  border:2px solid #7e655c;
+  border-radius:7px;
+  background:linear-gradient(#fff9ef,#e8ddca);
+  box-shadow:inset 0 1px #fff,0 2px 2px #2c1b24bb;
+}
+.v2-gear-weapon{border:3px solid #e9be63}
+.v2-extra-rune{
+  background:linear-gradient(#f3dcff,#ab78e7);
+  border-color:#d8b7fc;
+}
+.v2-extra-skill{background:linear-gradient(#fff0bf,#c89246);border-color:#e7c679}
+.v2-extra-follower{
+  background:linear-gradient(#f9e8c6,#c89458);
+  border-color:#f4c77e;
+}
+.v2-extra-follower img{height:88%;width:74%;object-fit:contain;object-position:28% center}
+.v2-extra-follower small{white-space:nowrap}
+
+/* Crucial: reserve the center for crossed axes so quest text is never covered. */
+.v2-commands{
+  height:49px;
+  display:grid;
+  grid-template-columns:minmax(0,41%) minmax(61px,18%) minmax(0,1fr);
+  align-items:center;
+  gap:2px;
+  padding:4px 5px;
+  background:linear-gradient(#694c49,#392b32);
+  border-bottom:2px solid #9c775d;
+  position:relative;
+  z-index:8;
+}
+.v2-task{
+  grid-column:1;
+  width:100%;height:100%;
+  padding:3px 6px;
+  justify-content:space-evenly;
+  background:linear-gradient(#4f3b36,#2c262d);
+  border-color:#d1ae8b;
+  overflow:hidden;
+  gap:0;
+}
+.v2-task strong{font-size:9px;line-height:1.03}
+.v2-task span{
+  display:block;
+  font-size:clamp(9px,2.6vw,12px);
+  line-height:1.1;
+  max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.v2-task small{
+  font-size:clamp(8px,2.1vw,10px);
+  white-space:nowrap;
+  line-height:1;
+}
+.v2-command-spacer{grid-column:2;pointer-events:none}
+.v2-command-actions{
+  grid-column:3;min-width:0;height:100%;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;align-items:center;
+}
+.v2-command-actions .v2-control{
+  height:39px;
+  width:100%;
+  min-width:0;
+  font-size:clamp(18px,4.5vw,25px);
+  border-color:#b7a5a8;
+  background:linear-gradient(#735458,#42343f);
+  border-radius:9px;
+}
+.v2-command-actions .v2-control.repeat{font-size:29px;background:linear-gradient(#ac803e,#5a4428)}
+.v2-command-actions .v2-rank-icon{width:28px;height:27px}
+
+/* Five icon shortcuts, highlighted only central crossed axes. */
+.v2-bottom{
+  height:68px;
+  grid-template-columns:1fr 1fr 1.18fr 1fr 1fr;
+  gap:3px;
+  align-items:stretch;
+  position:relative;
+  z-index:9;
+  padding:4px 3px max(env(safe-area-inset-bottom),3px);
+  border-top:2px solid #6c5150;
+  background:linear-gradient(#43343a,#29272f);
+}
+.v2-bottom button{
+  background:linear-gradient(#67504b,#3e3339);
+  border:1px solid #ac8880;
+  border-radius:8px 8px 2px 2px;
+  gap:0;
+  font-size:clamp(9px,2.4vw,12px);
+}
+.v2-bottom button>img{width:35px;height:34px;max-width:86%}
+.v2-bottom button.main{
+  height:82px;
+  align-self:end;
+  transform:translateY(0px);
+  margin-top:-14px;
+  border:3px solid #a7d2ee;
+  border-radius:21px 21px 16px 16px;
+  background:linear-gradient(150deg,#3b9edd,#0d467a 44%,#10234d);
+  box-shadow:inset 0 0 5px #ccf7ff,0 1px 7px #0d324788;
+  justify-content:flex-start;
+  padding:2px 0;
+  position:relative;
+  z-index:10;
+}
+.v2-bottom button.main>img{width:49px;height:46px}
+.v2-bottom button.main .v2-nav-fight{
+  font-size:11px;color:#fff1c9;font-weight:1000;
+  letter-spacing:.06em;line-height:1;
+}
+.v2-bottom button.main .v2-nav-demo{
+  font-size:8px;
+  color:#b8efff;
+  line-height:10px;
+  letter-spacing:.12em;
+}
+.v2-bottom button span{white-space:normal;text-align:center;line-height:1.05}
+
+/* No clipped task or unreadable action labels on narrow Telegram browsers. */
+@media(max-width:370px){
+  .v2-header{grid-template-columns:45px minmax(83px,1fr) minmax(155px,1.75fr);height:64px}
+  .v2-profile{width:44px;height:55px}
+  .v2-wallet button{font-size:8px}
+  .v2-left-buttons{width:58px;top:64px}
+  .v2-right-buttons{width:58px;top:66px;bottom:16%}
+  .v2-shortcut span{font-size:8px;max-width:57px}
+  .v2-stagehead{left:54px;right:54px}
+  .v2-stage-enter{right:-53px}
+  .v2-commands{grid-template-columns:minmax(0,42%) minmax(57px,16%) minmax(0,1fr)}
+  .v2-command-actions .v2-control{height:36px}
+  .v2-task strong{font-size:8px}
+  .v2-task span{font-size:9px}
+  .v2-task small{font-size:8px}
+  .v2-bottom button.main{height:79px}
+  .v2-equipment{height:100px;min-height:100px}
+}
+@media(max-height:650px){
+  .v2-header{height:59px;min-height:59px}
+  .v2-profile{height:52px}
+  .v2-battle{min-height:145px}
+  .v2-left-buttons{top:57px;bottom:0}
+  .v2-right-buttons{top:57px;bottom:13%}
+  .v2-shortcut b{height:23px;width:25px}
+  .v2-shortcut span{font-size:7px}
+  .v2-equipment{height:90px;min-height:90px}
+  .v2-commands{height:44px}
+  .v2-bottom{height:62px}
+  .v2-bottom button.main{height:74px}
+}
+@media(prefers-reduced-motion:reduce){
+  .v2-battle .v2-parallax{animation:none}
+}
