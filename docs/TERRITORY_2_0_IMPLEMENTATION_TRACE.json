@@ -270,18 +270,6 @@
       "implementationStatus": "NOT_VERIFIED_COMPLETE"
     },
     {
-      "sourceId": "LW-23",
-      "sourceRegion": "lootborn-cn",
-      "evidenceType": "official",
-      "claim": "Событие с бросанием кубика",
-      "sourceURL": "https://www.taptap.cn/moment/686315198453124818",
-      "requirementId": "SCR-26",
-      "scenarioId": "GMP-11",
-      "acceptanceId": "E2E-046",
-      "disposition": "regional-released",
-      "implementationStatus": "NOT_VERIFIED_COMPLETE"
-    },
-    {
       "sourceId": "LW-24",
       "sourceRegion": "lootborn-player",
       "evidenceType": "secondary",
@@ -362,18 +350,6 @@
       "requirementId": "SCR-20",
       "scenarioId": "GMP-10",
       "acceptanceId": "E2E-037",
-      "disposition": "historical-released",
-      "implementationStatus": "NOT_VERIFIED_COMPLETE"
-    },
-    {
-      "sourceId": "COC-07",
-      "sourceRegion": "coc",
-      "evidenceType": "official-channel",
-      "claim": "Событие с бросанием кубиков Monopoly",
-      "sourceURL": "https://tgtop.org/tg/coc_web3_news",
-      "requirementId": "SCR-26",
-      "scenarioId": "GMP-11",
-      "acceptanceId": "E2E-046",
       "disposition": "historical-released",
       "implementationStatus": "NOT_VERIFIED_COMPLETE"
     },
