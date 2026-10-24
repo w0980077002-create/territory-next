@@ -314,7 +314,7 @@ export function NextApp() {
     </nav>
 
     {overlay&&<div className="v2-mask" role="presentation" onClick={()=>setOverlay(null)}>
-      <section className="v2-drawer" role="dialog" aria-modal="true" aria-label={routeTitle[overlay]} onClick={e=>e.stopPropagation()}>
+      <section className="v2-drawer" role="dialog" aria-modal="false" aria-label={routeTitle[overlay]} onClick={e=>e.stopPropagation()}>
         <header><button onClick={()=>overlay==='menu'?setOverlay(null):setOverlay('menu')} aria-label="Назад">‹</button><h2>{routeTitle[overlay]}</h2><button onClick={()=>setOverlay(null)} aria-label="Закрыть">×</button></header>
         <div className="v2-drawer-content">
           {overlay==='menu'&&<div className="v2-tilegrid">
@@ -397,6 +397,7 @@ export function NextApp() {
             <div className="v2-comp-list">{followerOptions.map(x=><button key={x.id} onClick={()=>setCompanion(x.id)} className={companion===x.id?'chosen':''}><img src={companionArt[x.id]} alt=""/><span><b>{x.name}</b><small>{x.desc}</small></span>{companion===x.id&&<strong>✓</strong>}</button>)}</div>
             <div className="v2-cow-preview"><img src={companionArt.warcow} alt="Боевая корова в доспехах" className="v2-cow-sprite"/><div><strong>Боевая корова</strong><p>Особенный шестой спутник! Таранит врагов и частично защищает героя. Авторский первый векторный арт — ещё будем совершенствовать перед выпуском.</p><button type="button" className="v2-cow-select" onClick={()=>setCompanion('warcow')}>Выбрать боевую корову</button></div></div>
             <LootbornCompanionsTemplate selected={companion} level={progress.level}
+              getPortrait={alias=>companionArt[alias as CompanionKind]}
               onChoose={alias=>{
                 const chosen=followerOptions.find(x=>x.id===alias);
                 if(chosen)setCompanion(chosen.id);

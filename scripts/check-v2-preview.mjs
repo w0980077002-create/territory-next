@@ -27,6 +27,13 @@ assert(app.includes('LootbornSkillsTemplate')&&app.includes('LootbornCompanionsT
 assert(app.includes('data-layout="two-row-gear"'));
 assert(app.includes('data-layout="five-button-fixed"'));
 assert(app.includes('v2-orb-percent')&&app.includes('heroHpPct')&&app.includes('energyPct'));
+assert(app.includes('aria-modal="false"'),'Drawer must allow persistent bottom navigation');
+assert(modules.includes('aria-expanded={inspectedId===skill.id}'),'Skill cards must expand in-place');
+assert(modules.includes('v2-module-inspector'),'Skill details must come directly from V2 module config');
+assert(modules.includes('getPortrait(companion.selectorAlias)'),'Companion should use existing approved sprites');
+assert(style.includes('.v2-shell .v2-mask{bottom:var(--v2-preview-nav-height);z-index:50}'),'Backdrop must not block footer');
+assert(style.includes('.v2-shell .v2-bottom{z-index:60}'),'Bottom navigation must stay clickable above drawer');
+assert(style.includes('max-height:650px'),'Short screen drawer/footer contract missing');
 assert(modules.includes("from '../SkillManager'"),'UI must use validated single-source JSON library');
 assert(manager.includes("from './modules/lootborn/lootborn-modules.json'"));
 assert.equal(config.schema,'territory_v2');

@@ -66,3 +66,38 @@
  .v2-module-card-text{gap:2px}
 }
 @media(prefers-reduced-motion:reduce){.v2-module-card{transition:none!important}}
+
+/* SCR-01..08 — 5 locked tabs stay live while any drawer is open.
+   The drawer covers the fight, not the bottom bar. No scrolling it away. */
+.v2-shell{--v2-preview-nav-height:78px}
+.v2-shell .v2-mask{bottom:var(--v2-preview-nav-height);z-index:50}
+.v2-shell .v2-bottom{z-index:60}
+.v2-shell .v2-drawer{height:min(91%,760px);max-height:100%;overscroll-behavior:contain}
+.v2-shell .v2-drawer-content{scrollbar-gutter:stable}
+.v2-shell .v2-bottom button[aria-current="page"]:not(.main){
+  border-color:#ffe4a0;background:linear-gradient(#705944,#32263a);
+  box-shadow:inset 0 0 0 1px #f7d2886b,0 -1px 8px #f0bf5355
+}
+.v2-module-icon--companion img{width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 2px 3px #101323)}
+.v2-module-inspector{margin:9px 0 2px;padding:10px;border:1px solid #e1b76e;
+  border-radius:10px;background:linear-gradient(135deg,#473b40,#1b3044);
+  box-shadow:inset 0 1px #ffe7ac77}
+.v2-module-inspector-header{display:flex;justify-content:space-between;
+  align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid #d1b48180}
+.v2-module-inspector-header strong{color:#ffe2a2;font-size:13px}
+.v2-module-inspector-header span{color:#ebd3a7;font-size:10px;white-space:nowrap}
+.v2-module-inspector-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:5px 8px;margin:10px 0}
+.v2-module-inspector-grid>div{padding:6px;border-radius:6px;background:#15283bad;
+  border:1px solid #7997aa63;min-width:0}
+.v2-module-inspector-grid dt{color:#abc4d7;font-size:9px;margin-bottom:3px}
+.v2-module-inspector-grid dd{margin:0;color:#fff0c7;font-size:11px;
+  font-weight:900;overflow-wrap:anywhere}
+.v2-module-inspector-close{display:block;width:100%;padding:8px;
+  border:1px solid #d2b27c;border-radius:7px;background:#3c4f63;color:#ffe3a5;
+  font-size:11px;font-weight:900}
+@media(max-width:370px){.v2-shell{--v2-preview-nav-height:72px}}
+@media(max-height:650px){.v2-shell{--v2-preview-nav-height:62px}
+  .v2-shell .v2-drawer{height:min(95%,760px)}
+}
