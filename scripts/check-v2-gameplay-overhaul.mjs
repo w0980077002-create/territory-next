@@ -106,4 +106,5 @@ assert(app.includes('<StageMapExperience')&&app.includes('<OverhaulShopExperienc
 assert(app.includes('clearV2StageSave('));
 assert(app.includes('stageEncounter(campaign.currentStage,heroClass)'));
 assert(app.includes('buyV2Shop(campaign,progress,kind,'));
+assert(app.includes("if(kind==='reset')setDemoSkills(createV2DemoSkillState())"),'Reset must also release allocated demo skill points');
 console.log('OK: 5x20 stages, boss/elite mods, loot burst + autoequip, rune/gold shop, 100 clears, safe V2 persistence');

@@ -246,6 +246,7 @@ export function NextApp() {
     setGame(g=>({...g,campaign:result.campaign,progress:result.progress,burst:null}));
     if(kind==='companion'&&result.campaign.lastCompanionRoll)
       setCompanion(result.campaign.lastCompanionRoll);
+    if(kind==='reset')setDemoSkills(createV2DemoSkillState());
   };
   const navigateStage=(id:number)=>{
     if(id>campaign.highestUnlockedStage)return;
