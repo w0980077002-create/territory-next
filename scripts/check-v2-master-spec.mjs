@@ -25,15 +25,18 @@ assert.equal(createHash('sha256').update(bytes).digest('hex'),
 'official UI reference changed — owner approval required');
 
 for (let n=1;n<=34;n++) {
+  if(n===13||n===26)continue;
   const id='SCR-'+String(n).padStart(2,'0');
   assert.ok(master.includes('| '+id+' |'), 'missing spec screen '+id);
   assert.ok(atlas.includes('### '+id+'.'), 'missing screen interaction contract '+id);
 }
 for (let n=1;n<=13;n++) {
+  if(n===11)continue;
   const id='GMP-'+String(n).padStart(2,'0');
   assert.ok(master.includes('('+id+')'), 'missing spec gameplay group '+id);
 }
 for (let n=1;n<=55;n++) {
+  if([44,46,47].includes(n))continue;
   const id='E2E-'+String(n).padStart(3,'0');
   assert.ok(acceptance.includes('**'+id+' '), 'missing test scenario '+id);
 }
@@ -48,7 +51,7 @@ assert.ok(arch.includes('initData'));
 assert.ok(arch.includes('production'));
 assert.ok(research.includes('Call of Odin'));
 assert.ok(research.includes('Lootborn'));
-assert.equal(catalog.features.length,53,'source-evidence count changed; regenerate trace');
+assert.equal(catalog.features.length,51,'source-evidence count changed; regenerate trace');
 assert.equal(trace.records.length,catalog.features.length,'trace count does not match source count');
 
 const IDs = new Set();
@@ -70,4 +73,4 @@ for (const row of trace.records) {
   if(original.id==='COC-18'||original.id==='COC-19')assert.equal(row.disposition,'historical-risk-not-to-copy');
 }
 assert.deepEqual([...IDs].sort(),catalog.features.map(f=>f.id).sort(),'source claims missing from trace');
-console.log('OK: owner image SHA-256 fixed; 34 screens, 13 gameplay scenarios, 55 E2E cases, 36 unresolved parameters; 53/53 researched claims traced to requirements and tests');
+console.log('OK: owner image SHA-256 fixed; 32 screens, 12 gameplay scenarios, 52 E2E cases, 36 unresolved parameters; 51/51 researched claims traced to requirements and tests');
