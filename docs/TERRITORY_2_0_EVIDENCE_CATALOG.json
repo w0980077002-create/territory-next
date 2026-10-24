@@ -17,7 +17,12 @@
     "cArchive": "https://tgtop.org/tg/coc_web3_news",
     "cWhite": "https://doc.cocweb3.xyz/",
     "shutdown": "https://telemetr.me/content/COC_Web3_News",
-    "reddit": "https://www.reddit.com/r/BeerMoneyGameGuides/comments/1ly1bfo"
+    "reddit": "https://www.reddit.com/r/BeerMoneyGameGuides/comments/1ly1bfo",
+    "tapOfficial": "https://www.taptap.cn/app/738818/topic?type=official",
+    "tapEvent": "https://www.taptap.cn/moment/859489741802832959",
+    "tapOct21": "https://www.taptap.cn/moment/862024761239145246",
+    "tapOct24": "https://www.taptap.cn/moment/862753911151264316",
+    "tapSep": "https://www.taptap.cn/moment/843921763438952479"
   },
   "features": [
     {
@@ -423,6 +428,78 @@
       "evidence": "announcement-only",
       "source": "cArchive",
       "title": "Анонс гильдий; запуск не подтверждён",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-25",
+      "game": "lootborn-cn",
+      "system": "seasonal-gems-apocalypse-invasion",
+      "evidence": "official",
+      "source": "tapOfficial",
+      "title": "Сезонные самоцветы с отдельной оценкой силы и элитными источниками дропа",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-26",
+      "game": "lootborn-cn",
+      "system": "temporary-extraction-event",
+      "evidence": "official",
+      "source": "tapEvent",
+      "title": "Событийный режим поиска предметов, боя, эвакуации и ограниченного рюкзака",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-27",
+      "game": "lootborn-cn",
+      "system": "temporary-three-choice-skill-buffs",
+      "evidence": "official",
+      "source": "tapEvent",
+      "title": "Внутри событийной экспедиции выдаётся выбор одного из трёх улучшений навыков",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-28",
+      "game": "lootborn-cn",
+      "system": "temporary-event-equalized-stats",
+      "evidence": "official",
+      "source": "tapEvent",
+      "title": "Временное выравнивание начальных характеристик только внутри особого события",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-29",
+      "game": "lootborn-cn",
+      "system": "rune-engraving-merging-and-replacement",
+      "evidence": "official",
+      "source": "tapOct24",
+      "title": "Ретроспективно подтверждённые слияние и замена гравировок в S2",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-30",
+      "game": "lootborn-cn",
+      "system": "warlock-summoner-class-plan",
+      "evidence": "announcement-only",
+      "source": "tapOct24",
+      "title": "Планируемый класс призывателя (зима 2026): не выпущен на дату исследования",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-31",
+      "game": "lootborn-cn",
+      "system": "s3-coop-territory-wars-plan",
+      "evidence": "announcement-only",
+      "source": "tapOct24",
+      "title": "Анонс новых кооперативных режимов и войн за территории гильдий в S3",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-32",
+      "game": "lootborn-cn",
+      "system": "october-event-network-reconnect-fixes",
+      "evidence": "official",
+      "source": "tapOct21",
+      "title": "Подтверждённые сетевые и боевые исправления событийного режима 21 октября 2026",
       "implementation": "candidate-not-complete"
     }
   ]
