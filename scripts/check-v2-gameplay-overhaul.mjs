@@ -46,7 +46,10 @@ for(let i=1;i<=100;i++){
  const resolution=core.settleV2Stage(campaign,progress,receipt,777,(i*.381)%1);
  assert(resolution.burst);
  assert.equal(resolution.burst.stageId,i);
- assert.equal(resolution.burst.items.length,core.stageAt(i).kind==='boss'?3:core.stageAt(i).kind==='elite'?2:1);
+ const rawDrops=core.stageAt(i).kind==='boss'?3:core.stageAt(i).kind==='elite'?2:1;
+ assert(resolution.burst.items.length<=rawDrops,'Inventory limit must cap generated loot');
+ assert(resolution.burst.items.length>=0);
+ assert(resolution.progress.materials>=old.materials,'Overflow loot should convert to materials');
  assert.equal(resolution.campaign.highScores[String(i)],777);
  assert.equal(resolution.campaign.claimedStages.includes(i),true);
  assert.equal(resolution.campaign.highestUnlockedStage,Math.min(100,i+1));
