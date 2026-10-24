@@ -38,7 +38,7 @@
     "test:clans": "node scripts/check-clans.mjs",
     "test:wheel": "node scripts/check-fortune.mjs && node scripts/check-fortune-client.mjs",
     "test:wheel:browser": "node scripts/build-fortune-preview.mjs && python scripts/check-fortune-browser.py",
-    "test:v2": "node scripts/check-v2-preview.mjs && node scripts/check-v2-combat.mjs && node scripts/check-v2-entry.mjs"
+    "test:v2": "node scripts/check-v2-preview.mjs && node scripts/check-v2-combat.mjs && node scripts/check-v2-entry.mjs && node scripts/check-v2-progression.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
