@@ -3,6 +3,8 @@ import { encounterForChapter, nextPreviewTick, startPreviewEncounter, type HeroC
 import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, type V2ScreenId } from './interfaceContract';
 import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import { QuestExperience } from './QuestExperience';
+import { PortExperience } from './PortExperience';
+import {createV2DemoMiningState,beginV2DemoMining,claimV2DemoMining,cancelV2DemoMining,type V2DemoResource} from './core/demoPort';
 import {createV2DemoQuestState,recordV2DemoQuestVictory,claimV2DemoQuest,type V2DemoQuestId} from './core/demoQuests';
 import { DEMO_START_CHAPTER, DEMO_WAVES_PER_CHAPTER, chooseDemoChapter, nextDemoChapterVictory, demoCombatSample } from './core/campaignFlow';
 import { V2_SKILL_CATEGORIES, type V2SkillCategory } from './core/buildLoadout';
@@ -135,6 +137,7 @@ export function NextApp() {
   const [notice,setNotice] = useState('');
   const [progress,setProgress] = useState<V2Progression>(()=>offlineSave?.progress??createV2DemoProgress());
   const [questState,setQuestState] = useState(()=>offlineSave?.quests??createV2DemoQuestState());
+  const [miningState,setMiningState] = useState(()=>offlineSave?.mining??createV2DemoMiningState());
   const [encounterId,setEncounterId] = useState(offlineSave?.encounterId??1);
   const [gearFocus,setGearFocus] = useState<V2GearSlot>('weapon');
   const heroStats = useMemo(()=>statsFromV2Progress(progress),[progress]);
@@ -154,11 +157,11 @@ export function NextApp() {
       v2DemoStorage(),
       {version:1,savedAt:Date.now(),chapter,wave,highestUnlockedChapter,
        encounterId,heroClass,rune,companion,speed,auto,victories,defeats,
-       progress,builds:demoBuilds,quests:questState}
+       progress,builds:demoBuilds,quests:questState,mining:miningState}
     );
     setSaveStatus(ok?'local':'memory');
   },[chapter,wave,highestUnlockedChapter,encounterId,heroClass,rune,
-     companion,speed,auto,victories,defeats,progress,demoBuilds,questState]);
+     companion,speed,auto,victories,defeats,progress,demoBuilds,questState,miningState]);
   useEffect(()=>{
     if(!auto || battle.finished) return;
     const interval = window.setInterval(()=>{
@@ -309,9 +312,19 @@ export function NextApp() {
       <section className="v2-drawer" role="dialog" aria-modal="true" aria-label={routeTitle[overlay]} onClick={e=>e.stopPropagation()}>
         <header><button onClick={()=>overlay==='menu'?setOverlay(null):setOverlay('menu')} aria-label="Назад">‹</button><h2>{routeTitle[overlay]}</h2><button onClick={()=>setOverlay(null)} aria-label="Закрыть">×</button></header>
         <div className="v2-drawer-content">
-          {(overlay==='menu'||overlay==='port')&&<div className="v2-tilegrid">
-            {(overlay==='menu'?V2_EXTRA_MENU:[...V2_EXTRA_MENU.slice(0,4),{id:'adventure',label:'Приключение'},{id:'arena',label:'Арена'},{id:'games',label:'Игры'},{id:'professions',label:'Профессии'}]).map(x=><ViewTile key={x.id} name={x.label} icon={shortcutIcon[x.id]??'✦'} onClick={()=>open(x.id as V2ScreenId)}/>)}
+          {overlay==='menu'&&<div className="v2-tilegrid">
+            {V2_EXTRA_MENU.map(x=><ViewTile key={x.id} name={x.label} icon={shortcutIcon[x.id]??'✦'} onClick={()=>open(x.id as V2ScreenId)}/>)}
           </div>}
+          {(overlay==='port'||overlay==='professions')&&<PortExperience
+            mode={overlay}
+            state={miningState}
+            blueGems={progress.gems}
+            onBegin={(resource:V2DemoResource)=>setMiningState(s=>beginV2DemoMining(s,resource,Date.now()))}
+            onClaim={()=>setMiningState(s=>claimV2DemoMining(s,Date.now()))}
+            onCancel={()=>setMiningState(cancelV2DemoMining)}
+            onWarehouse={()=>open('warehouse')}
+            onProfessions={()=>open('professions')}
+          />}
           {(overlay==='hero'||overlay==='warehouse')&&<InventoryExperience
             view={overlay}
             progress={progress}
@@ -402,7 +415,7 @@ export function NextApp() {
             }}>Начать демонстрацию заново</button>
             <p>Выбор десяти разных фонов будет добавлен отдельным этапом; текущий фон по решению владельца не меняется.</p>
           </div>}
-          {['shop','specialMarket','welcomeBundle','trials','friends','invitation','socialRewards','seaBundle','clan','professions','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
+          {['shop','specialMarket','welcomeBundle','trials','friends','invitation','socialRewards','seaBundle','clan','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
             <p>Раздел «{routeTitle[overlay]}» входит в нашу структуру TERRITORY 2.0.</p><p>Исходные механики уже перенесены в новый репозиторий. Здесь будет их обновлённый интерфейс после интеграции с тестовой базой.</p>
             <button className="v2-cta" onClick={()=>open('menu')}>Открыть меню</button>
           </div>}
