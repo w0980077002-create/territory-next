@@ -10,8 +10,6 @@ export const V2_DEMO_RESOURCES=[
   {id:'wood',label:'Древесина',icon:'🪵',description:'Лесозаготовка на северном побережье'},
   {id:'herbs',label:'Травы',icon:'🌿',description:'Сбор трав и припасов'},
 ] as const;
-export const V2_DEMO_PROFESSION_LEVEL_CAP=300;
-export const V2_DEMO_PROFESSION_UNLOCK_BLUE_GEMS=1000;
 export type V2DemoMiningJob=Readonly<{
   id:number; resource:V2DemoResource;startedAt:number;finishAt:number;
 }>;
