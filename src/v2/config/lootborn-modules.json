@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "schema": "territory_v2",
+  "limits": {
+    "maxSkillRank": 5,
+    "maxCompanionLevel": 300,
+    "maxEquippedSkills": 5,
+    "maxActiveCompanions": 1
+  },
+  "skills": [
+    {
+      "id": "v2.cyclone-cut",
+      "name": "Вихревой выпад",
+      "type": "active",
+      "bindingCategory": "core",
+      "trigger": {
+        "phase": "tick",
+        "everyTicks": 4,
+        "energyCost": 20
+      },
+      "modifiers": [],
+      "effect": {
+        "kind": "damage",
+        "scaleBy": "attack",
+        "formula": {
+          "base": 0.38,
+          "perLevel": 0.002,
+          "perRank": 0.14,
+          "min": 0.1,
+          "max": 1.6
+        }
+      },
+      "visual": {
+        "trigger": "arc-slash"
+      }
+    },
+    {
+      "id": "v2.granite-ward",
+      "name": "Гранитная стойкость",
+      "type": "passive",
+      "bindingCategory": "passive",
+      "trigger": {
+        "phase": "spawn",
+        "everyTicks": 0,
+        "energyCost": 0
+      },
+      "modifiers": [
+        {
+          "stat": "damageTaken",
+          "operation": "multiply",
+          "formula": {
+            "base": 1,
+            "perLevel": 0,
+            "perRank": -0.035,
+            "min": 0.7,
+            "max": 1
+          }
+        }
+      ],
+      "effect": null,
+      "visual": {
+        "trigger": "armor-glow"
+      }
+    },
+    {
+      "id": "v2.northern-banner",
+      "name": "Знамя Севера",
+      "type": "aura",
+      "bindingCategory": "ultimate",
+      "trigger": {
+        "phase": "spawn",
+        "everyTicks": 0,
+        "energyCost": 0
+      },
+      "modifiers": [
+        {
+          "stat": "damageDealt",
+          "operation": "multiply",
+          "formula": {
+            "base": 1,
+            "perLevel": 0.0003,
+            "perRank": 0.035,
+            "min": 1,
+            "max": 1.4
+          }
+        }
+      ],
+      "effect": null,
+      "visual": {
+        "trigger": "rune-aura"
+      }
+    }
+  ],
+  "companions": [
+    {
+      "id": "v2.stance-duelist",
+      "name": "Северный дуэлянт",
+      "stance": "melee",
+      "selectorAlias": "warrior",
+      "baseStats": {
+        "hp": 280,
+        "attack": 45,
+        "defense": 22
+      },
+      "perLevel": {
+        "hp": 12,
+        "attack": 3,
+        "defense": 1
+      },
+      "activeSkillId": "v2.cyclone-cut",
+      "auraModifiers": [],
+      "visual": {
+        "spawn": "summon-warrior",
+        "stanceSwitch": "stance-flash"
+      },
+      "ai": {
+        "switchEveryTicks": 4,
+        "patterns": [
+          {
+            "stance": "melee",
+            "attackEveryTicks": 2,
+            "damageMultiplier": {
+              "base": 0.76,
+              "perLevel": 0.0008,
+              "perRank": 0,
+              "min": 0.5,
+              "max": 1.15
+            }
+          },
+          {
+            "stance": "ranged",
+            "attackEveryTicks": 3,
+            "damageMultiplier": {
+              "base": 0.6,
+              "perLevel": 0.0007,
+              "perRank": 0,
+              "min": 0.4,
+              "max": 1.05
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "v2.rune-herald",
+      "name": "Рунный знаменосец",
+      "stance": "buffer",
+      "selectorAlias": "mage",
+      "baseStats": {
+        "hp": 245,
+        "attack": 28,
+        "defense": 28
+      },
+      "perLevel": {
+        "hp": 9,
+        "attack": 1,
+        "defense": 2
+      },
+      "activeSkillId": "v2.northern-banner",
+      "auraModifiers": [
+        {
+          "stat": "damageDealt",
+          "operation": "multiply",
+          "formula": {
+            "base": 1.055,
+            "perLevel": 0.0002,
+            "perRank": 0,
+            "min": 1,
+            "max": 1.13
+          }
+        }
+      ],
+      "visual": {
+        "spawn": "banner-light",
+        "stanceSwitch": "none"
+      },
+      "ai": {
+        "switchEveryTicks": 0,
+        "patterns": [
+          {
+            "stance": "buffer",
+            "attackEveryTicks": 0,
+            "damageMultiplier": {
+              "base": 0,
+              "perLevel": 0,
+              "perRank": 0,
+              "min": 0,
+              "max": 0
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
