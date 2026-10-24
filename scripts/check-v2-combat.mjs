@@ -26,8 +26,10 @@ for (const heroClass of ['berserker', 'runemage', 'ranger']) {
       assert.equal(state.stonesSpent, 0);
       assert.equal(state.tick, 0);
       let count = 0;
+      let seed = 123456789;
       while (!state.finished && count < 300) {
-        const rng = ((count * 214013 + 2531011) >>> 0) / 4294967296;
+        seed = (1664525 * seed + 1013904223) >>> 0;
+        const rng = seed / 4294967296;
         state = nextPreviewTick(state, rng);
         count++;
         assert.equal(state.stonesSpent, 0);
