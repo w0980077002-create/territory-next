@@ -1,0 +1,88 @@
+name: TERRITORY 2.0 - one-time source import
+
+on:
+  push:
+    paths:
+      - '.github/workflows/00-import-source.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout new repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Checkout previously approved development source
+        run: |
+          git clone --depth 1 --single-branch --branch territory-2.0 \
+            https://github.com/w0980077002-create/territory-game-builde.git /tmp/territory-v2-source
+
+      - name: Import app, content, game assets and unit tests without production workflows
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -a /tmp/territory-v2-source/ ./ \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.env' \
+            --exclude='.env.*' \
+            --exclude='dist/' \
+            --exclude='node_modules/' \
+            --exclude='dist-monopoly-test/'
+          rm -f .env .env.local .env.production
+          # Existing database files are retained as reference, not deployed.
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          config = Path('vite.config.ts')
+          src = config.read_text()
+          assert "const base = '/territory-game-builde/';" in src
+          config.write_text(src.replace("const base = '/territory-game-builde/';", "const base = '/territory-next/';"))
+          package = Path('package.json')
+          data = json.loads(package.read_text())
+          data['name'] = 'territory-next'
+          data['scripts']['test:v2'] = 'node scripts/check-v2-preview.mjs && node scripts/check-v2-combat.mjs'
+          package.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n')
+          Path('README.md').write_text("""# TERRITORY 2.0
+
+          Independent source repository. Based on approved development branch from TERRITORY 1.0.
+
+          ## Status
+          This is **development code**, not a live game and not safe to connect to the
+          existing production Supabase project. The `main` branch here must not be
+          deployed to players until complete testing, staging backend and migration.
+
+          ## UI prototype
+          Open `public/v2-preview.html` via a static web server (or its built copy).
+          The preview simulates combat and screens offline with no player credentials.
+
+          ## Build
+          `npm ci` then `npm run typecheck`, `npm run test:v2`, `npm run build`.
+
+          ## Approved UI
+          Bright illustrated Viking fantasy; bottom Порт / Навыки / Бой /
+          Приключение / Магазин; Arena button above blue energy orb; HP and
+          equipment remain visible. Preserve legacy players and admin systems.
+          """.replace('\n          ', '\n'))
+          PY
+          test -f src/v2/core/autoBattle.ts
+          test -f public/v2-preview.html
+          test -f docs/TERRITORY_2_0_ENGINEERING_RU.md
+          test ! -f .github/workflows/pages.yml
+          echo 'Source imported without original release workflows.'
+
+      - name: Commit and push imported source to territory-next
+        run: |
+          set -euo pipefail
+          git config user.name "territory-v2-automation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "feat(v2): import isolated game code, assets, tests and offline prototype"
+          git push origin HEAD:main
