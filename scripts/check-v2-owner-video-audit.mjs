@@ -23,7 +23,11 @@ for(let n=1;n<=14;n++)assert(spec.includes('V-'+String(n).padStart(3,'0')),
   'Missing concrete owner-reported visual issue '+n);
 for(const [f,title] of [
   ['docs/video-frames/01_combat.jpg','00:00'],
-  ['docs/video-frames/02_warehouse.jpg','00:16']
+  ['docs/video-frames/02_warehouse.jpg','00:16'],
+  ['docs/video-frames/03_gems.jpg','01:30'],
+  ['docs/video-frames/04_quests.jpg','02:30'],
+  ['docs/video-frames/05_adventure.jpg','03:16'],
+  ['docs/video-frames/06_skills.jpg','03:46']
 ]){
  assert(existsSync(f),'Missing video screenshot on GitHub: '+f);
  const image=readFileSync(f);
@@ -33,4 +37,4 @@ for(const [f,title] of [
 }
 assert(['камни','задания','навыки'].every(x=>spec.toLocaleLowerCase('ru-RU').includes(x)),'Missing major video sections');
 assert(spec.includes('ВНЕШНИЙ ВИД')&&spec.includes('Приоритет'));
-console.log('OK: screenshot byte-identity, 14 documented visual bugs, V2-only mobile adjustments, 2 real owner video frames in GitHub');
+console.log('OK: screenshot byte-identity, 14 documented visual bugs, V2-only mobile adjustments, 6 real owner video frames in GitHub');
