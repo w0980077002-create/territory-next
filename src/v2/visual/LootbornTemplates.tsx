@@ -8,7 +8,8 @@ import type {V2SkillCategory} from '../core/buildLoadout';
 
 const typeLabels={active:'АКТИВНЫЙ',passive:'ПАССИВНЫЙ',aura:'АУРА'} as const;
 const stanceLabels={melee:'Ближний бой',ranged:'Дальний бой',buffer:'Поддержка'} as const;
-const typeIcons={active:'⚔',passive:'🛡',aura:'ᚱ'} as const;
+const typeIcons={active:'fight',passive:'shield',aura:'runes'} as const;
+const asset=(path:string)=>import.meta.env.BASE_URL+path;
 
 export function LootbornSkillsTemplate({
   heroLevel,levels,onFocus,onShowCompanions,
@@ -43,7 +44,7 @@ export function LootbornSkillsTemplate({
           aria-expanded={inspectedId===skill.id}
           aria-controls="v2-skill-inspector"
           aria-label={skill.name+', уровень '+rank+', показать параметры'}>
-          <span className={'v2-module-icon v2-module-icon--'+skill.type} aria-hidden="true">{typeIcons[skill.type]}</span>
+          <span className={'v2-module-icon v2-module-icon--'+skill.type} aria-hidden="true"><img src={asset('art/icons/'+typeIcons[skill.type]+'.svg')} alt=""/></span>
           <span className="v2-module-card-text">
             <span className="v2-module-title">{skill.name}</span>
             <span className="v2-module-subtitle">{typeLabels[skill.type]} · уровень {rank}/{V2_MODULES.limits.maxSkillRank}</span>
