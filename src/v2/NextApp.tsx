@@ -1,7 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type SetStateAction } from 'react';
 import { encounterForChapter, type HeroClass, type RuneKind, type CompanionKind } from './core/autoBattle';
 import { nextPreviewTick, startPreviewEncounter } from './core/moduleCombat';
 import {LootbornSkillsTemplate} from './visual/LootbornTemplates';
+import {StageMapExperience} from './visual/StageMapExperience';
+import {OverhaulShopExperience} from './visual/OverhaulShopExperience';
+import {V2LootRain} from './visual/V2LootRain';
+import {readV2StageSave,writeV2StageSave,clearV2StageSave} from './core/stageSave';
+import {stageAt,stageEncounter,chooseV2Stage,settleV2Stage,buyV2Shop,
+ v2StageScore,v2BoughtSkillAttackMultiplier,type V2LootBurst,type V2ShopKind} from './core/gameplayOverhaul';
 import {RuneGallery,CompanionGallery} from './visual/RuneCompanionGallery';
 import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, type V2ScreenId } from './interfaceContract';
 import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
@@ -141,20 +147,37 @@ export function NextApp() {
   const [victories,setVictories] = useState(offlineSave?.victories??0);
   const [defeats,setDefeats] = useState(offlineSave?.defeats??0);
   const [notice,setNotice] = useState('');
-  const [progress,setProgress] = useState<V2Progression>(()=>offlineSave?.progress??createV2DemoProgress());
+  const [game,setGame] = useState(()=>({
+    progress:offlineSave?.progress??createV2DemoProgress(),
+    campaign:readV2StageSave(v2DemoStorage()),
+    burst:null as V2LootBurst|null
+  }));
+  const progress=game.progress;
+  const campaign=game.campaign;
+  const setProgress=(action:SetStateAction<V2Progression>)=>setGame(g=>({
+    ...g,progress:typeof action==='function'?action(g.progress):action
+  }));
   const [questState,setQuestState] = useState(()=>offlineSave?.quests??createV2DemoQuestState());
   const [miningState,setMiningState] = useState(()=>offlineSave?.mining??createV2DemoMiningState());
   const [encounterId,setEncounterId] = useState(offlineSave?.encounterId??1);
   const [gearFocus,setGearFocus] = useState<V2GearSlot>('weapon');
   const heroStats = useMemo(()=>statsFromV2Progress(progress),[progress]);
   const config = useMemo(() => ({
-    ...encounterForChapter(chapter,wave,heroClass),
-    hero: {level:progress.level,...heroStats},
+    ...stageEncounter(campaign.currentStage,heroClass),
+    hero: {level:progress.level,...heroStats,
+     attack:Math.round(heroStats.attack*v2BoughtSkillAttackMultiplier(campaign))},
     rune,companion,skills:demoSkills.levels,speed:1 as const
-  }),[chapter,wave,heroClass,rune,companion,demoSkills,progress.level,heroStats]);
+  }),[campaign.currentStage,campaign.skillMultiplier,heroClass,rune,companion,demoSkills,progress.level,heroStats]);
   const [battle,setBattle] = useState(() => startPreviewEncounter(config));
 
   useEffect(()=>{setBattle(startPreviewEncounter(config));},[config]);
+  useEffect(()=>{writeV2StageSave(v2DemoStorage(),campaign);},[campaign]);
+  useEffect(()=>{
+    const receipt=game.burst?.receiptId;
+    if(!receipt)return;
+    const timeout=window.setTimeout(()=>setGame(g=>g.burst?.receiptId===receipt?{...g,burst:null}:g),1600);
+    return ()=>window.clearTimeout(timeout);
+  },[game.burst]);
 
   // Preview-only persistence. No Telegram identity, client-side Supabase writes,
   // payments or real rewards. Progress survives a local browser reload.
@@ -187,10 +210,13 @@ export function NextApp() {
       if(status==='victory'){
         // Local demo receipts are unique per encounter. Replaying an effect
         // can never mint twice; real economy needs server-generated receipts.
-        setProgress(p=>applyV2DemoVictory(
-          p,'v2-demo-encounter-'+encounterId,chapter,wave,
-          ((encounterId*531+chapter*73+wave*17)%997)/997
-        ));
+        setGame(g=>{
+          const outcome=settleV2Stage(g.campaign,g.progress,
+           'v2-demo-encounter-'+encounterId,
+           v2StageScore(battle.tick,battle.heroHp,config.hero.hp),
+           demoCombatSample(encounterId,battle.tick+1));
+          return {...g,campaign:outcome.campaign,progress:outcome.progress,burst:outcome.burst};
+        });
         setVictories(v=>v+1);
         setQuestState(q=>recordV2DemoQuestVictory(q,'v2-demo-encounter-'+encounterId,wave===DEMO_WAVES_PER_CHAPTER,Date.now()));
         const outcome=nextDemoChapterVictory({chapter,wave},highestUnlockedChapter);
@@ -205,13 +231,27 @@ export function NextApp() {
       setNotice('');
     },1350);
     return ()=>window.clearTimeout(timeout);
-  },[battle.finished,config,wave,chapter,encounterId,highestUnlockedChapter]);
+  },[battle.finished,battle.tick,battle.heroHp,config,wave,chapter,encounterId,highestUnlockedChapter]);
 
   const heroHpPct=Math.max(0,100*battle.heroHp/config.hero.hp);
   const enemyHpPct=Math.max(0,100*battle.enemyHp/config.enemy.hp);
   const energyPct=Math.max(0,100*battle.mana/battle.maxMana);
   const latestHit = [...battle.events].reverse().find(e=>e.target==='enemy' && e.amount>0);
-  const chapterPercent=(wave-1)*100/DEMO_WAVES_PER_CHAPTER+(1-enemyHpPct/100)*100/DEMO_WAVES_PER_CHAPTER;
+  const currentStage=stageAt(campaign.currentStage);
+  const chapterPercent=(currentStage.stage-1)*100/20+(1-enemyHpPct/100)*100/20;
+  const buyDemoItem=(kind:V2ShopKind)=>{
+    const result=buyV2Shop(campaign,progress,kind,
+      demoCombatSample(encounterId,campaign.companionRolls+42));
+    if(!result.success)return;
+    setGame(g=>({...g,campaign:result.campaign,progress:result.progress,burst:null}));
+    if(kind==='companion'&&result.campaign.lastCompanionRoll)
+      setCompanion(result.campaign.lastCompanionRoll);
+  };
+  const navigateStage=(id:number)=>{
+    if(id>campaign.highestUnlockedStage)return;
+    setGame(g=>({...g,campaign:chooseV2Stage(g.campaign,id),burst:null}));
+    setEncounterId(id=>id+1);setAuto(true);setOverlay(null);
+  };
   const xpPct=progress.level>=300?100:Math.min(100,progress.xp/nextXp(progress.level)*100);
   const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',professions:'Профессии',games:'Игровой зал',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Первый взнос',settings:'Настройки',menu:'Меню',invitation:'Приглашение',socialRewards:'Социальные награды',seaBundle:'Морской набор',ranking:'Рейтинг'};
   const open = (id: V2ScreenId | 'menu')=>id==='expedition'?(setOverlay(null),setAuto(true)):setOverlay(id);
@@ -235,15 +275,15 @@ export function NextApp() {
       </div>
     </header>
 
-    <section className={'v2-battle v2-biome-'+(Math.floor((chapter-1)/3)%4)} aria-label="Боевой поход">
+    <section className={'v2-battle v2-biome-'+(Math.floor((currentStage.chapter-1)/3)%4)} aria-label="Боевой поход">
       <div className="v2-parallax" aria-hidden="true"/>
       <div className="v2-stagehead">
-        <div className="v2-stage-track" role="progressbar" aria-label="Прогресс главы" aria-valuemin={0} aria-valuemax={DEMO_WAVES_PER_CHAPTER} aria-valuenow={wave-1}>
+        <div className="v2-stage-track" role="progressbar" aria-label="Прогресс главы" aria-valuemin={0} aria-valuemax={20} aria-valuenow={currentStage.stage-1}>
           <div className="v2-stage-line" style={{width:chapterPercent*.8+'%'}} aria-hidden="true"/>
           {Array.from({length:DEMO_WAVES_PER_CHAPTER},(_,i)=><span key={i} className={(i+1<wave?'cleared ':i+1===wave?'current ':'')+(i===DEMO_WAVES_PER_CHAPTER-1?'boss-node':'')} aria-label={'Этап '+(i+1)}>{i===DEMO_WAVES_PER_CHAPTER-1?'☠':'◆'}</span>)}
         </div>
-        <strong>[Глава {chapter}] Северные земли</strong>
-        <small>{chapter}-{wave} · {wave===DEMO_WAVES_PER_CHAPTER?'Босс: ':''}{config.enemyName}</small>
+        <strong>[Глава {currentStage.chapter}] Северные земли</strong>
+        <small>{currentStage.chapter}-{currentStage.stage} · {currentStage.label}: {config.enemyName}</small>
         <button className="v2-stage-enter" type="button" onClick={()=>setAuto(true)} aria-label="Войти в текущий этап"><span className="v2-portal-spark" aria-hidden="true"/><span>Войти</span></button>
       </div>
       <div className="v2-left-buttons">
@@ -262,9 +302,9 @@ export function NextApp() {
           <img src={altHeroAssets[heroClass]} alt="Викинг"/>
           <span className="v2-swipe" aria-hidden="true"/>
         </div>
-        <div className={'v2-foe'+(wave===5?' boss':'')}>
+        <div className={'v2-foe'+(currentStage.kind==='boss'?' boss':'')}>
           <div className="v2-foe-hp"><span style={{width:enemyHpPct+'%'}}/></div>
-          <img src={enemies[(wave-1)%enemies.length]} alt={config.enemyName}/>
+          <img src={enemies[(currentStage.id-1)%enemies.length]} alt={config.enemyName}/>
           {latestHit&&auto&&<b className="v2-damage" key={battle.tick}>−{latestHit.amount}</b>}
         </div>
       </div>
@@ -272,6 +312,7 @@ export function NextApp() {
         <img src={asset('ic-arena.webp')} alt=""/><span>Арена</span>
       </button>
       {(notice||!auto)&&<div className="v2-combat-notice">{notice||'Автобой остановлен'}</div>}
+      <V2LootRain burst={game.burst}/>
     </section>
 
     <section className="v2-healthrow" aria-label="Здоровье и энергия">
@@ -295,7 +336,7 @@ export function NextApp() {
 
     <section className="v2-commands">
       <button className="v2-task" onClick={()=>open('quests')}>
-        <strong>Задание главы</strong><span>Победи {wave===5?'босса':'врагов'}</span>
+        <strong>Задание главы</strong><span>Победи {currentStage.kind==='boss'?'босса':currentStage.kind==='elite'?'элиту':'врагов'} · {currentStage.chapter}-{currentStage.stage}</span>
         <small>{progress.wins} побед · {progress.bosses} боссов · 🎒 {progress.inventory.length}</small>
       </button>
       <span className="v2-command-spacer" aria-hidden="true"/>
@@ -384,6 +425,8 @@ export function NextApp() {
                 {demoSkills.levels[skillCategory]>=5?'Навык прокачан':'Улучшить навык · 1 очко'}
               </button>
               {skillCategory==='core'&&<button className="v2-cta" type="button" onClick={()=>open('runes')}>Изменить руну навыка</button>}
+              <div className="v2-overhaul-shop-result">ᚱ Улучшение навыков: уровень {campaign.skillMultiplier}/10 · ×{v2BoughtSkillAttackMultiplier(campaign).toFixed(3)}</div>
+              <button className="v2-cta" type="button" onClick={()=>open('shop')}>Купить усиление в магазине</button>
               <p className="v2-preview-chip">Навыки действительно влияют на автобой и хранятся только в локальной демоверсии. Это тестовые значения, не настоящие начисления.</p>
             </div>
             <LootbornSkillsTemplate heroLevel={progress.level} levels={demoSkills.levels}
@@ -394,15 +437,13 @@ export function NextApp() {
           {overlay==='companions'&&<CompanionGallery companions={followerOptions}
             portraits={companionArt} selected={companion} heroLevel={progress.level}
             onChoose={setCompanion} onShowSkills={()=>open('skills')}/>}
-          {overlay==='adventure'&&<>
-            <p>Доступные главы демонстрационного похода · последняя открытая: {highestUnlockedChapter}. Следующая глава открывается только после победы над боссом текущей.</p>
-            <div className="v2-stage-grid">{Array.from({length:Math.max(12,highestUnlockedChapter+1)},(_,i)=>i+1).map(x=><button type="button" disabled={x>highestUnlockedChapter} className={(chapter===x?'chosen ':'')+(x>highestUnlockedChapter?'locked':'')} key={x} onClick={()=>{
-              const next=chooseDemoChapter(x,highestUnlockedChapter);
-              if(!next)return;
-              setChapter(next.chapter);setWave(next.wave);setOverlay(null);setAuto(true);
-            }}>{x>highestUnlockedChapter?'🔒 ':''}Глава {x}<small>{x>highestUnlockedChapter?'Победи босса предыдущей главы':'Доступна · демо'}</small></button>)}</div>
-          </>}
-{(overlay==='quests'||overlay==='rewards'||overlay==='events')&&<QuestExperience
+          {overlay==='adventure'&&<StageMapExperience state={campaign}
+            onSelect={navigateStage} onFight={()=>{setOverlay(null);setAuto(true);}}/>}
+          {overlay==='shop'&&<OverhaulShopExperience campaign={campaign}
+            progress={progress} selectedCompanion={companion}
+            onBuy={buyDemoItem} onViewSkills={()=>open('skills')}
+            onViewCompanions={()=>open('companions')}/>}
+          {(overlay==='quests'||overlay==='rewards'||overlay==='events')&&<QuestExperience
             mode={overlay}
             state={questState}
             progress={progress}
@@ -423,12 +464,13 @@ export function NextApp() {
             <button className="v2-cta" type="button" onClick={()=>{
               if(window.confirm('Удалить только тестовый прогресс TERRITORY 2.0 на этом устройстве? Данные первой игры не затрагиваются.')){
                 clearV2LocalDemoSave(v2DemoStorage());
+                clearV2StageSave(v2DemoStorage());
                 window.location.reload();
               }
             }}>Начать демонстрацию заново</button>
             <p>Выбор десяти разных фонов будет добавлен отдельным этапом; текущий фон по решению владельца не меняется.</p>
           </div>}
-          {['shop','specialMarket','welcomeBundle','trials','friends','invitation','socialRewards','seaBundle','clan','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
+          {['specialMarket','welcomeBundle','trials','friends','invitation','socialRewards','seaBundle','clan','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
             <p>Раздел «{routeTitle[overlay]}» входит в нашу структуру TERRITORY 2.0.</p><p>Исходные механики уже перенесены в новый репозиторий. Здесь будет их обновлённый интерфейс после интеграции с тестовой базой.</p>
             <button className="v2-cta" onClick={()=>open('menu')}>Открыть меню</button>
           </div>}
