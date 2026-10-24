@@ -12,7 +12,7 @@
  */
 
 export const V2_SKILL_CATEGORIES = [
-  'basic', 'core', 'mastery', 'ultimate', 'passive',
+  'basic', 'core', 'control', 'ultimate', 'passive',
 ] as const;
 
 export type V2SkillCategory = typeof V2_SKILL_CATEGORIES[number];
