@@ -33,6 +33,11 @@ Independent source repository. Based on approved development branch from TERRITO
 
 `npm run test:master-spec` проверяет полноту документации и SHA-256 владельческого эталона. **Документы не равны готовой игре.** Экраны, источники и зафиксированные механики должны проходить E2E и серверные тесты перед публикацией. Не подключать production первой TERRITORY.
 
+
+## Текущая реализация TERRITORY 2.0
+
+[Первый работающий пакет: интерфейс по эталону, этапы, навыки/сборки, тесты и приватная staging SQL-заготовка](docs/TERRITORY_2_0_IMPLEMENTATION_20261024_RU.md). Реальный сервер, сохранения игроков и платежи **не подключены**; код является изолированным preview, без публикации.
+
 ## Status
 This is **development code**, not a live game and not safe to connect to the
 existing production Supabase project. The `main` branch here must not be
