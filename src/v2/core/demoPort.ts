@@ -36,7 +36,7 @@ export function parseV2DemoMiningState(v:unknown):V2DemoMiningState|null{
     !Array.isArray(x.cancelledJobs)||x.cancelledJobs.length>100||
     !x.claimedJobs.every(validJobNumber)||!x.cancelledJobs.every(validJobNumber))return null;
   const all=[...x.claimedJobs,...x.cancelledJobs];
-  if(new Set(all).size!==all.length||all.some(id=>id>=x.nextJobId))return null;
+  if(new Set(all).size!==all.length||all.some(id=>id>=Number(x.nextJobId)))return null;
   let job:V2DemoMiningJob|null=null;
   if(x.job!==null){
     if(!x.job||typeof x.job!=='object'||Array.isArray(x.job))return null;
