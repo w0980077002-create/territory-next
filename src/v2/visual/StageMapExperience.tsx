@@ -6,7 +6,7 @@ import './inner-panels.css';
 const asset=(name:string)=>import.meta.env.BASE_URL+name;
 const badge:Record<V2StageKind,string>={normal:'◆',elite:'✦',boss:'☠'};
 const chapterNames=['Северная застава','Ледяные перевалы','Рунический лес','Крепость бурь','Трон ярла'] as const;
-const chapterArt=['map-forest.webp','map-mountain.webp','map-herbs.webp','map-chamber.webp','map-rare.webp'] as const;
+const chapterArt=['art/chapters/1.svg','art/chapters/2.svg','art/chapters/3.svg','art/chapters/4.svg','art/chapters/5.svg'] as const;
 export function StageMapExperience({
   state,onSelect,onFight,
 }:{

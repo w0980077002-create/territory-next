@@ -11,30 +11,30 @@ export type FeaturePanelId=Extract<V2ScreenId,
 const asset=(path:string)=>import.meta.env.BASE_URL+path.replace(/^\//,'');
 const mailItems=[
   {id:'welcome',title:'Добро пожаловать на Север',from:'Летописец TERRITORY',
-   image:'ic-mail.webp',body:'Ты открываешь отдельную тестовую TERRITORY 2.0. Здесь можно проверять экраны и прокачку, не затрагивая настоящих игроков.'},
+   image:'art/icons/mail.svg',body:'Ты открываешь отдельную тестовую TERRITORY 2.0. Здесь можно проверять экраны и прокачку, не затрагивая настоящих игроков.'},
   {id:'expedition',title:'Отчёт о походах',from:'Совет северных земель',
-   image:'ic-quests.webp',body:'Все результаты кампании и предметы сохраняются лишь в демоданных этого браузера. Серверная выдача наград в почте пока не подключена.'},
+   image:'art/icons/quests.svg',body:'Все результаты кампании и предметы сохраняются лишь в демоданных этого браузера. Серверная выдача наград в почте пока не подключена.'},
   {id:'supplies',title:'Подарки и посылки',from:'Кладовщик',
-   image:'ic-daily.webp',body:'В релизе здесь появятся вложения писем, получение одной или нескольких наград и защита от повторной выдачи. Пока это только интерактивная демонстрация.'},
+   image:'art/icons/rewards.svg',body:'В релизе здесь появятся вложения писем, получение одной или нескольких наград и защита от повторной выдачи. Пока это только интерактивная демонстрация.'},
 ] as const;
 const trials=[
- {stage:10,name:'Страж ледяной крепости',image:'assets/territory/characters/bosses/giant_king/idle.webp'},
- {stage:20,name:'Северный ярл',image:'assets/territory/characters/bosses/northern_jarl/idle.webp'},
- {stage:30,name:'Повелитель штормов',image:'assets/territory/characters/bosses/storm_lord/idle.webp'},
- {stage:40,name:'Король нежити',image:'assets/territory/characters/bosses/undead_king/idle.webp'},
- {stage:50,name:'Владыка огня',image:'assets/territory/characters/bosses/fire_lord/idle.webp'},
- {stage:60,name:'Хранитель кургана',image:'assets/territory/characters/bosses/barrow_guardian/idle.webp'},
- {stage:70,name:'Тёмный жрец',image:'assets/territory/characters/bosses/dark_priest/idle.webp'},
- {stage:80,name:'Вождь разбойников',image:'assets/territory/characters/bosses/bandit_chief/idle.webp'},
- {stage:90,name:'Тень хаоса',image:'assets/territory/characters/bosses/chaos_shadow/idle.webp'},
- {stage:100,name:'Демон бездны',image:'assets/territory/characters/bosses/abyss_demon/idle.webp'},
+ {stage:10,name:'Страж ледяной крепости',image:'art/bosses/giant_king.svg'},
+ {stage:20,name:'Северный ярл',image:'art/bosses/northern_jarl.svg'},
+ {stage:30,name:'Повелитель штормов',image:'art/bosses/storm_lord.svg'},
+ {stage:40,name:'Король нежити',image:'art/bosses/undead_king.svg'},
+ {stage:50,name:'Владыка огня',image:'art/bosses/fire_lord.svg'},
+ {stage:60,name:'Хранитель кургана',image:'art/bosses/barrow_guardian.svg'},
+ {stage:70,name:'Тёмный жрец',image:'art/bosses/dark_priest.svg'},
+ {stage:80,name:'Вождь разбойников',image:'art/bosses/bandit_chief.svg'},
+ {stage:90,name:'Тень хаоса',image:'art/bosses/chaos_shadow.svg'},
+ {stage:100,name:'Демон бездны',image:'art/bosses/abyss_demon.svg'},
 ] as const;
 const hall=[
- {name:'Сокровищница',image:'fortune/golden-chest.svg',description:'Сундуки и выбор сокровищ'},
- {name:'Монополия',image:'monopoly/hero.webp',description:'Настольное путешествие'},
- {name:'Рунические барабаны',image:'ic-trophy.webp',description:'Пять барабанов · игровой концепт'},
- {name:'Кости ярла',image:'ic-arena.webp',description:'Идея будущей мини-игры'},
- {name:'Колесо судьбы',image:'ic-daily.webp',description:'Идея будущей мини-игры'},
+ {name:'Сокровищница',image:'art/icons/treasure.svg',description:'Сундуки и выбор сокровищ'},
+ {name:'Монополия',image:'art/icons/board.svg',description:'Настольное путешествие'},
+ {name:'Рунические барабаны',image:'art/icons/reels.svg',description:'Пять барабанов · игровой концепт'},
+ {name:'Кости ярла',image:'art/icons/dice.svg',description:'Идея будущей мини-игры'},
+ {name:'Колесо судьбы',image:'art/icons/wheel.svg',description:'Идея будущей мини-игры'},
 ] as const;
 
 function HallTitle({eyebrow,title,detail,image}:{
@@ -64,7 +64,7 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
 
  if(mode==='mail')return <section className="v2-inner-screen" data-screen="mail">
   <HallTitle eyebrow="КОРОЛЕВСКАЯ ПОЧТА" title="Письма героя" detail={'Непрочитано: '+unreads}
-   image="ic-mail.webp"/>
+   image="art/icons/mail.svg"/>
   <div className="v2-inner-toolbar">
    <span>{mailItems.length} письма · пример интерфейса</span>
    <button type="button" disabled={unreads===0} onClick={()=>setReadMail(mailItems.map(m=>m.id))}>Прочитать все</button>
@@ -80,7 +80,7 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
    <article className="v2-inner-parchment">
     <small>ПИСЬМО · ДЕМОВЕРСИЯ</small><h4>{mail.title}</h4>
     <p>{mail.body}</p>
-    <div className="v2-inner-reward-demo"><img src={asset('ic-daily.webp')} alt=""/>
+    <div className="v2-inner-reward-demo"><img src={asset('art/icons/rewards.svg')} alt=""/>
      <div><strong>Посылка без предметов</strong><small>Серверное начисление отключено</small></div>
     </div>
     <button type="button" className="v2-inner-action" disabled={markedMail.includes(mail.id)}
@@ -97,7 +97,7 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
   const open=boss.stage<=campaign.highestUnlockedStage;
   return <section className="v2-inner-screen" data-screen="trials">
    <HallTitle eyebrow="ПОДЗЕМЕЛЬЯ СЕВЕРА" title="Испытания и боссы"
-    detail="Десять противников · путь через кампанию" image="ic-trials.webp"/>
+    detail="Десять противников · путь через кампанию" image="art/icons/trials.svg"/>
    <div className="v2-boss-feature">
     <img src={asset(boss.image)} alt={'Босс '+boss.name}/>
     <div><small>БОСС · ЭТАП {boss.stage}</small><strong>{boss.name}</strong>
@@ -120,7 +120,7 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
 
  if(mode==='games')return <section className="v2-inner-screen" data-screen="games">
   <HallTitle eyebrow="ЗАЛ РАЗВЛЕЧЕНИЙ" title="Игровой зал"
-   detail="Пять игровых направлений · без расходования билетов" image="ic-trophy.webp"/>
+   detail="Пять игровых направлений · без расходования билетов" image="art/icons/ranking.svg"/>
   <div className="v2-game-grid" role="group" aria-label="Мини-игры">
    {hall.map((g,i)=><button type="button" key={g.name}
     className={'v2-game-card'+(selectedGame===i?' selected':'')} aria-pressed={selectedGame===i}
@@ -138,13 +138,13 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
 
  if(mode==='friends'||mode==='invitation'||mode==='socialRewards')return <section className="v2-inner-screen" data-screen="social">
   <HallTitle eyebrow="СОЮЗЫ И ПРИГЛАШЕНИЯ" title={mode==='socialRewards'?'Награды за друзей':mode==='invitation'?'Пригласить в отряд':'Мои друзья'}
-    detail="Награды за приглашения будут подтверждаться сервером" image="ic-invite.webp"/>
+    detail="Награды за приглашения будут подтверждаться сервером" image="art/icons/invitation.svg"/>
   <div className="v2-inner-tabs">
    {([{id:'friends',label:'Друзья'},{id:'invitation',label:'Приглашение'},{id:'socialRewards',label:'Награды'}] as const)
     .map(x=><button key={x.id} type="button" className={mode===x.id?'selected':''}
      aria-pressed={mode===x.id} onClick={()=>onNavigate(x.id)}>{x.label}</button>)}
   </div>
-  <div className="v2-social-emblem"><img src={asset('ic-invite.webp')} alt=""/></div>
+  <div className="v2-social-emblem"><img src={asset('art/icons/invitation.svg')} alt=""/></div>
   <article className="v2-inner-parchment">
    <small>ТЕЛЕГРАМ · БЕЗОПАСНЫЙ РЕЖИМ</small>
    <h4>{mode==='invitation'?'Твоя ссылка-приглашение':mode==='friends'?'Список приглашённых':'Путь к подаркам'}</h4>
@@ -161,13 +161,13 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
 
  if(mode==='clan')return <section className="v2-inner-screen" data-screen="clan">
   <HallTitle eyebrow="СЕВЕРНЫЙ СОЮЗ" title="Крепость клана"
-   detail="Совместные задачи и отряд появятся после подключения серверной системы" image="nav-clan.webp"/>
+   detail="Совместные задачи и отряд появятся после подключения серверной системы" image="art/icons/clan.svg"/>
   <div className="v2-inner-tabs" role="group" aria-label="Раздел клана">
    {([{id:'overview',label:'Крепость'},{id:'roster',label:'Участники'},{id:'missions',label:'Задания'}] as const)
     .map(x=><button type="button" key={x.id} aria-pressed={clanTab===x.id}
      className={clanTab===x.id?'selected':''} onClick={()=>setClanTab(x.id)}>{x.label}</button>)}
   </div>
-  <div className="v2-inner-hero-art"><img src={asset('nav-clan.webp')} alt=""/></div>
+  <div className="v2-inner-hero-art"><img src={asset('art/icons/clan.svg')} alt=""/></div>
   <article className="v2-inner-parchment">
    <small>КЛАНЫ · ДЕМОНСТРАЦИЯ</small><h4>{clanTab==='overview'?'Крепость пока пуста':clanTab==='roster'?'Участников нет':'Клановые миссии'}</h4>
    <p>{clanTab==='overview'?'Создание клана потребует реального игрока и проверенных сервером ресурсов. Пока доступен просмотр интерфейса.'
@@ -178,11 +178,11 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
 
  if(mode==='arena')return <section className="v2-inner-screen" data-screen="arena">
   <HallTitle eyebrow="ПОЛЕ ЧЕСТИ" title="Арена героев"
-   detail="PvP · чат во время боя · сезоны" image="ic-arena.webp"/>
+   detail="PvP · чат во время боя · сезоны" image="art/icons/arena.svg"/>
   <div className="v2-arena-preview">
-   <img src={asset('assets/territory/characters/heroes/male_viking/idle.webp')} alt="Герой"/>
+   <img src={asset('art/heroes/berserker.svg')} alt="Герой"/>
    <span>VS</span>
-   <img src={asset('assets/territory/characters/enemies/bandit/idle.webp')} alt="Тестовый противник"/>
+   <img src={asset('art/enemies/bandit.svg')} alt="Тестовый противник"/>
   </div>
   <div className="v2-inner-stat-row">
    <span>Побед в PvE <strong>{progress.wins}</strong></span>
@@ -201,9 +201,9 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
   <HallTitle eyebrow={market?'ОСОБЫЕ ПРЕДЛОЖЕНИЯ':first?'НАЧАЛО ПУТИ':'МОРСКИЕ ПОСТАВКИ'}
    title={market?'Специальный рынок':first?'Набор новичка':'Морской набор'}
    detail="Витрина будущих предложений без реальных платежей"
-   image={market?'ic-shop.webp':first?'ic-daily.webp':'ic-sea.webp'}/>
+   image={market?'art/icons/market.svg':first?'art/icons/welcome.svg':'art/icons/sea.svg'}/>
   <div className="v2-inner-offer-art">
-   <img src={asset(market?'ic-shop.webp':first?'fortune/golden-chest.svg':'ic-sea.webp')} alt=""/>
+   <img src={asset(market?'art/icons/shop.svg':first?'art/icons/treasure.svg':'art/icons/sea.svg')} alt=""/>
    <div><small>ПРЕДПРОСМОТР</small><strong>{market?'Редкие товары':first?'Подарочный сундук':'Припасы для плавания'}</strong></div>
   </div>
   <article className="v2-inner-parchment">

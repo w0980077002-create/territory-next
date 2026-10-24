@@ -41,50 +41,50 @@ import './visual/reference-audit-fixes.css';
  * All profile/currencies/gear are clearly marked mock values. No wallets move.
  */
 const asset = (path: string): string => import.meta.env.BASE_URL + path.replace(/^\//, '');
-const heroAsset = asset('assets/territory/characters/heroes/male_viking/idle.webp');
+const heroAsset = asset('art/heroes/berserker.svg');
 const altHeroAssets = {
   berserker: heroAsset,
-  runemage: asset('assets/territory/characters/heroes/female_warrior/idle.webp'),
-  ranger: asset('assets/territory/characters/heroes/female_archer/idle.webp'),
+  runemage: asset('art/heroes/runemage.svg'),
+  ranger: asset('art/heroes/ranger.svg'),
 } satisfies Record<HeroClass, string>;
 const companionArt: Record<CompanionKind, string> = {
-  guardian: asset('assets/territory/characters/followers/loyal_shield/idle.webp'),
-  warrior: asset('assets/territory/characters/followers/northern_warrior/idle.webp'),
-  healer: asset('assets/territory/characters/followers/forest_healer/idle.webp'),
-  hunter: asset('assets/territory/characters/followers/moon_hunter/idle.webp'),
-  mage: asset('assets/territory/characters/followers/rune_mage/idle.webp'),
-  warcow: asset('v2-battle-cow-approved.webp'),
+  guardian: asset('art/companions/guardian.svg'),
+  warrior: asset('art/companions/warrior.svg'),
+  healer: asset('art/companions/healer.svg'),
+  hunter: asset('art/companions/hunter.svg'),
+  mage: asset('art/companions/mage.svg'),
+  warcow: asset('art/companions/warcow.svg'),
 };
 const enemies = [
-  asset('assets/territory/characters/enemies/wolf/idle.webp'),
-  asset('assets/territory/characters/enemies/goblin/idle.webp'),
-  asset('assets/territory/characters/enemies/bandit/idle.webp'),
-  asset('assets/territory/characters/enemies/troll/idle.webp'),
-  asset('assets/territory/characters/bosses/giant_king/idle.webp'),
+  asset('art/enemies/wolf.svg'),
+  asset('art/enemies/goblin.svg'),
+  asset('art/enemies/bandit.svg'),
+  asset('art/enemies/troll.svg'),
+  asset('art/bosses/giant_king.svg'),
 ];
 const featureScreens:readonly string[]=[
   'arena','mail','trials','friends','invitation','socialRewards',
   'specialMarket','welcomeBundle','seaBundle','clan','games',
 ];
 const menuTileArt:Readonly<Record<string,string>>={
-  hero:'v2-approved-avatar.webp',warehouse:'item-armor.webp',
-  runes:'ic-blessing.webp',companions:'v2-battle-cow-approved.webp',
-  clan:'nav-clan.webp',professions:'ic-forge.webp',
-  games:'ic-trophy.webp',mail:'ic-mail.webp',settings:'ic-settings.webp',
-  ranking:'ic-trophy.webp',
+  hero:'art/avatar.svg',warehouse:'art/icons/armor.svg',
+  runes:'art/icons/runes.svg',companions:'art/icons/companions.svg',
+  clan:'art/icons/clan.svg',professions:'art/icons/professions.svg',
+  games:'art/icons/games.svg',mail:'art/icons/mail.svg',settings:'art/icons/settings.svg',
+  ranking:'art/icons/ranking.svg',
 };
 const bottomIcon: Record<string, string> = {
-  port:'ic-sea.webp',
-  skills:'v2-ui-skills-book.svg',
-  expedition:'nav-battle.webp',
-  adventure:'nav-map-parchment.webp',
-  shop:'ic-shop.webp',
+  port:'art/icons/port.svg',
+  skills:'art/icons/skills.svg',
+  expedition:'art/icons/fight.svg',
+  adventure:'art/icons/adventure.svg',
+  shop:'art/icons/shop.svg',
 };
 const shortcutArt: Record<string,string> = {
-  quests:'ic-quests.webp',events:'ic-events.webp',friends:'ic-invite.webp',
-  rewards:'ic-daily.webp',settings:'ic-settings.webp',specialMarket:'ic-shop.webp',
-  trials:'ic-trials.webp',welcomeBundle:'ic-daily.webp',
-  invitation:'ic-invite.webp',socialRewards:'ic-honor.webp',seaBundle:'ic-sea.webp',ranking:'ic-trophy.webp',
+  quests:'art/icons/quests.svg',events:'art/icons/events.svg',friends:'art/icons/friends.svg',
+  rewards:'art/icons/rewards.svg',settings:'art/icons/settings.svg',specialMarket:'art/icons/market.svg',
+  trials:'art/icons/trials.svg',welcomeBundle:'art/icons/welcome.svg',
+  invitation:'art/icons/invitation.svg',socialRewards:'art/icons/social.svg',seaBundle:'art/icons/sea.svg',ranking:'art/icons/ranking.svg',
 };
 const shortcutIcon: Record<string, string> = {
   quests:'📜', events:'🎇', friends:'🤝', rewards:'🎁', specialMarket:'💰', trials:'🐲',
@@ -98,10 +98,10 @@ const gear = [
   ['shield','Щит'],['ring','Кольцо'],['amulet','Амулет'],
 ] as const;
 const runeOptions: {id:RuneKind; name:string; icon:string; desc:string}[] = [
-  {id:'flame',name:'Огонь',icon:'🔥',desc:'Поджигает врагов'},
-  {id:'frost',name:'Лёд',icon:'❄',desc:'Может прервать удар'},
-  {id:'thunder',name:'Гром',icon:'⚡',desc:'Накапливает мощь'},
-  {id:'guardian',name:'Защита',icon:'🛡',desc:'Создаёт щит'},
+  {id:'flame',name:'Огонь',icon:'art/icons/red.svg',desc:'Поджигает врагов'},
+  {id:'frost',name:'Лёд',icon:'art/icons/blue.svg',desc:'Может прервать удар'},
+  {id:'thunder',name:'Гром',icon:'art/icons/stone.svg',desc:'Накапливает мощь'},
+  {id:'guardian',name:'Защита',icon:'art/icons/shield.svg',desc:'Создаёт щит'},
 ];
 const followerOptions: {id:CompanionKind; name:string; desc:string}[] = [
   {id:'guardian',name:'Верный щит',desc:'Снижает входящий урон'},
@@ -147,15 +147,15 @@ function DemoNote() {
 function Shortcut({id,label,onClick}: {id:string;label:string;onClick:()=>void}) {
   return <button className={'v2-shortcut v2-shortcut--'+id} type="button" onClick={onClick} title={label} aria-label={label}>
     <b className="v2-shortcut-emblem" aria-hidden="true">
-      {id==='settings'?<span className="v2-menu-glyph"/>:shortcutArt[id]?<img src={asset(shortcutArt[id])} alt="" loading="lazy"/>:shortcutIcon[id]??'✦'}
+      {id==='settings'?<span className="v2-menu-glyph"/>:<img src={asset(shortcutArt[id]??'art/icons/shield.svg')} alt="" loading="lazy"/>}
     </b>
     {id!=='settings'&&<span className="v2-shortcut-label">{label}</span>}
   </button>;
 }
-function ViewTile({id,name,icon,onClick}: {id:string;name:string;icon:string;onClick:()=>void}) {
+function ViewTile({id,name,onClick}: {id:string;name:string;onClick:()=>void}) {
   return <button className="v2-view-tile" type="button" onClick={onClick}
     aria-label={'Открыть: '+name}>
-    <b aria-hidden="true">{menuTileArt[id]?<img src={asset(menuTileArt[id])} alt="" loading="lazy"/>:icon}</b>
+    <b aria-hidden="true"><img src={asset(menuTileArt[id]??'art/icons/shield.svg')} alt="" loading="lazy"/></b>
     <span>{name}</span>
   </button>;
 }
@@ -294,7 +294,7 @@ export function NextApp() {
     <div className="v2-prelabel" aria-label="Режим проверки">TERRITORY 2.0 <span>DEMO</span></div>
     <header className="v2-header">
       <button className="v2-profile" type="button" onClick={()=>open('hero')}>
-        <img src={heroClass==='berserker'?asset('v2-approved-avatar.webp'):altHeroAssets[heroClass]} alt="" />
+        <img src={heroClass==='berserker'?asset('art/avatar.svg'):altHeroAssets[heroClass]} alt="" />
         <span className="v2-level-badge">{progress.level}</span>
       </button>
       <div className="v2-identity">
@@ -303,9 +303,9 @@ export function NextApp() {
         <span className="v2-experience-line" title={progress.xp+' / '+nextXp(progress.level)+' XP'}><span style={{width:xpPct+'%'}}/></span>
       </div>
       <div className="v2-wallet" aria-label="Демонстрационные валюты">
-        <button type="button" onClick={()=>open('shop')} aria-label={`Золото: ${progress.gold.toLocaleString('ru-RU')}. Открыть магазин`} title={`Золото: ${progress.gold.toLocaleString('ru-RU')}`}><img src={asset('gold-coin.webp')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.gold)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.gold,true)}</span><b aria-hidden="true">+</b></button>
-        <button type="button" onClick={()=>open('shop')} aria-label={`Синие алмазы: ${progress.gems.toLocaleString('ru-RU')}. Открыть магазин`} title={`Синие алмазы: ${progress.gems.toLocaleString('ru-RU')}`}><img src={asset('blue-gem.webp')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.gems)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.gems,true)}</span><b aria-hidden="true">+</b></button>
-        <button type="button" onClick={()=>open('shop')} aria-label={`Красные алмазы: ${progress.redGems.toLocaleString('ru-RU')}. Открыть магазин`} title={`Красные алмазы: ${progress.redGems.toLocaleString('ru-RU')}`}><img src={asset('red-gem.webp')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.redGems)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.redGems,true)}</span><b aria-hidden="true">+</b></button>
+        <button type="button" onClick={()=>open('shop')} aria-label={`Золото: ${progress.gold.toLocaleString('ru-RU')}. Открыть магазин`} title={`Золото: ${progress.gold.toLocaleString('ru-RU')}`}><img src={asset('art/icons/gold.svg')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.gold)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.gold,true)}</span><b aria-hidden="true">+</b></button>
+        <button type="button" onClick={()=>open('shop')} aria-label={`Синие алмазы: ${progress.gems.toLocaleString('ru-RU')}. Открыть магазин`} title={`Синие алмазы: ${progress.gems.toLocaleString('ru-RU')}`}><img src={asset('art/icons/blue.svg')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.gems)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.gems,true)}</span><b aria-hidden="true">+</b></button>
+        <button type="button" onClick={()=>open('shop')} aria-label={`Красные алмазы: ${progress.redGems.toLocaleString('ru-RU')}. Открыть магазин`} title={`Красные алмазы: ${progress.redGems.toLocaleString('ru-RU')}`}><img src={asset('art/icons/red.svg')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.redGems)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.redGems,true)}</span><b aria-hidden="true">+</b></button>
       </div>
     </header>
 
@@ -343,7 +343,7 @@ export function NextApp() {
         </div>
       </div>
       <button className="v2-arena-button" onClick={()=>open('arena')} type="button">
-        <img src={asset('ic-arena.webp')} alt=""/><span>Арена</span>
+        <img src={asset('art/icons/arena.svg')} alt=""/><span>Арена</span>
       </button>
       {(notice||!auto)&&<div className="v2-combat-notice">{notice||'Автобой остановлен'}</div>}
       <V2LootRain burst={game.burst}/>
@@ -364,7 +364,7 @@ export function NextApp() {
     <section className="v2-equipment" aria-label="Экипировка" data-layout="two-row-gear">
       {V2_GEAR_SLOTS.map(slot=><EquipmentSlot key={slot} slot={slot} item={progress.equipped[slot]} onClick={()=>{setGearFocus(slot);open('hero');}}/>)}
       <button className="v2-gear v2-extra-rune" type="button" onClick={()=>open('runes')} aria-label="Активная руна"><span className="v2-rune-glyph">ᚱ</span><small>Руна</small></button>
-      <button className="v2-gear v2-extra-skill" type="button" onClick={()=>open('skills')} aria-label="Активные навыки"><img src={asset('ic-blessing.webp')} alt=""/><small>Навык</small></button>
+      <button className="v2-gear v2-extra-skill" type="button" onClick={()=>open('skills')} aria-label="Активные навыки"><img src={asset('art/icons/skills.svg')} alt=""/><small>Навык</small></button>
       <button className="v2-gear v2-extra-follower" type="button" onClick={()=>open('companions')} aria-label="Активный спутник"><img src={companionArt[companion]} alt=""/><small>Спутник</small></button>
     </section>
 
@@ -377,7 +377,7 @@ export function NextApp() {
       <div className="v2-command-actions">
         <button className={'v2-control v2-control--speed'+(speed===2?' is-active':'')} type="button" onClick={()=>setSpeed(s=>s===1?2:1)} aria-label={'Скорость боя: ×'+speed} aria-pressed={speed===2}>×{speed}</button>
         <button className={'v2-control repeat v2-control--auto'+(auto?' active':'')} type="button" onClick={()=>setAuto(a=>!a)} aria-pressed={auto} aria-label={auto?'Остановить автобой':'Начать автобой'}>⟳</button>
-        <button className="v2-control v2-control--ranking" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('v2-ui-crown.svg')} alt=""/></button>
+        <button className="v2-control v2-control--ranking" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('art/icons/ranking.svg')} alt=""/></button>
       </div>
     </section>
 
@@ -385,7 +385,7 @@ export function NextApp() {
       {V2_BOTTOM_NAV.map(({id,label})=><button key={id} onClick={()=>open(id)}
         className={id==='expedition'?'main':''}
         type="button" aria-current={overlay===id||(id==='expedition'&&overlay===null)?'page':undefined} aria-label={label||'Бой'}>
-        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo"><img src={asset('battle-stone.webp')} alt=""/>{progress.wins}</small></>}
+        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo"><img src={asset('art/icons/stone.svg')} alt=""/>{progress.wins}</small></>}
       </button>)}
     </nav>
 
@@ -394,7 +394,7 @@ export function NextApp() {
         <header><button onClick={()=>overlay==='menu'?setOverlay(null):setOverlay('menu')} aria-label="Назад">‹</button><h2>{routeTitle[overlay]}</h2><button onClick={()=>setOverlay(null)} aria-label="Закрыть">×</button></header>
         <div className="v2-drawer-content">
           {overlay==='menu'&&<div className="v2-tilegrid">
-            {V2_EXTRA_MENU.map(x=><ViewTile key={x.id} id={x.id} name={x.label} icon={shortcutIcon[x.id]??'✦'} onClick={()=>open(x.id as V2ScreenId)}/>)}
+            {V2_EXTRA_MENU.map(x=><ViewTile key={x.id} id={x.id} name={x.label} onClick={()=>open(x.id as V2ScreenId)}/>)}
           </div>}
           {(overlay==='port'||overlay==='professions')&&<PortExperience
             mode={overlay}

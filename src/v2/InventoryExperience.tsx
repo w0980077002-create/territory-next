@@ -31,7 +31,7 @@ function ComparisonItem({title,item}:{
   return <article className={'v2-compare-item'+(item?' v2-rarity-'+item.rarity:' is-empty')}>
     <div className="v2-compare-item-heading">{title}</div>
     {item?<><div className="v2-compare-art">
-      <img src={asset('item-'+item.slot+'.webp')} alt=""/>
+      <img src={asset('art/icons/'+item.slot+'.svg')} alt=""/>
       <span className="v2-compare-upgrade">+{item.upgrade}</span>
     </div>
       <strong className={'v2-rarity-text-'+item.rarity}>{item.name}</strong>
@@ -58,7 +58,7 @@ export function EquipmentSlot({
     className={'v2-gear v2-gear-'+slot+' v2-rarity-'+rarity+(selected?' v2-gear-selected':'')}
     onClick={onClick}
   >
-    <img src={asset('item-'+slot+'.webp')} alt="" loading="lazy"/>
+    <img src={asset('art/icons/'+slot+'.svg')} alt="" loading="lazy"/>
     <small>{item?'+'+item.upgrade:'+'}</small>
   </button>;
 }
@@ -209,7 +209,7 @@ export function InventoryExperience({
           aria-pressed={selectedId===item.id}
           aria-label={item.name+', уровень '+item.level+', '+V2_RARITY_LABEL[item.rarity]}
           onClick={()=>chooseItem(item)}>
-          <img src={asset('item-'+item.slot+'.webp')} alt=""/>
+          <img src={asset('art/icons/'+item.slot+'.svg')} alt=""/>
           <small>+{item.upgrade}</small>
           <span>{V2_SLOT_LABEL[item.slot]}</span>
         </button>):<div className="v2-warehouse-empty">
