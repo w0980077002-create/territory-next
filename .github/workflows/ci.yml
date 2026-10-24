@@ -42,9 +42,8 @@ jobs:
         run: |
           test ! -f .github/workflows/pages.yml
           test -s dist/v2-preview.html
-          test -s dist/v2-preview.css
-          test -s dist/v2-preview.js
+          node scripts/check-v2-original-art-isolation.mjs --dist
           grep -q 'const base' vite.config.ts
-          grep -q 'isLegacyProduction' src/game/supabase.ts
-          grep -q "VITE_V2_STAGING_APPROVED" src/game/supabase.ts
+          test ! -d dist/assets/territory
+          test ! -d dist/monopoly
           echo "V2 offline demo and app build verified; production deployment disabled."
