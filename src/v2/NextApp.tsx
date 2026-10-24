@@ -3,6 +3,7 @@ import { encounterForChapter, type HeroClass, type RuneKind, type CompanionKind 
 import { nextPreviewTick, startPreviewEncounter } from './core/moduleCombat';
 import {LootbornSkillsTemplate} from './visual/LootbornTemplates';
 import {StageMapExperience} from './visual/StageMapExperience';
+import {FeaturePanelExperience,type FeaturePanelId} from './visual/FeaturePanelExperience';
 import {OverhaulShopExperience} from './visual/OverhaulShopExperience';
 import {V2LootRain} from './visual/V2LootRain';
 import {readV2StageSave,writeV2StageSave,clearV2StageSave} from './core/stageSave';
@@ -30,6 +31,7 @@ import './navigation.css';
 import './approved-ui.css';
 import './sunlit-reference-polish.css';
 import './owner-ui-controls.css';
+import './visual/inner-panels.css';
 import './visual/reference-templates.css';
 import './visual/reference-audit-fixes.css';
 
@@ -60,6 +62,17 @@ const enemies = [
   asset('assets/territory/characters/enemies/troll/idle.webp'),
   asset('assets/territory/characters/bosses/giant_king/idle.webp'),
 ];
+const featureScreens:readonly string[]=[
+  'arena','mail','trials','friends','invitation','socialRewards',
+  'specialMarket','welcomeBundle','seaBundle','clan','games',
+];
+const menuTileArt:Readonly<Record<string,string>>={
+  hero:'v2-approved-avatar.webp',warehouse:'item-armor.webp',
+  runes:'ic-blessing.webp',companions:'v2-battle-cow-approved.webp',
+  clan:'nav-clan.webp',professions:'ic-forge.webp',
+  games:'ic-trophy.webp',mail:'ic-mail.webp',settings:'ic-settings.webp',
+  ranking:'ic-trophy.webp',
+};
 const bottomIcon: Record<string, string> = {
   port:'ic-sea.webp',
   skills:'v2-ui-skills-book.svg',
@@ -139,8 +152,12 @@ function Shortcut({id,label,onClick}: {id:string;label:string;onClick:()=>void})
     {id!=='settings'&&<span className="v2-shortcut-label">{label}</span>}
   </button>;
 }
-function ViewTile({name,icon,onClick}: {name:string;icon:string;onClick:()=>void}) {
-  return <button className="v2-view-tile" type="button" onClick={onClick}><b>{icon}</b><span>{name}</span></button>;
+function ViewTile({id,name,icon,onClick}: {id:string;name:string;icon:string;onClick:()=>void}) {
+  return <button className="v2-view-tile" type="button" onClick={onClick}
+    aria-label={'Открыть: '+name}>
+    <b aria-hidden="true">{menuTileArt[id]?<img src={asset(menuTileArt[id])} alt="" loading="lazy"/>:icon}</b>
+    <span>{name}</span>
+  </button>;
 }
 
 export function NextApp() {
@@ -373,11 +390,11 @@ export function NextApp() {
     </nav>
 
     {overlay&&<div className="v2-mask" role="presentation" onClick={()=>setOverlay(null)}>
-      <section className="v2-drawer" role="dialog" aria-modal="false" aria-label={routeTitle[overlay]} onClick={e=>e.stopPropagation()}>
+      <section className="v2-drawer" data-v2-screen={overlay} role="dialog" aria-modal="false" aria-label={routeTitle[overlay]} onClick={e=>e.stopPropagation()}>
         <header><button onClick={()=>overlay==='menu'?setOverlay(null):setOverlay('menu')} aria-label="Назад">‹</button><h2>{routeTitle[overlay]}</h2><button onClick={()=>setOverlay(null)} aria-label="Закрыть">×</button></header>
         <div className="v2-drawer-content">
           {overlay==='menu'&&<div className="v2-tilegrid">
-            {V2_EXTRA_MENU.map(x=><ViewTile key={x.id} name={x.label} icon={shortcutIcon[x.id]??'✦'} onClick={()=>open(x.id as V2ScreenId)}/>)}
+            {V2_EXTRA_MENU.map(x=><ViewTile key={x.id} id={x.id} name={x.label} icon={shortcutIcon[x.id]??'✦'} onClick={()=>open(x.id as V2ScreenId)}/>)}
           </div>}
           {(overlay==='port'||overlay==='professions')&&<PortExperience
             mode={overlay}
@@ -470,7 +487,9 @@ export function NextApp() {
             ))}
             onOpenAdventure={()=>open('expedition')}
           />}
-          {overlay==='arena'&&<><p>Арена TERRITORY 2.0: PvP-чат во время боя, снаряжение, эликсиры, сезоны и 30 минут переписки после боя.</p><p>Пока доступен только интерфейс. Настоящие PvP-матчи требуют отдельного сервера.</p></>}
+          {overlay!=='menu'&&featureScreens.includes(overlay)&&
+            <FeaturePanelExperience mode={overlay as FeaturePanelId}
+              progress={progress} campaign={campaign} onNavigate={open}/>}
           {overlay==='ranking'&&<><h3>Рейтинг похода · локальная демонстрация</h3><div className="v2-info-row">Победы <b>{victories}</b></div><div className="v2-info-row">Боссы <b>{progress.bosses}</b></div><div className="v2-info-row">Поражения <b>{defeats}</b></div><p>Настоящий рейтинг появится после подключения независимого серверного учёта матчей.</p></>}
           {overlay==='settings'&&<div className="v2-feature-cards">
             <h3>Настройки демоверсии</h3>
@@ -487,10 +506,7 @@ export function NextApp() {
             }}>Начать демонстрацию заново</button>
             <p>Выбор десяти разных фонов будет добавлен отдельным этапом; текущий фон по решению владельца не меняется.</p>
           </div>}
-          {['specialMarket','welcomeBundle','trials','friends','invitation','socialRewards','seaBundle','clan','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
-            <p>Раздел «{routeTitle[overlay]}» входит в нашу структуру TERRITORY 2.0.</p><p>Исходные механики уже перенесены в новый репозиторий. Здесь будет их обновлённый интерфейс после интеграции с тестовой базой.</p>
-            <button className="v2-cta" onClick={()=>open('menu')}>Открыть меню</button>
-          </div>}
+          
         </div>
         <DemoNote/>
       </section>
