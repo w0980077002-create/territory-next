@@ -93,7 +93,7 @@ export function CompanionGallery({
         <span className="v2-companion-gallery-info">
           <strong>{c.name}</strong>
           <small>{c.desc}</small>
-          <span className="v2-companion-gallery-role">{module?null:null}{moduleFor(c.id)?stanceName[moduleFor(c.id)!.stance]:c.id==='warcow'?'Особый спутник':'Спутник'}</span>
+          <span className="v2-companion-gallery-role">{moduleFor(c.id)?stanceName[moduleFor(c.id)!.stance]:c.id==='warcow'?'Особый спутник':'Спутник'}</span>
         </span>
         <span className="v2-companion-gallery-status">{selected===c.id?'✓':'+'}</span>
       </button>)}

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { encounterForChapter, type HeroClass, type RuneKind, type CompanionKind } from './core/autoBattle';
 import { nextPreviewTick, startPreviewEncounter } from './core/moduleCombat';
-import {LootbornSkillsTemplate,LootbornCompanionsTemplate} from './visual/LootbornTemplates';
+import {LootbornSkillsTemplate} from './visual/LootbornTemplates';
+import {RuneGallery,CompanionGallery} from './visual/RuneCompanionGallery';
 import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, type V2ScreenId } from './interfaceContract';
 import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import { QuestExperience } from './QuestExperience';
@@ -388,21 +389,11 @@ export function NextApp() {
             <LootbornSkillsTemplate heroLevel={progress.level} levels={demoSkills.levels}
               onFocus={setSkillCategory} onShowCompanions={()=>open('companions')}/>
           </>}
-          {overlay==='runes'&&<>
-            <p>Каждая руна изменяет ход демонстрационного боя. Выбор применяется сразу.</p>
-            <div className="v2-runes">{runeOptions.map(x=><button key={x.id} className={rune===x.id?'chosen':''} onClick={()=>setRune(x.id)}><b>{x.icon}</b><strong>{x.name}</strong><small>{x.desc}</small></button>)}</div>
-          </>}
-          {overlay==='companions'&&<>
-            <p>Выбран один активный спутник. Его роль изменяет бой.</p>
-            <div className="v2-comp-list">{followerOptions.map(x=><button key={x.id} onClick={()=>setCompanion(x.id)} className={companion===x.id?'chosen':''}><img src={companionArt[x.id]} alt=""/><span><b>{x.name}</b><small>{x.desc}</small></span>{companion===x.id&&<strong>✓</strong>}</button>)}</div>
-            <div className="v2-cow-preview"><img src={companionArt.warcow} alt="Боевая корова в доспехах" className="v2-cow-sprite"/><div><strong>Боевая корова</strong><p>Особенный шестой спутник! Таранит врагов и частично защищает героя. Авторский первый векторный арт — ещё будем совершенствовать перед выпуском.</p><button type="button" className="v2-cow-select" onClick={()=>setCompanion('warcow')}>Выбрать боевую корову</button></div></div>
-            <LootbornCompanionsTemplate selected={companion} level={progress.level}
-              getPortrait={alias=>companionArt[alias as CompanionKind]}
-              onChoose={alias=>{
-                const chosen=followerOptions.find(x=>x.id===alias);
-                if(chosen)setCompanion(chosen.id);
-              }} onShowSkills={()=>open('skills')}/>
-          </>}
+          {overlay==='runes'&&<RuneGallery runes={runeOptions} selected={rune}
+            onChoose={setRune} onShowSkills={()=>open('skills')}/>}
+          {overlay==='companions'&&<CompanionGallery companions={followerOptions}
+            portraits={companionArt} selected={companion} heroLevel={progress.level}
+            onChoose={setCompanion} onShowSkills={()=>open('skills')}/>}
           {overlay==='adventure'&&<>
             <p>Доступные главы демонстрационного похода · последняя открытая: {highestUnlockedChapter}. Следующая глава открывается только после победы над боссом текущей.</p>
             <div className="v2-stage-grid">{Array.from({length:Math.max(12,highestUnlockedChapter+1)},(_,i)=>i+1).map(x=><button type="button" disabled={x>highestUnlockedChapter} className={(chapter===x?'chosen ':'')+(x>highestUnlockedChapter?'locked':'')} key={x} onClick={()=>{

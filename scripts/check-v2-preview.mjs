@@ -23,7 +23,7 @@ assert(!/https:\/\/[^"']+/.test(html),'Preview must never load remote code');
 assert(index.includes('/src/v2/main.tsx'));
 assert(main.includes("from './NextApp'"));
 assert(app.includes("import './visual/reference-templates.css'"));
-assert(app.includes('LootbornSkillsTemplate')&&app.includes('LootbornCompanionsTemplate'));
+assert(app.includes('LootbornSkillsTemplate')&&app.includes('RuneGallery')&&app.includes('CompanionGallery'));
 assert(app.includes('data-layout="two-row-gear"'));
 assert(app.includes('data-layout="five-button-fixed"'));
 assert(app.includes('v2-orb-percent')&&app.includes('heroHpPct')&&app.includes('energyPct'));
