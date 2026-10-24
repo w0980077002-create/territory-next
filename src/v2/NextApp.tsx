@@ -3,6 +3,7 @@ import { encounterForChapter, type HeroClass, type RuneKind, type CompanionKind 
 import { nextPreviewTick, startPreviewEncounter } from './core/moduleCombat';
 import {LootbornSkillsTemplate} from './visual/LootbornTemplates';
 import {StageMapExperience} from './visual/StageMapExperience';
+import {V2ReferenceSkills,V2ReferenceAdventure,V2ReferenceGems,V2ReferenceWarehouse} from './visual/CanonicalScreens';
 import {FeaturePanelExperience,type FeaturePanelId} from './visual/FeaturePanelExperience';
 import {OverhaulShopExperience} from './visual/OverhaulShopExperience';
 import {V2LootRain} from './visual/V2LootRain';
@@ -170,6 +171,7 @@ export function NextApp() {
   const [rune,setRune] = useState<RuneKind>(offlineSave?.rune??'flame');
   const [companion,setCompanion] = useState<CompanionKind>(offlineSave?.companion??'warcow');
   const [overlay,setOverlay] = useState<Overlay>(null);
+  const [expandedAdventureMap,setExpandedAdventureMap] = useState(false);
   const [speed,setSpeed] = useState<1|2>(offlineSave?.speed??1);
   const [auto,setAuto] = useState(offlineSave?.auto??true);
   const [victories,setVictories] = useState(offlineSave?.victories??0);
@@ -286,8 +288,8 @@ export function NextApp() {
     setEncounterId(id=>id+1);setAuto(true);setOverlay(null);
   };
   const xpPct=progress.level>=300?100:Math.min(100,progress.xp/nextXp(progress.level)*100);
-  const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Первый взнос',settings:'Настройки',menu:'Меню',invitation:'Приглашение',socialRewards:'Социальные награды',seaBundle:'Морской набор',ranking:'Рейтинг'};
-  const open = (id: V2ScreenId | 'menu')=>id==='expedition'?(setOverlay(null),setAuto(true)):setOverlay(id);
+  const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',gems:'Драгоценный камень',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Первый взнос',settings:'Настройки',menu:'Меню',invitation:'Приглашение',socialRewards:'Социальные награды',seaBundle:'Морской набор',ranking:'Рейтинг'};
+  const open = (id: V2ScreenId | 'menu')=>id==='expedition'?(setOverlay(null),setAuto(true)):(id==='adventure'&&setExpandedAdventureMap(false),setOverlay(id));
 
   return <div className="v2-shell">
     <div className="v2-prelabel" aria-label="Режим проверки">TERRITORY 2.0 <span>DEMO</span></div>
@@ -411,8 +413,9 @@ export function NextApp() {
             onCancel={()=>setMiningState(cancelV2DemoMining)}
             onWarehouse={()=>open('warehouse')}
           />}
-          {(overlay==='hero'||overlay==='warehouse')&&<InventoryExperience
-            view={overlay}
+          {overlay==='warehouse'&&<V2ReferenceWarehouse progress={progress} onShowGear={()=>open('hero')}/>}
+          {overlay==='hero'&&<InventoryExperience
+            view="hero"
             progress={progress}
             heroArt={altHeroAssets[heroClass]}
             focusSlot={gearFocus}
@@ -422,7 +425,13 @@ export function NextApp() {
             onUpgrade={slot=>setProgress(p=>upgradeV2Equipped(p,slot))}
             onSalvage={id=>setProgress(p=>salvageV2Item(p,id))}
           />}
-          {overlay==='skills'&&<>
+          {overlay==='skills'&&<div className="v2-ref-skills-page">
+            <V2ReferenceSkills state={demoSkills} heroLevel={progress.level}
+              onTrain={id=>setDemoSkills(old=>learnV2DemoSkill(old,id,progress.level))}
+              onShowRunes={()=>open('runes')}/>
+            <details className="v2-ref-skills-advanced">
+              <summary>Дополнительные настройки сборки</summary>
+              <div>
             <h3>Выбор класса · демонстрационная сборка</h3>
             {classes.map(x=><button className={'v2-choice'+(heroClass===x.id?' chosen':'')} key={x.id} onClick={()=>setHeroClass(x.id)}><b>{x.name}</b><span>{x.desc}</span>{heroClass===x.id&&<em>Активен</em>}</button>)}
             <h3>Сборки героя · демонстрационные слоты</h3>
@@ -470,14 +479,21 @@ export function NextApp() {
             </div>
             <LootbornSkillsTemplate heroLevel={progress.level} levels={demoSkills.levels}
               onFocus={setSkillCategory} onShowCompanions={()=>open('companions')}/>
-          </>}
+              </div>
+            </details>
+          </div>}
           {overlay==='runes'&&<RuneGallery runes={runeOptions} selected={rune}
             onChoose={setRune} onShowSkills={()=>open('skills')}/>}
           {overlay==='companions'&&<CompanionGallery companions={followerOptions}
             portraits={companionArt} selected={companion} heroLevel={progress.level}
             onChoose={setCompanion} onShowSkills={()=>open('skills')}/>}
-          {overlay==='adventure'&&<StageMapExperience state={campaign}
-            onSelect={navigateStage} onFight={()=>{setOverlay(null);setAuto(true);}}/>}
+          {overlay==='adventure'&&(expandedAdventureMap?
+            <div><button type="button" className="v2-cta" onClick={()=>setExpandedAdventureMap(false)}>← Вернуться к карте приключений</button>
+              <StageMapExperience state={campaign} onSelect={navigateStage}
+                onFight={()=>{setOverlay(null);setAuto(true);}}/></div>:
+            <V2ReferenceAdventure onBoss={()=>open('trials')} onCampaign={()=>setExpandedAdventureMap(true)}/>)}
+          {overlay==='gems'&&<V2ReferenceGems onClose={()=>open('hero')}/>}
+
           {overlay==='shop'&&<OverhaulShopExperience campaign={campaign}
             progress={progress} selectedCompanion={companion}
             onBuy={buyDemoItem} onViewSkills={()=>open('skills')}
@@ -491,6 +507,7 @@ export function NextApp() {
               q,questId,progress,highestUnlockedChapter,Date.now(),
             ))}
             onOpenAdventure={()=>open('expedition')}
+            onNavigate={open}
           />}
           {overlay!=='menu'&&featureScreens.includes(overlay)&&
             <FeaturePanelExperience mode={overlay as FeaturePanelId}
