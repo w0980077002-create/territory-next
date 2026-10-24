@@ -7,7 +7,7 @@ const js=ts.transpileModule(tsSource,{compilerOptions:{module:ts.ModuleKind.ESNe
 const {V2_SKILL_CATEGORIES,validateV2Loadout,countEquippedSetPieces,activeSupportAuraKeys}=
   await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
 
-assert.deepEqual(V2_SKILL_CATEGORIES,['basic','core','mastery','ultimate','passive']);
+assert.deepEqual(V2_SKILL_CATEGORIES,['basic','core','control','ultimate','passive']);
 
 const lib={
   skills:[{id:'slash',category:'basic'},{id:'storm',category:'core'}],
@@ -16,7 +16,7 @@ const lib={
   gear:[{instanceId:'axe',slot:'weapon',setId:'north'},{instanceId:'helm',slot:'helmet',setId:'north'}],
 };
 const rules={
-  skillSlotCaps:{basic:1,core:1,mastery:0,ultimate:0,passive:0},
+  skillSlotCaps:{basic:1,core:1,control:0,ultimate:0,passive:0},
   supportCompanionSlots:1,
   equipmentSlotIds:['weapon','helmet'],
 };
