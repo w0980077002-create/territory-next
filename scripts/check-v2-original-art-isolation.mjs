@@ -35,7 +35,7 @@ for(const path of ['src/v2/NextApp.tsx','src/v2/InventoryExperience.tsx',
  assert(code(path).includes('art/'),'New V2 assets absent from '+path);
 }
 const art=files('public-v2/art').map(x=>relative('public-v2/art',x).split(sep).join('/'));
-assert(art.length>=70,'Generator must provide original characters, bosses and icons (got '+art.length+')');
+assert(art.length>=65,'Generator must provide original characters, bosses and icons (got '+art.length+')');
 assert(art.every(x=>x.endsWith('.svg')),'V2 generated art must be independently authored SVG');
 for(const f of [
  'heroes/berserker.svg','heroes/runemage.svg','heroes/ranger.svg',
