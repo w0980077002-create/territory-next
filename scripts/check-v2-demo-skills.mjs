@@ -28,8 +28,9 @@ assert.equal(s.parseV2DemoSkillState(clean,12).levels.basic,2);
 const cfg=c.encounterForChapter(3,1);
 const skills={basic:5,core:5,control:5,ultimate:5,passive:5};
 let a=c.startPreviewEncounter(cfg),b=c.startPreviewEncounter({...cfg,skills});
-for(let i=0;i<10;i++){a=c.nextPreviewTick(a,.5);b=c.nextPreviewTick(b,.5);}
-assert(b.enemyHp<a.enemyHp,'Training must affect battle damage');
+a=c.nextPreviewTick(a,.5);b=c.nextPreviewTick(b,.5);
+assert(b.enemyHp<a.enemyHp,'Training must affect battle damage before the enemy is defeated');
+for(let i=1;i<10;i++){a=c.nextPreviewTick(a,.5);b=c.nextPreviewTick(b,.5);}
 assert(b.heroHp>=a.heroHp,'Defensive upgrades must help');
 assert.equal(b.stonesSpent,0);
 const app=readFileSync('src/v2/NextApp.tsx','utf8');
