@@ -1,0 +1,150 @@
+/* TERRITORY 2.0: original CSS recreations from owner's six locked references.
+   No competitor assets. All styles scoped to the new, independent V2 app. */
+.v2-ref-skill,.v2-ref-adventure,.v2-ref-gems,.v2-ref-warehouse{box-sizing:border-box;position:relative;min-width:0}
+.v2-ref-skill button,.v2-ref-adventure button,.v2-ref-gems button,.v2-ref-warehouse button{cursor:pointer;touch-action:manipulation}
+.v2-ref-skill button:focus-visible,.v2-ref-adventure button:focus-visible,.v2-ref-gems button:focus-visible,.v2-ref-warehouse button:focus-visible{outline:3px solid #50eaff;outline-offset:2px}
+
+/* Skills: monumental violet altar, parchment, five ordered rows, 3 hexes each. */
+.v2-ref-skill{background:#edcc98;color:#342018;border:3px solid #38231e;border-radius:6px;overflow:hidden}
+.v2-ref-skill-altar{height:150px;position:relative;display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(90deg,#3c2d65 0%,#c9aee5 13%,#fff4de 21%,#673692 30%,#4f236f 48%,#692d98 67%,#f1e0ef 78%,#4c3378 100%);border-bottom:8px ridge #593326}
+.v2-ref-skill-altar:before,.v2-ref-skill-altar:after{content:"";position:absolute;bottom:35px;width:32px;height:45px;background:radial-gradient(circle at 50% 25%,#fff8bd 0 25%,#de861f 27% 45%,transparent 48%)}
+.v2-ref-skill-altar:before{left:13%}.v2-ref-skill-altar:after{right:13%}
+.v2-ref-skill-banner{color:#f8baff;font-size:95px;text-shadow:0 0 14px #f237ff,2px 3px #351247;filter:drop-shadow(0 0 8px #efadff)}
+.v2-ref-skill-altar-name{position:absolute;bottom:2px;font-size:24px;font-weight:1000;color:#ffdc80;-webkit-text-stroke:1px #482526;text-shadow:2px 3px #30212e}
+.v2-ref-skill-parchment{padding:11px 8px 42px;background:linear-gradient(#f9dba6,#efd0a1 60%,#f7e1b1);min-height:550px}
+.v2-ref-skill-rows{display:grid;gap:1px}
+.v2-ref-skill-row{display:grid;grid-template-columns:72px repeat(3,minmax(0,1fr));align-items:center;gap:3px;min-height:87px;border-bottom:2px solid #d4ac79}
+.v2-ref-skill-kind{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:0!important;background:none!important;color:#2f2020!important;padding:0 2px;font-size:13px!important;font-weight:1000;text-shadow:1px 1px #fff5e1;line-height:1.08}
+.v2-ref-skill-kind>span{width:48px;height:48px;clip-path:polygon(50% 0,91% 23%,91% 77%,50% 100%,9% 77%,9% 23%);display:grid;place-items:center;font-size:29px;color:#92939c;background:#fff7e8;box-shadow:inset 0 0 0 7px #a69a93}
+.v2-ref-skill-kind strong{overflow-wrap:anywhere;max-width:70px}
+.v2-ref-skill-hex{position:relative;display:grid;place-items:center;margin:0 auto;border:0!important;background:transparent!important;min-width:0;min-height:75px;padding:1px 0 18px!important;color:#fff!important}
+.v2-ref-skill-hex-face{display:grid;place-items:center;width:min(66px,18vw);height:67px;
+ clip-path:polygon(50% 0,88% 16%,100% 50%,87% 82%,50% 100%,13% 82%,0 50%,12% 17%);
+ font-size:34px;font-weight:1000;text-shadow:0 2px 4px #000c,0 0 5px white;
+ background:radial-gradient(circle at 33% 27%,#fff8b0,#d5a82e 38%,#6b401a 68%,#342236 90%);
+ box-shadow:inset 0 0 0 4px #a48047}
+.v2-ref-skill-blue .v2-ref-skill-hex-face{background:radial-gradient(at 36% 26%,#d1f4ff,#528fd9 47%,#254580 90%)}
+.v2-ref-skill-green .v2-ref-skill-hex-face{background:radial-gradient(at 36% 26%,#d2ff98,#6ac25c 47%,#286941 90%)}
+.v2-ref-skill-bronze .v2-ref-skill-hex-face{background:radial-gradient(at 36% 26%,#ffda9d,#c67d3b 47%,#623b2a 90%)}
+.v2-ref-skill-fire .v2-ref-skill-hex-face{background:radial-gradient(at 36% 26%,#ffe8a1,#ed7f23 43%,#8b3016 90%)}
+.v2-ref-skill-violet .v2-ref-skill-hex-face{background:radial-gradient(at 36% 26%,#ffd8ff,#a168d5 43%,#613184 90%)}
+.v2-ref-skill-ice .v2-ref-skill-hex-face{background:radial-gradient(at 36% 26%,#effaff,#56aaf1 43%,#2d5294 90%)}
+.v2-ref-skill-hex.equipped .v2-ref-skill-hex-face{filter:drop-shadow(0 0 4px #ffc52f);outline:1px solid #ac6b00}
+.v2-ref-skill-hex.equipped:before,.v2-ref-skill-hex.equipped:after{content:"◆";position:absolute;top:20px;color:#dea028;text-shadow:0 1px #6b461c}
+.v2-ref-skill-hex.equipped:before{left:-3px}.v2-ref-skill-hex.equipped:after{right:-3px}
+.v2-ref-skill-hex small{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:10px;color:#fff;
+ white-space:nowrap;font-weight:1000;-webkit-text-stroke:.45px #382123;text-shadow:1px 2px #201512,0 0 3px #211311}
+.v2-ref-passive-title{text-align:center;margin:11px 0;color:#80552b;font-size:13px;font-weight:900}
+.v2-ref-passives{display:flex;justify-content:space-evenly;align-items:center;background:#edc99577;border:1px solid #d5af75;padding:9px 0}
+.v2-ref-passives span{display:grid;place-items:center;width:55px;height:55px;border-radius:50%;color:white;font-size:29px;
+ border:3px solid #805b57;background:radial-gradient(circle at 25% 24%,#ffe0a9,#ca5a8d 48%,#713269);text-shadow:1px 2px #451b43}
+.v2-ref-passives span:nth-child(2){background:radial-gradient(circle at 25% 24%,#fff8a4,#efaa27 48%,#9a461c)}
+.v2-ref-passives span:nth-child(3){background:radial-gradient(circle at 25% 24%,#fffcdd,#ebcf8b 48%,#b6576d)}
+.v2-ref-rune-bonus{display:flex;flex-direction:column;margin:15px 5px 8px;padding:9px 7px;border:3px solid #b88b57;
+ background:#f7e7b9;border-radius:6px;color:#483527;font-size:13px}
+.v2-ref-rune-bonus strong{font-size:13px}.v2-ref-rune-bonus small{font-weight:800;color:#6f5440}
+.v2-ref-skill-foot{display:flex;justify-content:center;gap:12px;margin:13px 30px}
+.v2-ref-skill-foot button{font-size:13px;font-weight:900;border:3px solid #342524;border-radius:3px;padding:10px 15px;color:#b4a294;background:linear-gradient(#473d49,#2b242e);transform:skewX(-11deg)}
+.v2-ref-skill-foot button.active{color:#ffe197;background:linear-gradient(#80472d,#3c2529)}
+.v2-ref-skill-inspector{display:flex;flex-direction:column;gap:5px;padding:11px;margin:10px 5px;color:#3a2a2a;background:#fff0ce;border:1px solid #b38b57;border-radius:7px;font-size:12px}
+.v2-ref-skill-inspector button{align-self:flex-start;background:linear-gradient(#a863e0,#73329a);color:#fff;border:2px solid #422359;border-radius:8px;padding:8px;font-weight:850}
+.v2-ref-skill-inspector button:disabled{opacity:.5}.v2-ref-rune-link{position:absolute;right:8px;bottom:9px;display:grid;place-items:center;
+ background:#3a334e;border:3px ridge #c39b8b;border-radius:50%;color:#decdff;font-size:22px;width:42px;height:42px}
+.v2-ref-quiet{font-size:12px;color:#69452c}
+
+/* Adventure: scrollable violet map and 3 independent illustrated destinations. */
+.v2-ref-adventure{position:relative;min-height:850px;background:linear-gradient(125deg,#84799c,#746d8b 46%,#b6a7c7);overflow:hidden;color:white;border-radius:5px}
+.v2-ref-adventure-title{height:70px;display:flex;align-items:center;justify-content:center;position:relative;z-index:2}
+.v2-ref-adventure-title span{font-size:22px;font-weight:1000;padding:12px 23px;white-space:nowrap;
+ color:#f9d4a4;text-shadow:2px 3px #37212a;-webkit-text-stroke:.6px #5f2d28;
+ background:linear-gradient(#be8c67,#84533c);border:3px ridge #ecc593;clip-path:polygon(0 50%,12% 0,88% 0,100% 50%,88% 100%,12% 100%);}
+.v2-ref-adventure-land{position:relative;height:720px;background:radial-gradient(ellipse at 75% 30%,#aba0c1 0 23%,transparent 30%),radial-gradient(at 30% 60%,#aaa6a4,#797083 70%);}
+.v2-ref-adventure-rivers{position:absolute;inset:0;width:100%;height:100%}
+.v2-ref-map-rock{position:absolute;color:#4f585e;font-size:24px;opacity:.5;transform:scale(.75);pointer-events:none}
+.v2-ref-adventure-place{position:absolute;z-index:2;width:49%;min-height:190px;border:0!important;background:transparent!important;color:#fff!important;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding:0!important}
+.v2-ref-adventure-farm{left:2%;top:11%}.v2-ref-adventure-portal{right:0;top:25%}.v2-ref-adventure-fortress{left:3%;top:52%}
+.v2-ref-adventure-badge{font-size:24px;color:#fff;background:#6d2b35;border-radius:50%;border:3px solid #e24760;padding:0 9px;line-height:30px}
+.v2-ref-adventure-place strong{font-size:17px;line-height:1.1;font-weight:1000;-webkit-text-stroke:.5px #241823;
+ text-shadow:-2px 2px 1px #1b172a,2px 2px 1px #1b172a,0 0 7px black}
+.v2-ref-adventure-place small{font-size:11px;color:#39f956;line-height:1.3;font-weight:1000;text-shadow:1px 2px #142416}
+.v2-ref-adventure-object{margin:3px 0;width:125px;height:117px;display:grid;place-items:center;border:4px solid #e3c5ac;
+ border-radius:24% 26% 28% 31%;background:linear-gradient(125deg,#e4b84b,#a66f2b 70%,#785332);
+ box-shadow:0 8px 0 #4b3948,0 0 14px 4px #a37b63aa;transform:rotate(-5deg)}
+.v2-ref-adventure-object span{font-size:69px;color:#ffe27a;text-shadow:2px 3px #714424}
+.v2-ref-adventure-portal .v2-ref-adventure-object{background:radial-gradient(ellipse,#ca5bfb 0 20%,#6d30ab 30%,#48205c 50%,#564058 52%,#9972b2 80%);
+ border-color:#d888ed;box-shadow:0 7px 0 #50304c,0 0 14px 5px #dc84eb9e;transform:rotate(5deg)}
+.v2-ref-adventure-portal .v2-ref-adventure-object span{color:#f5c8ff;text-shadow:0 0 15px #f9b2ff}
+.v2-ref-adventure-fortress .v2-ref-adventure-object{background:linear-gradient(130deg,#7a506d,#5b3150 64%,#aa481c);
+ border-color:#e49457;box-shadow:0 9px 0 #522232,0 0 15px #fa612a}
+.v2-ref-adventure-fortress .v2-ref-adventure-object span{color:#ffc971;text-shadow:0 0 12px #ef6e37}
+.v2-ref-adventure-pop{position:absolute;z-index:5;left:4%;right:4%;top:31%;border:4px ridge #dbb779;border-radius:9px;background:#4a3039;box-shadow:0 8px 35px #111c;padding:20px;color:#f9eacb;text-align:center}
+.v2-ref-adventure-pop h3{margin:3px 0;font-size:20px}.v2-ref-adventure-pop p{font-size:13px}
+.v2-ref-adventure-pop>button:not(.v2-ref-adventure-close){padding:10px;background:#aa58cf;border:2px solid #e1a0f9;color:white;font-weight:bold;border-radius:9px}
+.v2-ref-adventure-close{position:absolute;right:5px;top:4px;background:#ff4f8d;border:2px solid #431b27;border-radius:50%;height:34px;width:34px;font-size:24px;color:white}
+.v2-ref-adventure-note{position:relative;z-index:1;padding:7px 10px;font-size:10px;color:#ede8ea;background:#3c354ecc}
+
+/* Gem inset: 3 over-sized red stones + warm four-line 3-slot matrix. */
+.v2-ref-gems{background:#342128;color:#ffefbe;min-height:700px;border:4px ridge #bf8658;border-radius:6px;overflow:hidden}
+.v2-ref-gems-heading{min-height:65px;display:flex;align-items:center;gap:6px;justify-content:space-between;
+ background:linear-gradient(90deg,#643831,#32212f 45%,#68433b);border-bottom:5px ridge #d5a05c;padding:5px}
+.v2-ref-gems-heading h2{font-size:clamp(16px,4.5vw,23px);text-align:center;margin:0;font-weight:1000;color:#f8d796;text-shadow:1px 2px #27171a}
+.v2-ref-gems-heading button{background:transparent;color:#fff4d5;border:0;font-size:24px;min-width:39px}
+.v2-ref-gems-heading .v2-ref-synthesize{display:flex;flex-direction:column;align-items:center;font-size:21px}
+.v2-ref-synthesize small{font-size:10px;text-align:center;max-width:85px;overflow-wrap:anywhere}
+.v2-ref-gems-altar{height:130px;margin:12px 11px 0;display:grid;place-items:center;border:5px ridge #765046;
+ background:radial-gradient(ellipse at center,#553c43,#2a202c 70%);box-shadow:inset 0 0 30px #1f0b19}
+.v2-ref-gems-altar-emblem{width:110px;height:110px;display:grid;place-items:center;border:7px solid #b18b5b;border-radius:50%;color:#d0b69855;font-size:55px}
+.v2-ref-gems-selected{display:flex;justify-content:space-evenly;gap:3px;padding:18px 4px 13px;border-bottom:4px ridge #956942}
+.v2-ref-gem{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;min-width:0;
+ background:transparent;border:0!important;color:#ffecc1!important;padding:2px!important}
+.v2-ref-gem span{display:grid;place-items:center;height:56px;width:56px;border:5px ridge #c2937b;border-radius:50%;
+ font-size:34px;font-weight:1000;color:#ffced0;text-shadow:1px 2px #572238;
+ background:radial-gradient(circle at 33% 24%,#ffc5a9,#e72e3b 36%,#a30920 66%,#4d142a 90%)}
+.v2-ref-gem.selected span{box-shadow:0 0 0 3px #ffcc65,0 0 15px #f4ae50}
+.v2-ref-gem-blue span{background:radial-gradient(circle at 32% 23%,#e0fbff,#2dc9ee 38%,#2163b0 69%,#203977 91%)}
+.v2-ref-gem-green span{background:radial-gradient(circle at 32% 23%,#ddfff5,#38edb0 38%,#0e8865 69%,#185744 91%)}
+.v2-ref-gem-orange span{background:radial-gradient(circle at 32% 23%,#fff5cc,#ffb23c 38%,#de6910 69%,#8f3617 91%)}
+.v2-ref-gem small{margin-top:-6px;font-size:10px;font-weight:1000;color:#f8f8f5;text-shadow:1px 2px #1a1422}
+.v2-ref-gem em{font-size:10px;white-space:nowrap;color:#eee9bc;font-style:normal;font-weight:850;max-width:95px;overflow:hidden;text-overflow:ellipsis}
+.v2-ref-gem-list{min-height:390px;max-height:410px;overflow-y:auto;padding:13px 6px 25px;background:linear-gradient(#ffe3a9,#dfc28c)}
+.v2-ref-gem-row{display:grid;grid-template-columns:72px repeat(3,minmax(0,1fr));gap:2px;align-items:center;min-height:87px;padding:3px;margin-bottom:8px;border:4px ridge #cda05e;
+ background:linear-gradient(#efcf98,#b19b80);border-radius:5px}
+.v2-ref-gem-row.current{background:linear-gradient(#ffdfaa,#dac29b)}
+.v2-ref-gem-row .v2-ref-gem{justify-self:center}
+.v2-ref-gem-row-label{background:transparent!important;color:#46352b!important;border:0!important;display:flex;flex-direction:column;align-items:center;gap:2px}
+.v2-ref-gem-row-label span{font-size:26px;opacity:.72}.v2-ref-gem-row-label strong{font-size:11px}
+.v2-ref-gem-back{display:grid;place-items:center;margin:10px 15px 8px;transform:rotate(180deg);
+ color:white;font-size:24px;background:linear-gradient(#fa5198,#c82269);border:4px solid #51213c;border-radius:50%;width:52px;height:52px}
+.v2-ref-gem-disclaimer{display:block;font-size:10px;color:#cfb4aa;padding:4px 14px 10px}
+.v2-ref-gem-message{margin:8px;padding:9px;background:#f4dfaf;color:#3e2f31;border-radius:6px;font-size:12px}
+.v2-ref-gem-message button{float:right;border:0;background:#70343e;color:#fff;font-size:17px}
+
+/* Screenshot-specific warehouse: six columns, responsive item highlights and empty cream floor. */
+.v2-ref-warehouse{min-height:420px;border:4px solid #362328;padding:15px 10px;
+ border-radius:9px;background:#fdf0d2;color:#2a2023;box-shadow:inset 0 0 0 3px #fff8ea}
+.v2-ref-storage-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px 6px;align-content:start}
+.v2-ref-storage-cell{position:relative;min-width:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+ border:3px solid #452d36;border-radius:6px;color:#fff4cb;background:linear-gradient(145deg,#fd7729,#9a461f);
+ box-shadow:inset 0 0 0 2px #d8a976,inset 0 0 12px #34102166}
+.v2-ref-storage-cell span{font-size:clamp(20px,6vw,34px);font-weight:950;text-shadow:0 1px 4px #171624}
+.v2-ref-storage-cell small{position:absolute;bottom:1px;left:1px;right:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;
+ font-size:9px;font-weight:950;color:white;text-shadow:1px 1px black}
+.v2-ref-storage-cell.chosen{outline:2px solid #f3d05a;outline-offset:2px}
+.v2-ref-storage-purple{background:linear-gradient(#9e37e0,#5a1d8b)}
+.v2-ref-storage-blue{background:linear-gradient(#348be9,#2354aa)}
+.v2-ref-storage-amber{background:linear-gradient(#ffa528,#b35417)}
+.v2-ref-storage-inspect{display:flex;align-items:center;gap:6px;margin-top:10px;padding:9px;
+ border:2px solid #c79f69;border-radius:7px;background:#e9c699;font-size:11px}
+.v2-ref-storage-inspect strong{flex:1}.v2-ref-storage-inspect button{border:1px solid #825938;padding:5px 6px;border-radius:5px;background:#a86a40;color:white}
+@media(max-width:380px){.v2-ref-skill-row{grid-template-columns:60px repeat(3,minmax(0,1fr))}
+.v2-ref-skill-hex-face{width:min(56px,17vw);height:57px;font-size:27px}
+.v2-ref-skill-hex.equipped small{font-size:9px}
+.v2-ref-skill-kind strong{font-size:11px}
+.v2-ref-gem-row{grid-template-columns:57px repeat(3,minmax(0,1fr))}
+.v2-ref-gem span{width:45px;height:45px;font-size:25px}
+.v2-ref-storage-grid{gap:6px 3px}
+.v2-ref-storage-cell{border-width:2px}
+.v2-ref-storage-cell small{font-size:8px}
+.v2-ref-adventure-place strong{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.v2-ref-skill *,.v2-ref-adventure *,.v2-ref-gems *,.v2-ref-warehouse *{animation:none!important;transition:none!important}}
