@@ -20,6 +20,18 @@ Independent source repository. Based on approved development branch from TERRITO
 
 **Правило «без догадок»:** наличие механики подтверждается источником, но все отсутствующие в достоверных данных проценты, формулы, цены, таймеры и шансы считаются `TBD`, а не выдумываются. Это техническая спецификация дальнейшего направления, **не подтверждение готовности игры**. Call of Odin's Chosen закрыта с 29.09.2026, Web3/денежные обещания автоматически не переносим. Дизайн только с утверждённой картинки, никакой чужой графики. Старую TERRITORY 1.0 не трогать.
 
+## Главное ТЗ TERRITORY 2.0 — разработка строго по документам
+
+**Каноническая последовательность до любого изменения игрового кода:**
+1. [Master ТЗ 1.0 — все 34 экрана, 13 систем игрового цикла и принципы 1:1](docs/TERRITORY_2_0_MASTER_TZ_RU.md).
+2. [Техническая архитектура, схема БД, API, идемпотентность и безопасность](docs/TERRITORY_2_0_TECHNICAL_ARCHITECTURE_RU.md).
+3. [Матрица приёмки 1:1 и 55 сквозных тест-кейсов](docs/TERRITORY_2_0_ACCEPTANCE_AND_TRACEABILITY_RU.md).
+4. [Реестр 36 неизвестных величин — не выдумывать](docs/TERRITORY_2_0_UNVERIFIED_PARAMETERS_RU.md).
+5. [Машинная трассировка всех 53 доказательных записей к требованиям и тестам](docs/TERRITORY_2_0_IMPLEMENTATION_TRACE.json).
+6. [Единственное финальное фото от владельца](docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg).
+
+`npm run test:master-spec` проверяет полноту документации и SHA-256 владельческого эталона. **Документы не равны готовой игре.** Экраны, источники и зафиксированные механики должны проходить E2E и серверные тесты перед публикацией. Не подключать production первой TERRITORY.
+
 ## Status
 This is **development code**, not a live game and not safe to connect to the
 existing production Supabase project. The `main` branch here must not be
