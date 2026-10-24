@@ -7,7 +7,6 @@ const entry=read('index.html');
 const main=read('src/v2/main.tsx');
 const app=read('src/v2/NextApp.tsx');
 const css=read('src/v2/next.css');
-const db=read('src/game/supabase.ts');
 const layout=read('src/v2/interfaceContract.ts');
 
 assert.match(entry,/src\/v2\/main\.tsx/, 'new repository root must run NextApp');
@@ -28,8 +27,8 @@ assert.match(app,/v2-orb energy/);
 assert.match(app,/v2-equipment/);
 assert.match(app,/V2_GEAR_SLOTS|const gear =/, 'seven existing equipment slots must remain visible');
 assert.match(layout,/label: 'Приключение'/);
-assert.match(db,/VITE_V2_STAGING_APPROVED === 'yes'/);
-assert.match(db,/isLegacyProduction/);
+assert(!existsSync('src/game'),'No original game modules may remain');
+assert(!existsSync('src/components'),'No original game screens may remain');
 assert(!existsSync('.github/workflows/pages.yml'), 'old production deploy workflow must be absent');
 assert.match(css,/prefers-reduced-motion/, 'accessibility motion toggle must exist');
 assert.match(css,/safe-area-inset-bottom/, 'support iOS and Telegram safe area');
