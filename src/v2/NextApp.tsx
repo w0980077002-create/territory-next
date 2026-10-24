@@ -5,9 +5,10 @@ import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import {
   createV2DemoProgress,applyV2DemoVictory,statsFromV2Progress,nextXp,
   equipV2Item,unequipV2Item,salvageV2Item,upgradeV2Equipped,
-  V2_GEAR_SLOTS,type V2Progression,
+  V2_GEAR_SLOTS,type V2Progression,type V2GearSlot,
 } from './core/progression';
 import './next.css';
+import './navigation.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
@@ -105,6 +106,7 @@ export function NextApp() {
   const [notice,setNotice] = useState('');
   const [progress,setProgress] = useState<V2Progression>(createV2DemoProgress);
   const [encounterId,setEncounterId] = useState(1);
+  const [gearFocus,setGearFocus] = useState<V2GearSlot>('weapon');
   const heroStats = useMemo(()=>statsFromV2Progress(progress),[progress]);
   const config = useMemo(() => ({
     ...encounterForChapter(chapter,wave,heroClass),
@@ -223,7 +225,7 @@ export function NextApp() {
     </section>
 
     <section className="v2-equipment" aria-label="Экипировка">
-      {V2_GEAR_SLOTS.map(slot=><EquipmentSlot key={slot} slot={slot} item={progress.equipped[slot]} onClick={()=>open('hero')}/>)}
+      {V2_GEAR_SLOTS.map(slot=><EquipmentSlot key={slot} slot={slot} item={progress.equipped[slot]} onClick={()=>{setGearFocus(slot);open('hero');}}/>)}
     </section>
 
     <section className="v2-commands">
@@ -255,6 +257,7 @@ export function NextApp() {
             view={overlay}
             progress={progress}
             heroArt={altHeroAssets[heroClass]}
+            focusSlot={gearFocus}
             onView={open}
             onEquip={id=>setProgress(p=>equipV2Item(p,id))}
             onUnequip={slot=>setProgress(p=>unequipV2Item(p,slot))}
