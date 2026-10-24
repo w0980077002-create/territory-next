@@ -1,0 +1,106 @@
+/* Visual-only codex for SCR-05 Rune and SCR-08 Companion screens.
+ * No changes to the owner's locked battle background or bottom navigation. */
+.v2-codex{color:#fff1d5;display:flex;flex-direction:column;gap:10px;
+  border:2px solid #ba9569;border-radius:12px;padding:10px 9px 12px;
+  background:linear-gradient(150deg,#365670 0%,#263c58 52%,#16253c 100%);
+  box-shadow:inset 0 1px #ffedc377,0 3px 8px #0d152777}
+.v2-codex-header{display:flex;align-items:center;justify-content:space-between;
+  gap:8px;border-bottom:1px solid #d7b67f88;padding:2px 1px 10px}
+.v2-codex-header small{display:block;font-size:9px;font-weight:950;
+  color:#b7d7e7;letter-spacing:1.1px}
+.v2-codex-header h3{font-size:18px!important;line-height:1.1;
+  margin:3px 0 0!important;color:#ffe0a1!important}
+.v2-codex-label{padding:5px 6px;border-radius:6px;
+  border:1px solid #dfc186;color:#fce2b1;font-size:10px;font-weight:900;
+  background:linear-gradient(#624738,#342d3b);white-space:nowrap}
+.v2-codex-intro{margin:0!important;font-size:11px!important;line-height:1.45!important;
+  color:#d7e6ef!important}
+.v2-rune-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px}
+.v2-rune-gallery-card{min-width:0;display:flex;flex-direction:column;
+  align-items:center;gap:6px;text-align:center;min-height:155px;
+  padding:10px 5px 8px;border:2px solid #9b91a2;border-radius:12px;
+  background:linear-gradient(#4f6580,#253b58 55%,#1c2942);
+  box-shadow:inset 0 1px #d4eaff6b,0 2px 4px #10172d78}
+.v2-rune-gallery-art{display:grid;place-items:center;width:58px;height:58px;
+  border:3px solid #ebc785;border-radius:50%;background:
+  radial-gradient(circle at 28% 22%,#fff7bd,#96654a 36%,#35233c 72%);
+  box-shadow:inset 0 1px 6px #fffbcc77,0 0 8px #0c172966;
+  font-size:34px;filter:drop-shadow(0 2px 2px #171426)}
+.v2-rune-gallery--flame .v2-rune-gallery-art,.v2-codex-emblem.v2-rune-gallery--flame{
+  background:radial-gradient(circle at 30% 24%,#ffefa2,#df6931 48%,#5a1e36)}
+.v2-rune-gallery--frost .v2-rune-gallery-art,.v2-codex-emblem.v2-rune-gallery--frost{
+  background:radial-gradient(circle at 28% 25%,#fbfbff,#64c9ea 52%,#294c8c)}
+.v2-rune-gallery--thunder .v2-rune-gallery-art,.v2-codex-emblem.v2-rune-gallery--thunder{
+  background:radial-gradient(circle at 30% 23%,#fffbb5,#cb8bea 50%,#502778)}
+.v2-rune-gallery--guardian .v2-rune-gallery-art,.v2-codex-emblem.v2-rune-gallery--guardian{
+  background:radial-gradient(circle at 30% 20%,#f4fff9,#58bc95 50%,#245566)}
+.v2-rune-gallery-name{font-weight:1000;font-size:14px;color:#ffe7ac}
+.v2-rune-gallery-brief{flex:1;font-size:10px;color:#d0e0ef;line-height:1.25}
+.v2-rune-gallery-status{display:block;padding:4px 8px;border:1px solid #d3ab72;
+  border-radius:6px;background:#3e3641;color:#ffdf9d;font-size:10px;font-weight:950}
+.v2-rune-gallery-card.v2-gallery-active{border-color:#ffe28a;box-shadow:
+  inset 0 1px #fff8cb,0 0 8px #ffc35e88;
+  background:linear-gradient(#6e655c,#314a62 52%,#1c2c46)}
+.v2-gallery-active .v2-rune-gallery-status{background:linear-gradient(#ffe59d,#c58d38);
+  color:#37250c;border-color:#fff2b8}
+.v2-codex-detail{border:2px solid #c39d6f;border-radius:10px;
+  padding:10px 9px;background:linear-gradient(#42566c,#25374d);
+  box-shadow:inset 0 1px #e6c9a965}
+.v2-codex-detail-top{display:flex;align-items:center;gap:11px}
+.v2-codex-emblem{width:62px;height:62px;flex:none;display:grid;place-items:center;
+  border:3px solid #eac882;border-radius:12px;font-size:35px;
+  box-shadow:0 2px 4px #18263a99}
+.v2-codex-detail-top>div{min-width:0;display:flex;flex-direction:column;gap:4px}
+.v2-codex-detail-top small{font-size:9px;letter-spacing:.08em;color:#bdd9eb;font-weight:900}
+.v2-codex-detail-top strong{font-size:15px;color:#ffe7ab;font-weight:1000}
+.v2-codex-detail-top div>span{font-size:11px;color:#f0f4ef}
+.v2-codex-statlines{display:grid;grid-template-columns:1fr;gap:6px;margin-top:12px}
+.v2-codex-statlines>div{display:flex;gap:8px;justify-content:space-between;
+  align-items:center;padding:8px;border-radius:7px;background:#182e45ce;
+  border:1px solid #7b9aa380}
+.v2-codex-statlines span{min-width:0;color:#c5d5e7;font-size:10px}
+.v2-codex-statlines b{font-size:11px;color:#ffe4a1;text-align:right;
+  max-width:60%;overflow-wrap:anywhere}
+.v2-codex-disclaimer{margin:10px 1px 0!important;font-size:10px!important;
+  line-height:1.5!important;color:#bdd5e5!important}
+.v2-codex-link{display:flex;gap:9px;align-items:center;justify-content:space-between;
+  width:100%;padding:10px;border-radius:8px;border:2px solid #efce87;
+  background:linear-gradient(#b4864e,#775239);color:#fff2d7;
+  font-weight:950;text-shadow:0 1px 2px #221722}
+.v2-companion-gallery{display:grid;grid-template-columns:1fr;gap:7px}
+.v2-companion-gallery-card{min-width:0;display:flex;align-items:center;
+  gap:8px;padding:5px 8px 5px 4px;min-height:84px;text-align:left;
+  border:2px solid #8e9aaf;border-radius:11px;
+  background:linear-gradient(110deg,#456280,#29405a 50%,#1d2e47);
+  box-shadow:inset 0 1px #d1e5f259,0 2px 4px #0d15276b}
+.v2-companion-gallery-card.v2-gallery-active{border-color:#ffe099;
+  background:linear-gradient(110deg,#7c6048,#345068 45%,#1c314c);
+  box-shadow:inset 0 1px #f5e2b9a8,0 0 8px #ffdb896b}
+.v2-companion-gallery-portrait{flex:none;display:grid;place-items:center;
+  width:76px;height:74px;min-width:76px;overflow:hidden;border:2px solid #ddb87f;
+  border-radius:9px;background:radial-gradient(circle at 50% 24%,#d9eff7,#7399b1 52%,#32425b)}
+.v2-companion-gallery-portrait img{height:100%;width:100%;object-fit:contain;
+  filter:drop-shadow(0 3px 3px #112136b0)}
+.v2-companion-gallery-info{min-width:0;flex:1;display:flex;flex-direction:column;
+  justify-content:center;gap:5px}
+.v2-companion-gallery-info strong{font-size:13px;font-weight:950;color:#ffe5aa;
+  line-height:1.2}
+.v2-companion-gallery-info small{font-size:10px;color:#cfe0ec;line-height:1.25}
+.v2-companion-gallery-role{align-self:flex-start;padding:3px 5px;font-size:9px;
+  color:#ffe7ba;border-radius:5px;border:1px solid #b89a7b9e;background:#4f38428a}
+.v2-companion-gallery-status{font-size:20px;color:#ffe29d;font-weight:900;
+  padding:3px;text-align:center}
+.v2-companion-selected-portrait{flex:none;display:grid;place-items:center;
+  width:78px;height:96px;overflow:hidden;border:2px solid #e5ba7d;
+  border-radius:9px;background:radial-gradient(circle at 50% 15%,#d1edf7,#7293b5 56%,#37445c)}
+.v2-companion-selected-portrait img{width:100%;height:100%;object-fit:contain}
+.v2-codex .v2-module-section{margin-bottom:0}
+@media(max-width:355px){.v2-rune-gallery{gap:6px}.v2-rune-gallery-card{min-height:145px}
+ .v2-companion-gallery-portrait{width:62px;height:69px;min-width:62px}
+ .v2-companion-gallery-info strong{font-size:12px}
+ .v2-codex-label{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+ .v2-rune-gallery-card,.v2-companion-gallery-card{transition:none!important}
+}
