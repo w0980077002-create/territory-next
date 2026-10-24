@@ -1,6 +1,6 @@
--- TERRITORY 2.0 STAGING ONLY (DRAFT, NOT APPLIED TO A DATABASE).
--- IMPORTANT: never run against territory-game-builde or bolt-native-database.
--- A NEW Supabase project must be approved and verified by project ref first.
+-- TERRITORY 2.0 STAGING-ONLY PRIVATE SCHEMA MIGRATION.
+-- Run ONLY in the explicitly approved V2 staging project by verified PROJECT REF.
+-- Never run in the live Bolt database; do not modify existing public tables.
 -- Uses a non-exposed schema and default-deny row security. Client cannot write.
 -- Source: docs/TERRITORY_2_0_TECHNICAL_ARCHITECTURE_RU.md.
 begin;
