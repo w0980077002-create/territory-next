@@ -11,7 +11,7 @@ function fixPublicAssetPaths(): Plugin {
     name: 'fix-public-asset-paths',
     apply: 'build',
     closeBundle() {
-      const publicDir = join(process.cwd(), 'public');
+      const publicDir = join(process.cwd(), 'public-v2');
       const distDir = join(process.cwd(), 'dist');
       const assets = new Set<string>();
 
@@ -64,6 +64,7 @@ function fixPublicAssetPaths(): Plugin {
 
 export default defineConfig({
   base,
+  publicDir: 'public-v2',
   plugins: [react(), fixPublicAssetPaths()],
   resolve: {
     alias: {
