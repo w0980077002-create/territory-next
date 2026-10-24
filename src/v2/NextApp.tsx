@@ -5,6 +5,7 @@ import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import { DEMO_START_CHAPTER, DEMO_WAVES_PER_CHAPTER, chooseDemoChapter, nextDemoChapterVictory, demoCombatSample } from './core/campaignFlow';
 import { V2_SKILL_CATEGORIES, type V2SkillCategory } from './core/buildLoadout';
 import { createDemoBuildSlots, saveDemoBuildSlot, loadDemoBuildSlot } from './core/previewBuilds';
+import {readV2LocalDemoSave,writeV2LocalDemoSave,clearV2LocalDemoSave} from './core/localDemoSave';
 import {
   createV2DemoProgress,applyV2DemoVictory,statsFromV2Progress,nextXp,
   equipV2Item,unequipV2Item,salvageV2Item,upgradeV2Equipped,
@@ -97,7 +98,7 @@ const skillCategories: Readonly<Record<V2SkillCategory,{label:string;desc:string
 type Overlay = V2ScreenId | 'menu' | null;
 
 function DemoNote() {
-  return <div className="v2-demo-note">ТЕСТОВАЯ ВЕРСИЯ · Сохранения игроков и реальные валюты не подключены</div>;
+  return <div className="v2-demo-note">ДЕМО · Прогресс хранится только в браузере этого устройства; реальный аккаунт и валюты не подключены</div>;
 }
 function Shortcut({id,label,onClick}: {id:string;label:string;onClick:()=>void}) {
   return <button className={'v2-shortcut v2-shortcut--'+id} type="button" onClick={onClick} title={label} aria-label={label}>
@@ -112,24 +113,27 @@ function ViewTile({name,icon,onClick}: {name:string;icon:string;onClick:()=>void
 }
 
 export function NextApp() {
-  const [chapter,setChapter] = useState(DEMO_START_CHAPTER);
-  const [highestUnlockedChapter,setHighestUnlockedChapter] = useState(DEMO_START_CHAPTER);
+  const offlineSave=useMemo(()=>readV2LocalDemoSave(
+    typeof window==='undefined'?null:window.localStorage),[]);
+  const [saveStatus,setSaveStatus]=useState<'local'|'memory'>('local');
+  const [chapter,setChapter] = useState(offlineSave?.chapter??DEMO_START_CHAPTER);
+  const [highestUnlockedChapter,setHighestUnlockedChapter] = useState(offlineSave?.highestUnlockedChapter??DEMO_START_CHAPTER);
   const [skillCategory,setSkillCategory] = useState<V2SkillCategory>('core');
-  const [demoBuilds,setDemoBuilds] = useState(()=>createDemoBuildSlots(3));
+  const [demoBuilds,setDemoBuilds] = useState(()=>offlineSave?.builds??createDemoBuildSlots(3));
   const [buildNotice,setBuildNotice] = useState('');
-  const settledDemoEncounters = useRef<Set<number>>(new Set());
-  const [wave,setWave] = useState(2);
-  const [heroClass,setHeroClass] = useState<HeroClass>('berserker');
-  const [rune,setRune] = useState<RuneKind>('flame');
-  const [companion,setCompanion] = useState<CompanionKind>('warcow');
+  const settledDemoEncounters = useRef<Set<number>>(new Set(offlineSave?.progress.receipts.map(id=>Number(id.replace('v2-demo-encounter-','')))??[]));
+  const [wave,setWave] = useState(offlineSave?.wave??2);
+  const [heroClass,setHeroClass] = useState<HeroClass>(offlineSave?.heroClass??'berserker');
+  const [rune,setRune] = useState<RuneKind>(offlineSave?.rune??'flame');
+  const [companion,setCompanion] = useState<CompanionKind>(offlineSave?.companion??'warcow');
   const [overlay,setOverlay] = useState<Overlay>(null);
-  const [speed,setSpeed] = useState<1|2>(1);
-  const [auto,setAuto] = useState(true);
-  const [victories,setVictories] = useState(0);
-  const [defeats,setDefeats] = useState(0);
+  const [speed,setSpeed] = useState<1|2>(offlineSave?.speed??1);
+  const [auto,setAuto] = useState(offlineSave?.auto??true);
+  const [victories,setVictories] = useState(offlineSave?.victories??0);
+  const [defeats,setDefeats] = useState(offlineSave?.defeats??0);
   const [notice,setNotice] = useState('');
-  const [progress,setProgress] = useState<V2Progression>(createV2DemoProgress);
-  const [encounterId,setEncounterId] = useState(1);
+  const [progress,setProgress] = useState<V2Progression>(()=>offlineSave?.progress??createV2DemoProgress());
+  const [encounterId,setEncounterId] = useState(offlineSave?.encounterId??1);
   const [gearFocus,setGearFocus] = useState<V2GearSlot>('weapon');
   const heroStats = useMemo(()=>statsFromV2Progress(progress),[progress]);
   const config = useMemo(() => ({
@@ -140,6 +144,19 @@ export function NextApp() {
   const [battle,setBattle] = useState(() => startPreviewEncounter(config));
 
   useEffect(()=>{setBattle(startPreviewEncounter(config));},[config]);
+
+  // Preview-only persistence. No Telegram identity, client-side Supabase writes,
+  // payments or real rewards. Progress survives a local browser reload.
+  useEffect(()=>{
+    const ok=writeV2LocalDemoSave(
+      typeof window==='undefined'?null:window.localStorage,
+      {version:1,savedAt:Date.now(),chapter,wave,highestUnlockedChapter,
+       encounterId,heroClass,rune,companion,speed,auto,victories,defeats,
+       progress,builds:demoBuilds}
+    );
+    setSaveStatus(ok?'local':'memory');
+  },[chapter,wave,highestUnlockedChapter,encounterId,heroClass,rune,
+     companion,speed,auto,victories,defeats,progress,demoBuilds]);
   useEffect(()=>{
     if(!auto || battle.finished) return;
     const interval = window.setInterval(()=>{
@@ -366,7 +383,21 @@ export function NextApp() {
           </>}
           {overlay==='arena'&&<><p>Арена TERRITORY 2.0: PvP-чат во время боя, снаряжение, эликсиры, сезоны и 30 минут переписки после боя.</p><p>Пока доступен только интерфейс. Настоящие PvP-матчи требуют отдельного сервера.</p></>}
           {overlay==='ranking'&&<><h3>Рейтинг похода · локальная демонстрация</h3><div className="v2-info-row">Победы <b>{victories}</b></div><div className="v2-info-row">Боссы <b>{progress.bosses}</b></div><div className="v2-info-row">Поражения <b>{defeats}</b></div><p>Настоящий рейтинг появится после подключения независимого серверного учёта матчей.</p></>}
-          {['shop','specialMarket','welcomeBundle','trials','events','rewards','friends','invitation','socialRewards','seaBundle','clan','professions','games','mail','settings'].includes(overlay)&&<div className="v2-feature-cards">
+          {overlay==='settings'&&<div className="v2-feature-cards">
+            <h3>Настройки демоверсии</h3>
+            <div className="v2-info-row">Сохранение прогресса <b>{saveStatus==='local'?'На этом устройстве':'Недоступно в браузере'}</b></div>
+            <div className="v2-info-row">Автобой <button type="button" className="v2-cta" aria-pressed={auto} onClick={()=>setAuto(value=>!value)}>{auto?'Работает · выключить':'Остановлен · включить'}</button></div>
+            <div className="v2-info-row">Скорость воспроизведения <button type="button" className="v2-cta" onClick={()=>setSpeed(value=>value===1?2:1)}>×{speed}</button></div>
+            <p>Эта демоверсия хранит прогресс только в браузере. Она не подключена к Telegram-аккаунтам, экономике или серверам первой игры. Очистка браузера удалит демоданные.</p>
+            <button className="v2-cta" type="button" onClick={()=>{
+              if(window.confirm('Удалить только тестовый прогресс TERRITORY 2.0 на этом устройстве? Данные первой игры не затрагиваются.')){
+                clearV2LocalDemoSave(window.localStorage);
+                window.location.reload();
+              }
+            }}>Начать демонстрацию заново</button>
+            <p>Выбор десяти разных фонов будет добавлен отдельным этапом; текущий фон по решению владельца не меняется.</p>
+          </div>}
+          {['shop','specialMarket','welcomeBundle','trials','events','rewards','friends','invitation','socialRewards','seaBundle','clan','professions','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
             <p>Раздел «{routeTitle[overlay]}» входит в нашу структуру TERRITORY 2.0.</p><p>Исходные механики уже перенесены в новый репозиторий. Здесь будет их обновлённый интерфейс после интеграции с тестовой базой.</p>
             <button className="v2-cta" onClick={()=>open('menu')}>Открыть меню</button>
           </div>}
