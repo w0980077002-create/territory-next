@@ -1,0 +1,48 @@
+name: TERRITORY 2.0 - safe build and regression tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: territory-next-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - name: Install from lockfile
+        run: npm ci --ignore-scripts
+      - name: Typecheck entire game
+        run: npm run typecheck
+      - name: V2 isolated UI and combat checks
+        run: npm run test:v2
+      - name: Build against fake offline endpoint only
+        env:
+          VITE_SUPABASE_URL: https://offline-territory-v2-test.supabase.co
+          VITE_SUPABASE_ANON_KEY: dummy-ci-value-not-a-real-key
+          VITE_V2_STAGING_APPROVED: "no"
+        run: npm run build
+      - name: Validate isolated deploy and static assets
+        run: |
+          test ! -f .github/workflows/pages.yml
+          test -s dist/v2-preview.html
+          test -s dist/v2-preview.css
+          test -s dist/v2-preview.js
+          grep -q 'const base' vite.config.ts
+          grep -q 'isLegacyProduction' src/game/supabase.ts
+          grep -q "VITE_V2_STAGING_APPROVED" src/game/supabase.ts
+          echo "V2 offline demo and app build verified; production deployment disabled."
