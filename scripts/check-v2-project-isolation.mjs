@@ -35,6 +35,27 @@ assert(schema.includes('create schema if not exists territory_v2;'));
 assert(!/\b(?:drop|truncate)\s+(?:table|schema)/i.test(schema));
 assert(!/\b(?:alter|create)\s+table\s+public\./i.test(schema));
 assert(!schema.includes(cfg.production1ProjectRef),'Production ref in V2 schema file');
+// All new V2 backend primitives are private SECURITY INVOKER functions.
+// No browser API or signed-in client may invoke the raw economy or identity
+// procedures; only verified server code gets these privileges.
+for(const file of [
+  'server/staging/territory_v2_atomic_wallet.sql',
+  'server/staging/territory_v2_verified_player_identity.sql',
+]){
+  const sql=read(file);
+  const executable=sql.replace(/--[^\n]*/g,'');
+  assert(!executable.includes(cfg.production1ProjectRef),'V1 database reference in V2 migration SQL: '+file);
+  assert(executable.includes('security invoker'),'Privileged schema function must be SECURITY INVOKER: '+file);
+  assert(executable.includes('from public, anon, authenticated'),'V2 private function must revoke all client roles: '+file);
+  assert(executable.includes('to service_role'),'V2 internal functions must explicitly grant service role only: '+file);
+  assert(!/security\s+definer/i.test(executable),'Never add SECURITY DEFINER: '+file);
+  assert(!/\b(?:drop|truncate)\s+(?:table|schema)/i.test(executable),'Destructive DDL forbidden: '+file);
+}
+const verifier=read('server/telegram/verifyInitData.ts');
+assert(verifier.includes("encoder.encode('WebAppData')"),'Official Telegram HMAC secret derivation missing');
+assert(verifier.includes('TELEGRAM_INITDATA_SIGNATURE_INVALID'),'Telegram HMAC must fail closed');
+assert(!read('src/v2/main.tsx').includes('verifyInitData'),'Server-only Telegram code imported in browser');
+
 const workflows=readdirSync('.github/workflows').filter(n=>n.endsWith('.yml')||n.endsWith('.yaml'));
 assert(!workflows.some(n=>n==='pages.yml'),'V2 must never have auto-deploy to production Pages');
 for(const name of workflows){
