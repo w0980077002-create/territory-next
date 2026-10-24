@@ -7,7 +7,7 @@ const app=read('src/v2/NextApp.tsx');
 const view=read('src/v2/visual/RuneCompanionGallery.tsx');
 const styles=read('src/v2/visual/rune-companion.css');
 const cfg=JSON.parse(read('src/v2/modules/lootborn/lootborn-modules.json'));
-const preview=read('public/v2-preview.html');
+const preview=read('public-v2/v2-preview.html');
 const original=readFileSync('docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg');
 const tree=ts.createSourceFile('RuneCompanionGallery.tsx',view,ts.ScriptTarget.ES2022,true,ts.ScriptKind.TSX);
 assert.equal(tree.parseDiagnostics.length,0,'Rune/companion gallery must parse');
@@ -23,7 +23,7 @@ assert(app.includes("<CompanionGallery companions={followerOptions}"));
 assert(app.includes("onChoose={setCompanion}"),'Companion selection must update active demo state');
 assert(app.includes('portraits={companionArt}'));
 assert(app.includes("offlineSave?.companion??'warcow'"),'Keep special cow default');
-assert(app.includes("warcow: asset('v2-battle-cow-approved.webp')"));
+assert(app.includes("warcow: asset('art/companions/warcow.svg')"));
 assert(view.includes("data-screen-template=\"runes\""));
 assert(view.includes("data-screen-template=\"companions\""));
 assert(view.includes("role=\"group\" aria-label=\"Выбор активной руны\""));
@@ -47,6 +47,6 @@ for(const rule of [
 }
 assert(!/\bfetch\s*\(|XMLHttpRequest|\.rpc\(|localStorage|supabase\./.test(view),'No backend or V1 side effects in view');
 assert(preview.includes('src="./"'));
-assert(existsSync('public/v2-battle-cow-approved.webp'));
+assert(existsSync('public-v2/art/companions/warcow.svg'));
 assert(original.byteLength===465531,'Owner reference changed');
 console.log('OK: rune slot, 6 sidekick cards, selected artwork, configuration-only auras, static preview and 2026-10-24 owner screenshot');
