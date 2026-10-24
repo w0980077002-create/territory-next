@@ -1,0 +1,95 @@
+/* TERRITORY 2.0 — FIRST OWNER-REFERENCE IMPLEMENTATION PASS.
+ * Compositions and visual language follow only the owner-approved 2026-10-24
+ * image in docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg.
+ * This remains an isolated playable demo; not a pixel-identical final asset set.
+ */
+
+/* Header: red battle-power band + three separate jewel counters. */
+.v2-header{height:76px;display:grid;grid-template-columns:54px minmax(90px,1.15fr) minmax(166px,1.9fr);gap:4px;padding:3px 4px;align-items:center;background:linear-gradient(160deg,#1868af 0%,#14548a 47%,#102d51 100%)}
+.v2-profile{height:60px;width:54px;grid-column:1;grid-row:1;border-color:#e9b75d}
+.v2-identity{min-width:0;grid-column:2;grid-row:1;display:flex;align-items:stretch;flex-direction:column;justify-content:center;gap:3px}
+.v2-identity strong{display:block;font-size:11px;white-space:nowrap;text-overflow:ellipsis}
+.v2-identity i{font-size:9px}
+.v2-power-banner{height:23px;min-width:0;border:2px solid #7d160e;border-radius:4px 11px 4px 3px;box-shadow:inset 0 1px #fdb07d,0 2px 3px #0007;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-size:clamp(10px,2.5vw,15px);font-weight:1000;text-shadow:0 1px 2px #480b0b;background:linear-gradient(#fc3730,#b61218)}
+.v2-experience-line{display:block;height:3px;overflow:hidden;border-radius:5px;background:#283a58}
+.v2-experience-line>span{display:block;height:100%;background:#f8c859}
+.v2-wallet{grid-column:3;grid-row:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;min-width:0;align-items:start;height:100%;align-content:start;font-size:clamp(8px,2.2vw,10px)}
+.v2-wallet button{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:0;border:1px solid #dfbc74;border-radius:6px;background:linear-gradient(#374761,#1c283f);padding:2px 2px;min-width:0;width:100%;height:26px;white-space:nowrap;overflow:hidden;font-weight:950;letter-spacing:-.05em;box-shadow:inset 0 1px #ffffff73,0 1px 2px #1117}
+.v2-wallet button img{width:17px;height:19px;flex:none}
+.v2-wallet button b{font-size:12px;flex:none;margin-left:auto;color:#ffe9b2;background:#77532d;border-radius:4px;line-height:18px;padding:0 2px}
+.v2-wallet button:focus-visible{outline:2px solid #9ff7ff}
+
+/* The chapter is a sequence of linked battle nodes, ending in a boss. */
+.v2-stagehead{top:7px;left:58px;right:61px;gap:4px}
+.v2-stagehead strong{font-size:clamp(11px,2.8vw,14px);color:#dff3ff}
+.v2-stagehead small{font-size:clamp(9px,2.2vw,12px);color:#fff4d1}
+.v2-stage-track{height:25px;display:flex;align-items:center;justify-content:space-around;gap:1px;position:relative}
+.v2-stage-track:before{content:"";position:absolute;top:11px;left:10%;right:10%;height:5px;border-radius:6px;border:1px solid #49261e;background:#957450;box-shadow:0 1px 2px #000}
+.v2-stage-line{position:absolute;z-index:1;top:11px;left:10%;height:4px;max-width:80%;border-radius:5px;background:#ffe074;transition:width .2s;pointer-events:none}
+.v2-stage-track>span{display:grid;place-items:center;position:relative;z-index:2;flex:none;border:2px solid #a57b4e;width:22px;height:22px;border-radius:7px;background:linear-gradient(140deg,#825d38,#372d36);color:#dbc18f;text-shadow:0 1px #331b19;font-size:13px;box-shadow:0 2px 3px #0009}
+.v2-stage-track>span.cleared{background:linear-gradient(#ffe28b,#dc8e27);color:#763b10}
+.v2-stage-track>span.current{background:linear-gradient(#edb849,#a73f19);border-color:#fff0ba;color:white;box-shadow:0 0 7px #ffdd87}
+.v2-stage-track>span.boss-node{border-color:#d58056;border-radius:50%;width:26px;height:26px;background:linear-gradient(#d8312a,#670a11);font-size:17px;color:white}
+.v2-stage-enter{position:absolute;right:-53px;top:3px;pointer-events:auto;border-radius:50%;width:46px;height:46px;background:radial-gradient(circle,#ffb841 0%,#cf4e1a 45%,#7c1113 74%);border:3px ridge #f0c575;box-shadow:0 2px 8px #000b;color:white;text-shadow:0 2px 3px #000;font-size:10px;font-weight:1000}
+
+/* Seven owner-approved left hand actions; no arbitrary shortcut removal. */
+.v2-left-buttons,.v2-right-buttons{top:74px;bottom:10%;height:auto;gap:2px;justify-content:space-between;width:60px;overflow:hidden}
+.v2-left-buttons{display:grid;grid-template-rows:repeat(7,minmax(0,1fr));left:1px}
+.v2-right-buttons{display:grid;grid-template-rows:repeat(4,minmax(0,1fr));right:1px;bottom:20%}
+.v2-shortcut{min-height:0;min-width:0;padding:0;gap:0;justify-content:center}
+.v2-shortcut b{height:clamp(22px,4.2dvh,37px);width:clamp(24px,4.8dvh,39px);font-size:21px;flex:none}
+.v2-shortcut span{line-height:.96;font-size:clamp(7px,1.9vw,10px);max-width:59px;text-shadow:1px 2px 2px #000,0 0 6px #000}
+.v2-shortcut .v2-menu-glyph{position:relative;display:block;width:23px;height:23px;border:0!important;background:transparent!important;box-shadow:none!important;filter:none!important;border-radius:0}
+.v2-menu-glyph:before{content:"";position:absolute;inset:2px;border-radius:3px;border:4px solid #ecf6fc;background:linear-gradient(90deg,transparent 45%,#ecf6fc 45%,#ecf6fc 60%,transparent 60%),linear-gradient(transparent 45%,#ecf6fc 45%,#ecf6fc 60%,transparent 60%);box-shadow:0 1px #101d2f}
+
+/* Wide, compact RPG item panel with highlighted weapon and follower. */
+.v2-equipment{height:129px;min-height:125px;grid-template-columns:1.45fr repeat(4,minmax(0,1fr)) 1.4fr;grid-template-rows:repeat(2,minmax(0,1fr));gap:3px;padding:4px}
+.v2-gear{border-color:#604857;background:linear-gradient(#fffcf8,#e7cce4);box-shadow:inset 0 1px #fff,0 1px 3px #231627}
+.v2-gear-weapon{grid-column:1;grid-row:span 2;border-color:#dcae5d}
+.v2-extra-rune{grid-column:3;grid-row:2;background:linear-gradient(#e2b7fe,#9b59dd);border-color:#f6d9ff}
+.v2-extra-skill{grid-column:4;grid-row:2;background:linear-gradient(#ffe4c2,#c75d3c);border-color:#f8c781}
+.v2-extra-follower{grid-column:5/span 2;grid-row:2;background:linear-gradient(#e8bb83,#b67b47);border-color:#e2c27f}
+.v2-extra-follower img{height:88%;max-width:100%;object-fit:contain}
+.v2-rune-glyph{font-size:31px;line-height:1.25;color:#66119e;text-shadow:0 0 3px #fff}
+.v2-rank-icon{width:30px;height:30px;object-fit:contain}
+.v2-nav-demo{font-size:9px;color:#f6d891;font-weight:900}
+
+/* Five functional skill category tabs. Unverified numbers remain unimplemented. */
+.v2-skill-tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;margin-bottom:12px}
+.v2-skill-tabs button{min-width:0;border:1px solid #8da5bf;border-radius:7px;background:#234861;padding:9px 2px;font-size:clamp(8px,2vw,11px);word-break:break-word;font-weight:850}
+.v2-skill-tabs button.chosen{color:#422407;border-color:#fff1bd;background:linear-gradient(#ffe59c,#d99c3b)}
+.v2-skill-detail{border:2px solid #b79a66;border-radius:10px;background:linear-gradient(#305575,#142b43);padding:12px;display:grid;gap:9px}
+.v2-skill-detail>strong{color:#ffe5a1}
+.v2-skill-detail p{margin:0}
+.v2-preview-chip{display:block;padding:7px;border:1px solid #7995ad;border-radius:7px;color:#c9e9fb;font-size:11px}
+.v2-stage-grid button:disabled,.v2-stage-grid button.locked{opacity:.56;cursor:not-allowed;filter:grayscale(.6)}
+.v2-stage-grid button:disabled:active{filter:grayscale(.6)}
+.v2-stage-enter:focus-visible,.v2-wallet button:focus-visible{outline:3px solid #8be3ff;outline-offset:2px}
+
+@media(max-height:720px){
+  .v2-header{height:64px;grid-template-columns:45px minmax(79px,1fr) minmax(155px,1.8fr)}
+  .v2-profile{height:51px;width:45px}
+  .v2-left-buttons{top:52px;bottom:6px;overflow-y:auto;scrollbar-width:none;grid-template-rows:repeat(7,minmax(35px,1fr))}
+  .v2-right-buttons{top:52px;bottom:15%;overflow-y:auto;grid-template-rows:repeat(4,minmax(35px,1fr))}
+  .v2-left-buttons::-webkit-scrollbar,.v2-right-buttons::-webkit-scrollbar{display:none}
+  .v2-shortcut b{height:23px;width:25px}
+  .v2-stage-track{height:20px}
+  .v2-stage-enter{height:39px;width:39px;right:-48px}
+  .v2-equipment{height:103px;min-height:100px}
+  .v2-rune-glyph{font-size:24px}
+}
+@media(max-width:350px){
+  .v2-header{grid-template-columns:42px minmax(74px,1fr) minmax(142px,1.7fr);padding:2px}
+  .v2-profile{width:42px;height:49px}
+  .v2-wallet button{font-size:8px}
+  .v2-wallet button img{width:14px}
+  .v2-wallet button b{font-size:9px}
+  .v2-stagehead{left:48px;right:49px}
+  .v2-stage-enter{right:-45px;width:38px;height:38px}
+  .v2-left-buttons,.v2-right-buttons{width:48px}
+  .v2-shortcut span{font-size:7px}
+  .v2-skill-tabs button{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  .v2-stage-line{transition:none}
+}
