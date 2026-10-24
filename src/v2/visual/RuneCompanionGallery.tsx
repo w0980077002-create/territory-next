@@ -12,6 +12,7 @@ export type RuneChoice=Readonly<{id:RuneKind;name:string;icon:string;desc:string
 export type CompanionChoice=Readonly<{id:CompanionKind;name:string;desc:string}>;
 
 const stanceName={melee:'Ближний бой',ranged:'Дальний бой',buffer:'Поддержка'} as const;
+const asset=(path:string)=>import.meta.env.BASE_URL+path;
 const format=(v:number)=>v.toLocaleString('ru-RU');
 const moduleFor=(alias:string)=>V2_MODULES.companions.find(c=>c.selectorAlias===alias);
 const mark=(condition:boolean)=>condition?'v2-gallery-active':'';
@@ -35,7 +36,7 @@ export function RuneGallery({
         className={'v2-rune-gallery-card v2-rune-gallery--'+r.id+' '+mark(selected===r.id)}
         aria-pressed={selected===r.id}
         onClick={()=>onChoose(r.id)}>
-        <span className="v2-rune-gallery-art" aria-hidden="true">{r.icon}</span>
+        <span className="v2-rune-gallery-art" aria-hidden="true"><img src={asset(r.icon)} alt=""/></span>
         <span className="v2-rune-gallery-name">{r.name}</span>
         <span className="v2-rune-gallery-brief">{r.desc}</span>
         <span className="v2-rune-gallery-status">{selected===r.id?'✓ Установлена':'Выбрать'}</span>
@@ -43,7 +44,7 @@ export function RuneGallery({
     </div>
     <div className="v2-codex-detail" aria-live="polite">
       <div className="v2-codex-detail-top">
-        <span className={'v2-codex-emblem v2-rune-gallery--'+selected} aria-hidden="true">{current?.icon??'ᚱ'}</span>
+        <span className={'v2-codex-emblem v2-rune-gallery--'+selected} aria-hidden="true"><img src={asset(current?.icon??'art/icons/runes.svg')} alt=""/></span>
         <div><small>АКТИВНАЯ РУНА</small><strong>{current?.name??'Не выбрана'}</strong>
           <span>{current?.desc??'Описание недоступно'}</span></div>
       </div>
