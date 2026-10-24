@@ -67,8 +67,10 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Configure GitHub Pages
+      - name: Configure GitHub Pages (owner enabled Pages)
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Deploy test-only public static demo
         id: deployment
         uses: actions/deploy-pages@v4
