@@ -85,3 +85,6 @@
 @media(max-width:355px){.v2-overhaul-stage-grid{gap:3px}.v2-overhaul-stage{min-height:49px}
  .v2-overhaul-shop-art{width:40px}.v2-overhaul-shop-card>button{flex-basis:74px}}
 @media(prefers-reduced-motion:reduce){.v2-overhaul-rain,.v2-overhaul-loot-icon{animation:none!important}}
+
+.v2-overhaul-shop-art img{width:84%;height:84%;object-fit:contain;filter:drop-shadow(0 2px 4px #0d1a2a)}
+.v2-module-icon>img{height:80%;width:80%;object-fit:contain}
