@@ -1,0 +1,27 @@
+name: TERRITORY 2.0 - verify supplied video reference
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/inspect-v2-reference-video.py'
+      - '.github/workflows/v2-reference-video.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-video:
+    name: Read public video metadata and available captions
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install public video metadata tool
+        run: python -m pip install -q "yt-dlp>=2026.1.1"
+      - name: Verify video metadata and captions if available
+        run: python scripts/inspect-v2-reference-video.py
