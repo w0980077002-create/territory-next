@@ -7,10 +7,12 @@ const js=path=>ts.transpileModule(readFileSync(path,'utf8'),{
 }).outputText;
 const url=source=>'data:text/javascript;base64,'+Buffer.from(source).toString('base64');
 const progressionURL=url(js('src/v2/core/progression.ts'));
+const bossURL=url(js('src/v2/core/bossEncounters.ts'));
 const combatURL=url(js('src/v2/core/autoBattle.ts'));
 const campaignSource=js('src/v2/core/gameplayOverhaul.ts')
  .replace(/from ['"]\.\/progression['"]/,"from '"+progressionURL+"'")
- .replace(/from ['"]\.\/autoBattle['"]/,"from '"+combatURL+"'");
+ .replace(/from ['"]\.\/autoBattle['"]/,"from '"+combatURL+"'")
+ .replace(/from ['"]\.\/bossEncounters['"]/,"from '"+bossURL+"'");
 const gameURL=url(campaignSource);
 const core=await import(gameURL),prog=await import(progressionURL);
 const saveSource=js('src/v2/core/stageSave.ts')
