@@ -10,6 +10,16 @@
 
 Independent source repository. Based on approved development branch from TERRITORY 1.0.
 
+## Подтверждённые референсы игровых механик (24.10.2026)
+
+**Обязательное исследование перед любыми доработками игры:**
+- [Исследование Lootborn Warriors / 英雄没有闪 и Call of Odin's Chosen: факты, версии, каналы, YouTube и оговорки](docs/TERRITORY_2_0_REFERENCE_RESEARCH_20261024_RU.md)
+- [Проверяемый план внедрения игровых систем](docs/TERRITORY_2_0_SOURCE_BASED_BACKLOG_RU.md)
+- [Машинный каталог из 45 связанных с источниками механик](docs/TERRITORY_2_0_EVIDENCE_CATALOG.json)
+- [Окончательно утверждённое изображение UI](docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg)
+
+**Правило «без догадок»:** наличие механики подтверждается источником, но все отсутствующие в достоверных данных проценты, формулы, цены, таймеры и шансы считаются `TBD`, а не выдумываются. Это техническая спецификация дальнейшего направления, **не подтверждение готовности игры**. Call of Odin's Chosen закрыта с 29.09.2026, Web3/денежные обещания автоматически не переносим. Дизайн только с утверждённой картинки, никакой чужой графики. Старую TERRITORY 1.0 не трогать.
+
 ## Status
 This is **development code**, not a live game and not safe to connect to the
 existing production Supabase project. The `main` branch here must not be
