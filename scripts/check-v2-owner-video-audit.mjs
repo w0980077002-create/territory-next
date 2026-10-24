@@ -31,6 +31,6 @@ for(const [f,title] of [
    'Extracted screenshot must be a genuine JPEG');
  assert(spec.includes(title),'Video timecode missing: '+title);
 }
-assert(spec.includes('Камни')&&spec.includes('Задания')&&spec.includes('Навыки'));
+assert(['камни','задания','навыки'].every(x=>spec.toLocaleLowerCase('ru-RU').includes(x)),'Missing major video sections');
 assert(spec.includes('ВНЕШНИЙ ВИД')&&spec.includes('Приоритет'));
 console.log('OK: screenshot byte-identity, 14 documented visual bugs, V2-only mobile adjustments, 2 real owner video frames in GitHub');
