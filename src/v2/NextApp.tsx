@@ -14,6 +14,7 @@ import './next.css';
 import './navigation.css';
 import './approved-ui.css';
 import './sunlit-reference-polish.css';
+import './owner-ui-controls.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
@@ -44,7 +45,7 @@ const enemies = [
 ];
 const bottomIcon: Record<string, string> = {
   port:'ic-sea.webp',
-  skills:'ic-blessing.webp',
+  skills:'v2-ui-skills-book.svg',
   expedition:'nav-battle.webp',
   adventure:'nav-map-parchment.webp',
   shop:'ic-shop.webp',
@@ -52,8 +53,8 @@ const bottomIcon: Record<string, string> = {
 const shortcutArt: Record<string,string> = {
   quests:'ic-quests.webp',events:'ic-events.webp',friends:'ic-invite.webp',
   rewards:'ic-daily.webp',settings:'ic-settings.webp',specialMarket:'ic-shop.webp',
-  trials:'ic-trials.webp',welcomeBundle:'ic-blessing.webp',
-  invitation:'ic-invite.webp',socialRewards:'ic-trophy.webp',seaBundle:'ic-sea.webp',ranking:'ic-trophy.webp',
+  trials:'ic-trials.webp',welcomeBundle:'ic-daily.webp',
+  invitation:'ic-invite.webp',socialRewards:'ic-honor.webp',seaBundle:'ic-sea.webp',ranking:'ic-trophy.webp',
 };
 const shortcutIcon: Record<string, string> = {
   quests:'📜', events:'🎇', friends:'🤝', rewards:'🎁', specialMarket:'💰', trials:'🐲',
@@ -99,8 +100,11 @@ function DemoNote() {
   return <div className="v2-demo-note">ТЕСТОВАЯ ВЕРСИЯ · Сохранения игроков и реальные валюты не подключены</div>;
 }
 function Shortcut({id,label,onClick}: {id:string;label:string;onClick:()=>void}) {
-  return <button className="v2-shortcut" type="button" onClick={onClick} title={label}>
-    <b aria-hidden="true">{id==='settings'?<span className="v2-menu-glyph"/>:shortcutArt[id]?<img src={asset(shortcutArt[id])} alt="" loading="lazy"/>:shortcutIcon[id]??'✦'}</b><span>{label}</span>
+  return <button className={'v2-shortcut v2-shortcut--'+id} type="button" onClick={onClick} title={label} aria-label={label}>
+    <b className="v2-shortcut-emblem" aria-hidden="true">
+      {id==='settings'?<span className="v2-menu-glyph"/>:shortcutArt[id]?<img src={asset(shortcutArt[id])} alt="" loading="lazy"/>:shortcutIcon[id]??'✦'}
+    </b>
+    {id!=='settings'&&<span className="v2-shortcut-label">{label}</span>}
   </button>;
 }
 function ViewTile({name,icon,onClick}: {name:string;icon:string;onClick:()=>void}) {
@@ -267,9 +271,9 @@ export function NextApp() {
       </button>
       <span className="v2-command-spacer" aria-hidden="true"/>
       <div className="v2-command-actions">
-        <button className="v2-control" type="button" onClick={()=>setSpeed(s=>s===1?2:1)} aria-label="Скорость">×{speed}</button>
-        <button className={'v2-control repeat'+(auto?' active':'')} type="button" onClick={()=>setAuto(a=>!a)} aria-label={auto?'Остановить автобой':'Начать автобой'}>⟳</button>
-        <button className="v2-control" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('ic-trophy.webp')} alt=""/></button>
+        <button className={'v2-control v2-control--speed'+(speed===2?' is-active':'')} type="button" onClick={()=>setSpeed(s=>s===1?2:1)} aria-label={'Скорость боя: ×'+speed} aria-pressed={speed===2}>×{speed}</button>
+        <button className={'v2-control repeat v2-control--auto'+(auto?' active':'')} type="button" onClick={()=>setAuto(a=>!a)} aria-pressed={auto} aria-label={auto?'Остановить автобой':'Начать автобой'}>⟳</button>
+        <button className="v2-control v2-control--ranking" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('ic-trophy.webp')} alt=""/></button>
       </div>
     </section>
 
@@ -277,7 +281,7 @@ export function NextApp() {
       {V2_BOTTOM_NAV.map(({id,label})=><button key={id} onClick={()=>open(id)}
         className={id==='expedition'?'main':''}
         type="button" aria-label={label||'Бой'}>
-        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo">{progress.wins}</small></>}
+        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo"><img src={asset('battle-stone.webp')} alt=""/>{progress.wins}</small></>}
       </button>)}
     </nav>
 
