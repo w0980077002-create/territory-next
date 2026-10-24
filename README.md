@@ -26,6 +26,7 @@ Independent source repository. Based on approved development branch from TERRITO
 1. [Master ТЗ 1.0 — все 34 экрана, 13 систем игрового цикла и принципы 1:1](docs/TERRITORY_2_0_MASTER_TZ_RU.md).
 2. [Техническая архитектура, схема БД, API, идемпотентность и безопасность](docs/TERRITORY_2_0_TECHNICAL_ARCHITECTURE_RU.md).
 3. [Матрица приёмки 1:1 и 55 сквозных тест-кейсов](docs/TERRITORY_2_0_ACCEPTANCE_AND_TRACEABILITY_RU.md).
+   - [Атлас UI/UX: 34 экрана, каждое действие, ошибки и состояния](docs/TERRITORY_2_0_SCREEN_BY_SCREEN_CONTRACT_RU.md).
 4. [Реестр 36 неизвестных величин — не выдумывать](docs/TERRITORY_2_0_UNVERIFIED_PARAMETERS_RU.md).
 5. [Машинная трассировка всех 53 доказательных записей к требованиям и тестам](docs/TERRITORY_2_0_IMPLEMENTATION_TRACE.json).
 6. [Единственное финальное фото от владельца](docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg).
