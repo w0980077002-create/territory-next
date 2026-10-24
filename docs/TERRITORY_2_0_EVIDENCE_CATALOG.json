@@ -224,15 +224,6 @@
       "implementation": "candidate-not-complete"
     },
     {
-      "id": "LW-23",
-      "game": "lootborn-cn",
-      "system": "weekly-dice-event",
-      "evidence": "official",
-      "source": "patch",
-      "title": "Событие с бросанием кубика",
-      "implementation": "candidate-not-complete"
-    },
-    {
       "id": "LW-24",
       "game": "lootborn-player",
       "system": "manual-loot-interruptions",
@@ -293,15 +284,6 @@
       "evidence": "official-channel",
       "source": "cArchive",
       "title": "Рефералы с условием уровня 10 (v3.3)",
-      "implementation": "candidate-not-complete"
-    },
-    {
-      "id": "COC-07",
-      "game": "coc",
-      "system": "monopoly-event",
-      "evidence": "official-channel",
-      "source": "cArchive",
-      "title": "Событие с бросанием кубиков Monopoly",
       "implementation": "candidate-not-complete"
     },
     {
