@@ -134,7 +134,7 @@ export function decodeV2LocalDemoSave(json:string):V2LocalDemoSave|null {
   const progress=parseProgress(raw.progress);
   if(!progress||progress.wins!==raw.victories)return null;
   const builds:DemoBuildSlot[]=createDemoBuildSlots(3).map((v,i)=>{
-    const entry=raw.builds[i] as unknown;
+    const entry=(raw.builds as unknown[])[i] as unknown;
     if(!object(entry)||entry.slot!==v.slot)return {slot:0,build:null};
     if(entry.build===null)return {slot:v.slot,build:null};
     if(!object(entry.build)||!validDemoBuild(entry.build as unknown as NonNullable<DemoBuildSlot['build']>))
@@ -164,6 +164,10 @@ export function decodeV2LocalDemoSave(json:string):V2LocalDemoSave|null {
 export function encodeV2LocalDemoSave(save:V2LocalDemoSave):string|null{
   const encoded=JSON.stringify({...save,savedAt:Date.now()});
   return encoded.length<=V2_LOCAL_SAVE_MAX_LENGTH?encoded:null;
+}
+export function v2DemoStorage():Storage|null{
+  try{return typeof window==='undefined'?null:window.localStorage;}
+  catch{return null;}
 }
 export function readV2LocalDemoSave(storage:Pick<Storage,'getItem'>|null):V2LocalDemoSave|null{
   try{return storage?decodeV2LocalDemoSave(storage.getItem(V2_LOCAL_DEMO_SAVE_KEY)??''):null;}
