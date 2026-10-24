@@ -82,7 +82,7 @@ begin
       or v_existing.combat_rules_version<>p_rules_version
       or v_existing_hash is distinct from p_snapshot_sha256
     then
-      raise exception 'PVE_START_CONFLICT' using errcode='23505';
+      raise exception 'PVE_START_CONFLICT' using errcode='23514';
     end if;
     return v_existing.id;
   end if;
