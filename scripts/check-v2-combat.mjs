@@ -19,7 +19,7 @@ const { encounterForChapter, startPreviewEncounter, nextPreviewTick, previewTime
 
 for (const heroClass of ['berserker', 'runemage', 'ranger']) {
   for (const rune of ['flame', 'frost', 'thunder', 'guardian']) {
-    for (const follower of ['guardian', 'warrior', 'healer', 'hunter', 'mage']) {
+    for (const follower of ['guardian', 'warrior', 'healer', 'hunter', 'mage', 'warcow']) {
       const base = encounterForChapter(1, 1, heroClass);
       const config = { ...base, rune, companion: follower };
       let state = startPreviewEncounter(config);
@@ -56,4 +56,4 @@ for (let wave = 1; wave <= 5; wave++) {
 const initial = startPreviewEncounter(encounterForChapter(3, 1));
 assert.equal(nextPreviewTick(initial, Number.NaN).tick, 1);
 assert.equal(nextPreviewTick(initial, Number.POSITIVE_INFINITY).tick, 1);
-console.log('TERRITORY 2.0: 60 class/rune/companion builds + 5 stages deterministic, finite, no stone/wallet writes');
+console.log('TERRITORY 2.0: 72 class/rune/companion builds + 5 stages deterministic, finite, no stone/wallet writes');
