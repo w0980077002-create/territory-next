@@ -6,6 +6,7 @@
 import {applyV2Xp,makeV2Item,V2_GEAR_SLOTS,V2_RARITIES,V2_ITEM_LIMIT,
  type V2Item,type V2Progression,type V2Rarity} from './progression';
 import {encounterForChapter,type CombatConfig,type HeroClass,type CompanionKind} from './autoBattle';
+import {bossForStage} from './bossEncounters';
 
 export const V2_STAGE_CHAPTERS=5;
 export const V2_STAGES_PER_CHAPTER=20;
@@ -58,8 +59,8 @@ export function stageEncounter(stageId:number,heroClass:HeroClass):CombatConfig{
  const info=stageAt(stageId);
  const base=encounterForChapter(info.chapter,Math.min(4,((info.stage-1)%4)+1),heroClass);
  const elite=info.kind!=='normal';
- return {...base,boss:elite,enemyName:
-   info.kind==='boss'?'Властитель Северных земель':info.kind==='elite'?'Элитный защитник':'Страж гор',
+ return {...base,boss:elite,bossStageId:info.kind==='boss'?info.id:undefined,enemyName:
+   info.kind==='boss'?(bossForStage(info.id)?.name??'Властитель Северных земель'):info.kind==='elite'?'Элитный защитник':'Страж гор',
   enemy:{...base.enemy,
    level:Math.min(300,Math.max(1,info.id)),
    hp:Math.round(base.enemy.hp*info.hpMultiplier),

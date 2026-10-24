@@ -3,6 +3,7 @@
  * loop still governs campaign flow; these data-driven additions cannot issue
  * real rewards, spend stones, connect to Telegram or access Supabase.
  */
+import {bossPhaseAt} from './bossEncounters';
 import {
  startPreviewEncounter as baseStart,nextPreviewTick as baseStep,
  type CombatConfig,type PreviewCombatState,type BattleEffect,
@@ -58,7 +59,11 @@ function performActions(
 }
 export function nextPreviewTick(state:ModuleBattleState,random:number):ModuleBattleState{
  if(state.finished)return state;
- const base=baseStep(state,random);
+ const phase=bossPhaseAt(state.config.bossStageId??0,state.enemyHp,state.config.enemy.hp);
+ const adjusted=phase.attackMultiplier===1?state:{...state,
+  config:{...state.config,enemy:{...state.config.enemy,
+  attack:Math.round(state.config.enemy.attack*phase.attackMultiplier)}}};
+ const base={...baseStep(adjusted,random),config:state.config};
  const hero=state.config.hero;
  const trained=skillAuras(state.modules.skills,hero.level);
  const support=sidekickAuras(state.modules.sidekick);

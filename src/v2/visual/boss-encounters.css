@@ -1,0 +1,18 @@
+/* Boss UI only. The owner-approved battle background and HUD remain unchanged. */
+.v2-shell .v2-foe.boss img{filter:drop-shadow(0 0 9px #ffce87ad)}
+.v2-shell .v2-foe.elite img{filter:drop-shadow(0 0 8px #d4b4ffad)}
+.v2-shell .v2-boss-title,.v2-shell .v2-elite-title{
+ position:absolute;z-index:4;top:-33px;left:-28%;right:-28%;
+ color:#fff0c8;text-align:center;font-size:clamp(8px,2.5vw,12px);font-weight:950;
+ text-shadow:0 2px 4px #0b0e1c;pointer-events:none}
+.v2-shell .v2-elite-title{color:#ebc7ff}
+.v2-shell .v2-boss-phase{position:absolute;z-index:4;bottom:-23px;left:-20%;right:-20%;
+ padding:3px 2px;border:1px solid #f5c681;border-radius:6px;
+ background:#422c42ea;color:#fcecd0;font-size:9px;font-weight:850;
+ text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.v2-shell .v2-boss-phase[data-phase="2"]{background:#6a4051ed}
+.v2-shell .v2-boss-phase[data-phase="3"]{background:#943c45f2;border-color:#ffbdaf}
+.v2-shell .v2-fight-event{position:absolute;bottom:18%;z-index:3;left:36%;right:19%;
+ font-size:10px;color:#ffedb9;font-weight:850;text-align:center;
+ text-shadow:0 2px 4px #060c21;pointer-events:none}
+@media(max-width:360px){.v2-shell .v2-boss-phase{font-size:8px}.v2-shell .v2-boss-title{font-size:8px}}

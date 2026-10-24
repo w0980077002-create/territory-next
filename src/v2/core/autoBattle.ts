@@ -26,6 +26,7 @@ export interface CombatConfig {
   readonly enemy: CombatStats;
   readonly enemyName: string;
   readonly boss: boolean;
+  readonly bossStageId?: number;
   readonly rune: RuneKind;
   readonly companion: CompanionKind;
   readonly skills?: Readonly<{basic:number;core:number;control:number;ultimate:number;passive:number}>;

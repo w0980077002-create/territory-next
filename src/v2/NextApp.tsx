@@ -7,6 +7,7 @@ import {FeaturePanelExperience,type FeaturePanelId} from './visual/FeaturePanelE
 import {OverhaulShopExperience} from './visual/OverhaulShopExperience';
 import {V2LootRain} from './visual/V2LootRain';
 import {readV2StageSave,writeV2StageSave,clearV2StageSave} from './core/stageSave';
+import {bossForStage,bossPhaseAt,artForStage} from './core/bossEncounters';
 import {stageAt,stageEncounter,chooseV2Stage,settleV2Stage,buyV2Shop,
  v2StageScore,v2BoughtSkillAttackMultiplier,type V2LootBurst,type V2ShopKind} from './core/gameplayOverhaul';
 import {RuneGallery,CompanionGallery} from './visual/RuneCompanionGallery';
@@ -34,6 +35,7 @@ import './owner-ui-controls.css';
 import './visual/inner-panels.css';
 import './visual/reference-templates.css';
 import './visual/reference-audit-fixes.css';
+import './visual/boss-encounters.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
@@ -55,13 +57,6 @@ const companionArt: Record<CompanionKind, string> = {
   mage: asset('art/companions/mage.svg'),
   warcow: asset('art/companions/warcow.svg'),
 };
-const enemies = [
-  asset('art/enemies/wolf.svg'),
-  asset('art/enemies/goblin.svg'),
-  asset('art/enemies/bandit.svg'),
-  asset('art/enemies/troll.svg'),
-  asset('art/bosses/giant_king.svg'),
-];
 const featureScreens:readonly string[]=[
   'arena','mail','trials','friends','invitation','socialRewards',
   'specialMarket','welcomeBundle','seaBundle','clan','games',
@@ -271,6 +266,10 @@ export function NextApp() {
   const energyPct=Math.max(0,100*battle.mana/battle.maxMana);
   const latestHit = [...battle.events].reverse().find(e=>e.target==='enemy' && e.amount>0);
   const currentStage=stageAt(campaign.currentStage);
+   const currentBoss=bossForStage(currentStage.id);
+   const bossPhase=bossPhaseAt(currentStage.id,battle.enemyHp,config.enemy.hp);
+   const combatMessage=[...battle.events].reverse()
+    .find(e=>e.kind!=='victory'&&e.kind!=='defeat'&&e.amount>0);
   const chapterPercent=(currentStage.stage-1)*100/20+(1-enemyHpPct/100)*100/20;
   const buyDemoItem=(kind:V2ShopKind)=>{
     const result=buyV2Shop(campaign,progress,kind,
@@ -336,11 +335,20 @@ export function NextApp() {
           <img src={altHeroAssets[heroClass]} alt="Викинг"/>
           <span className="v2-swipe" aria-hidden="true"/>
         </div>
-        <div className={'v2-foe'+(currentStage.kind==='boss'?' boss':'')}>
+        <div className={'v2-foe'+(currentStage.kind==='boss'?' boss':currentStage.kind==='elite'?' elite':'')}>
+          {currentBoss?<span className="v2-boss-title">{currentBoss.name}</span>:
+            currentStage.kind==='elite'?<span className="v2-elite-title">✦ ЭЛИТА</span>:null}
           <div className="v2-foe-hp"><span style={{width:enemyHpPct+'%'}}/></div>
-          <img src={enemies[(currentStage.id-1)%enemies.length]} alt={config.enemyName}/>
+          <img src={asset(artForStage(currentStage.id,currentStage.kind))} alt={config.enemyName}/>
+          {currentBoss&&<span className="v2-boss-phase" data-phase={bossPhase.phase}
+            aria-label={'Фаза босса '+bossPhase.phase+' из 3'}>
+            Фаза {bossPhase.phase}/3 · {bossPhase.label}
+          </span>
           {latestHit&&auto&&<b className="v2-damage" key={battle.tick}>−{latestHit.amount}</b>}
         </div>
+        {combatMessage&&auto&&<span className="v2-fight-event" key={battle.tick}>
+          {combatMessage.caption} · {combatMessage.amount}
+        </span>}
       </div>
       <button className="v2-arena-button" onClick={()=>open('arena')} type="button">
         <img src={asset('art/icons/arena.svg')} alt=""/><span>Арена</span>
