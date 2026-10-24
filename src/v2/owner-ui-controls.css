@@ -1,0 +1,580 @@
+/* TERRITORY 2.0 — OWNER APPROVED UI CONTROL PASS / 24 October 2026.
+ * Intentionally no .v2-battle background artwork, biome or scenery rule here.
+ * One approved screenshot only: docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg
+ *
+ * Targets: readable floating shortcuts, sculpted gold controls, raised hex
+ * crossed-axes battle button, compact ivory equipment cells, phone safe areas.
+ * All actions remain real buttons; no mock reward or backend writes.
+ */
+.v2-shell{
+  --v2-ui-bright-gold:#ffdea0;
+  --v2-ui-gold:#dda558;
+  --v2-ui-deep-wood:#382632;
+  --v2-ui-cream:#fff7e4;
+  --v2-ui-night:#15233c;
+}
+.v2-shell button{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.v2-shell button:focus-visible{
+  outline:3px solid #82edff;
+  outline-offset:2px;
+}
+.v2-shell button:disabled{
+  cursor:not-allowed;
+}
+.v2-header{
+  border-bottom:3px solid #c8a475;
+  box-shadow:inset 0 -1px 0 #fff3c48f,0 3px 5px #11203475;
+}
+.v2-profile{
+  border-color:#eccc7f;
+  box-shadow:0 2px 4px #1a31559c,inset 0 0 0 1px #fff6e2;
+}
+.v2-identity strong{
+  letter-spacing:.005em;
+  color:#fffbea;
+}
+.v2-identity i{
+  padding:2px 4px;
+  border-radius:4px;
+  border:1px solid #f4ce78;
+  background:linear-gradient(#91552d,#4b292c);
+  color:#ffe4a6;
+  text-shadow:0 1px 1px #27152b;
+}
+.v2-wallet button{
+  gap:2px;
+  border-radius:8px;
+  border:1.5px solid #f5d18c;
+  background:linear-gradient(175deg,#724c38,#352637 49%,#1e1c32);
+  box-shadow:inset 0 1px 0 #fff4b85e,0 2px 3px #13243b8f;
+  color:#fff9dc;
+  text-shadow:0 1px 2px #111;
+  letter-spacing:-.02em;
+  transition:filter .15s ease;
+}
+.v2-wallet button:active{filter:brightness(1.24)}
+.v2-wallet button b{
+  min-width:14px;
+  text-align:center;
+  border:1px solid #f3cf86;
+  border-radius:5px;
+  background:linear-gradient(#c08a40,#84511f);
+  box-shadow:inset 0 1px 0 #fff3b88c;
+}
+.v2-stage-enter .v2-portal-spark{
+  box-shadow:inset 0 0 8px #ffeb9d,0 2px 7px #111b329e,0 0 5px #fc7d47b5;
+}
+.v2-stage-enter:active .v2-portal-spark{filter:brightness(1.2);transform:scale(.96)}
+
+/* SIDE NAVIGATION — one reusable button system instead of mixed icon boxes */
+.v2-left-buttons{
+  left:0;
+  top:67px;
+  bottom:5px;
+  width:clamp(53px,14.4%,72px);
+  display:grid;
+  grid-template-rows:repeat(7,minmax(0,1fr));
+  gap:0;
+  overflow:hidden;
+  z-index:9;
+}
+.v2-right-buttons{
+  right:0;
+  top:64px;
+  bottom:24%;
+  width:clamp(53px,14.4%,72px);
+  display:grid;
+  grid-template-rows:repeat(4,minmax(0,1fr));
+  gap:1px;
+  overflow:hidden;
+  z-index:9;
+}
+.v2-left-buttons .v2-shortcut,
+.v2-right-buttons .v2-shortcut{
+  min-height:0;
+  height:100%;
+  width:100%;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  padding:2px 1px;
+  background:transparent;
+  border:0;
+  border-radius:10px;
+  color:white;
+  filter:none;
+  position:relative;
+  transition:transform .12s ease,filter .12s ease;
+}
+.v2-left-buttons .v2-shortcut:active,
+.v2-right-buttons .v2-shortcut:active{
+  transform:scale(.94);
+  filter:brightness(1.22);
+}
+.v2-left-buttons .v2-shortcut .v2-shortcut-emblem,
+.v2-right-buttons .v2-shortcut .v2-shortcut-emblem{
+  width:clamp(29px,5.1dvh,42px);
+  height:clamp(29px,5.1dvh,42px);
+  min-width:0;
+  flex:0 0 auto;
+  display:grid;
+  place-items:center;
+  border:1px solid #eaca8fb8;
+  border-radius:11px;
+  background:
+    radial-gradient(ellipse at 44% 23%,#fff4c14f,transparent 58%),
+    linear-gradient(165deg,#886546bd,#30263fb0 68%,#171c32b3);
+  box-shadow:inset 0 1px 1px #ffedbf80,0 2px 4px #0b2038a9;
+  overflow:visible;
+  color:white;
+  font-size:clamp(17px,4.5vw,24px);
+  line-height:1;
+  padding:2px;
+  filter:none;
+}
+.v2-left-buttons .v2-shortcut .v2-shortcut-emblem img,
+.v2-right-buttons .v2-shortcut .v2-shortcut-emblem img{
+  width:100%;
+  height:100%;
+  max-width:100%;
+  object-fit:contain;
+  display:block;
+  filter:drop-shadow(0 2px 2px #09182baf);
+}
+.v2-left-buttons .v2-shortcut .v2-shortcut-label,
+.v2-right-buttons .v2-shortcut .v2-shortcut-label{
+  color:#fffdf2;
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  font-size:clamp(8px,2.05vw,10.2px);
+  line-height:1.07;
+  font-weight:1000;
+  letter-spacing:-.02em;
+  text-align:center;
+  white-space:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+  text-wrap:balance;
+  text-shadow:
+    0 2px 2px #080e1d,
+    1px 0 2px #080e1d,
+    -1px 0 2px #080e1d,
+    0 0 4px #080e1d;
+  overflow:visible;
+}
+/* approved top-right grid entry has no 'Menu' caption */
+.v2-right-buttons .v2-shortcut--settings{
+  justify-content:flex-start;
+  padding-top:4px;
+}
+.v2-right-buttons .v2-shortcut--settings .v2-shortcut-emblem{
+  width:clamp(32px,5.5dvh,45px);
+  height:clamp(32px,5.5dvh,45px);
+  border:2px solid #e9c69a;
+  border-radius:12px;
+  background:linear-gradient(165deg,#383747,#161c2c);
+}
+.v2-right-buttons .v2-shortcut--settings .v2-menu-glyph{
+  display:block;
+  width:24px;
+  height:24px;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+.v2-right-buttons .v2-shortcut--settings .v2-menu-glyph:before{
+  content:'';
+  position:absolute;
+  inset:2px;
+  border:0;
+  border-radius:3px;
+  box-shadow:none;
+  background:
+    linear-gradient(#fdf9e9,#fdf9e9) left top/8px 8px no-repeat,
+    linear-gradient(#fdf9e9,#fdf9e9) right top/8px 8px no-repeat,
+    linear-gradient(#fdf9e9,#fdf9e9) left bottom/8px 8px no-repeat,
+    linear-gradient(#fdf9e9,#fdf9e9) right bottom/8px 8px no-repeat;
+}
+/* Style rare or longer captions consistently, no 3-line accidental overlaps. */
+.v2-shortcut--socialRewards .v2-shortcut-label,
+.v2-shortcut--specialMarket .v2-shortcut-label,
+.v2-shortcut--seaBundle .v2-shortcut-label,
+.v2-shortcut--welcomeBundle .v2-shortcut-label{
+  font-size:clamp(7.8px,1.96vw,9.7px)!important;
+}
+.v2-right-buttons .v2-shortcut--welcomeBundle .v2-shortcut-emblem{
+  background:linear-gradient(#a4763f,#542d36);
+}
+/* Arena is its own floating CTA, not a fifth squashed sidebar row. */
+.v2-arena-button{
+  width:clamp(52px,14%,67px);
+  right:2px;
+  bottom:4px;
+  padding:2px 2px 0;
+  border:0;
+  border-radius:12px;
+  background:transparent;
+  filter:drop-shadow(0 2px 4px #071c32);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+.v2-arena-button img{
+  width:clamp(39px,10.5vw,53px);
+  height:clamp(40px,11vw,54px);
+  object-fit:contain;
+}
+.v2-arena-button span{
+  font-size:clamp(10px,2.6vw,13px);
+  color:#fff5d8;
+  font-weight:1000;
+  text-shadow:0 2px 3px #060b15,1px 1px 1px #060b15;
+}
+.v2-arena-button:active{transform:scale(.94)}
+
+/* GEAR — seven actual clickable items + runes, skill and companion */
+.v2-equipment{
+  border-top:3px solid #b68e65;
+  border-bottom:3px solid #d5b483;
+  background:linear-gradient(170deg,#987058,#5b4041 35%,#3e303c 86%,#795343);
+  box-shadow:inset 0 2px 2px #ffe6ae55,0 2px 4px #1c1a21a6;
+  gap:3px;
+  padding:5px;
+}
+.v2-equipment .v2-gear{
+  min-width:0;
+  border:2px solid #c7a77a;
+  border-radius:8px;
+  background:linear-gradient(157deg,#fffef4,#fff0da 35%,#d7bfc1);
+  box-shadow:inset 0 1px 2px #fff,0 2px 2px #231a2b80;
+  overflow:hidden;
+  position:relative;
+  transition:transform .12s ease,filter .12s ease;
+}
+.v2-equipment .v2-gear:active{transform:scale(.97);filter:brightness(1.08)}
+.v2-equipment .v2-gear-weapon{
+  border-color:#eec46a;
+  box-shadow:inset 0 0 2px #fff9de,0 0 0 1px #78512c,0 2px 4px #080f207a;
+}
+.v2-equipment .v2-gear small{
+  z-index:2;
+  padding:2px 3px;
+  background:linear-gradient(#52485ba6,#211b31c7);
+  border-radius:4px;
+  border:1px solid #e3d6c483;
+  color:white;
+  text-shadow:0 1px 2px #100f18;
+  font-size:clamp(8px,2vw,10px);
+}
+.v2-equipment .v2-extra-rune{
+  background:radial-gradient(circle at 40% 30%,#ecc7fb,#a569d6 69%,#674487);
+  border-color:#f8d8ff;
+}
+.v2-equipment .v2-extra-skill{
+  background:linear-gradient(#fff3c6,#e4a75e 64%,#a6662f);
+  border-color:#ffdc94;
+}
+.v2-equipment .v2-extra-follower{
+  background:linear-gradient(165deg,#fce6b6,#c28a56 88%);
+  border-color:#f4cd80;
+}
+.v2-equipment .v2-extra-follower img{
+  width:79%;
+  height:90%;
+  object-fit:contain;
+}
+.v2-equipment .v2-extra-follower small{
+  right:4px;bottom:3px;
+  white-space:nowrap;
+  background:#5b3528cc;
+}
+
+/* Quest and right controls: read like one authored control strip */
+.v2-commands{
+  background:linear-gradient(#77554a,#442e35 52%,#382a33);
+  border-top:2px solid #e0b781;
+  border-bottom:2px solid #ab7e5a;
+  box-shadow:inset 0 1px 0 #fff1cb49;
+  height:53px;
+  padding:4px 6px;
+  gap:3px;
+}
+.v2-commands .v2-task{
+  background:linear-gradient(#6c4b3f,#342834);
+  border:2px solid #e8c492;
+  border-radius:10px;
+  box-shadow:inset 0 1px 2px #fff5df34,0 2px 3px #140d1875;
+  padding:3px 6px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;
+  gap:0;
+}
+.v2-commands .v2-task strong{
+  color:#ffdaa2;
+  font-size:clamp(8px,2.15vw,10px);
+  letter-spacing:.01em;
+}
+.v2-commands .v2-task span{
+  color:white;
+  text-shadow:0 1px 2px #141423;
+  font-size:clamp(9px,2.7vw,12px);
+  font-weight:1000;
+  line-height:1.12;
+}
+.v2-commands .v2-task small{
+  color:#f9ca88;
+  font-size:clamp(8px,1.9vw,10px);
+  line-height:1.1;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.v2-command-actions{
+  gap:4px;
+}
+.v2-command-actions .v2-control{
+  height:40px;
+  padding:0;
+  min-width:0;
+  border-radius:10px;
+  border:2px solid #b99a7b;
+  background:linear-gradient(#70545a,#382a39);
+  color:#fff6e1;
+  text-shadow:0 2px 2px #100e1b;
+  box-shadow:inset 0 1px 2px #fff5d069,0 1px 3px #1715229a;
+  font-size:clamp(19px,5.1vw,25px);
+  transition:filter .1s ease,transform .1s ease;
+}
+.v2-command-actions .v2-control:active{
+  transform:translateY(1px);
+  filter:brightness(1.2);
+}
+.v2-command-actions .v2-control--speed.is-active{
+  border-color:#95d2f8;
+  background:linear-gradient(#376ca2,#1a345f);
+  color:#d8f6ff;
+}
+.v2-command-actions .v2-control--auto.repeat{
+  background:linear-gradient(#bc8c41,#74512b);
+  border:2px solid #f2dc9d;
+  color:#fff7da;
+  font-size:clamp(26px,6.4vw,34px);
+}
+.v2-command-actions .v2-control--auto.repeat.active{
+  border-color:#fff6c9;
+  background:linear-gradient(#ffdb74,#ba7928 54%,#794a24);
+  box-shadow:inset 0 1px 2px #fff7dc,0 0 5px #fbe099a8;
+}
+.v2-command-actions .v2-control--ranking{
+  background:linear-gradient(#8e5466,#4a2e45);
+}
+.v2-command-actions .v2-control--ranking .v2-rank-icon{
+  width:29px;
+  height:29px;
+  object-fit:contain;
+  filter:drop-shadow(0 1px 1px #27141d);
+}
+
+/* Bottom navigation: one continuous dark wood bar with floating art.
+   Centre is a raised blue hexagon as in the ONLY owner-approved reference. */
+.v2-bottom{
+  position:relative;
+  isolation:isolate;
+  flex:none;
+  height:78px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.18fr) minmax(0,1fr) minmax(0,1fr);
+  align-items:stretch;
+  gap:1px;
+  padding:5px 4px max(env(safe-area-inset-bottom),4px);
+  border-top:3px solid #c6a17b;
+  background:
+    linear-gradient(180deg,#40313a 0%,#2f2834 38%,#24252f 100%);
+  box-shadow:inset 0 2px 1px #f7c69344,0 -1px 4px #2b182966;
+}
+.v2-bottom button:not(.main){
+  min-width:0;
+  border:0;
+  border-radius:11px;
+  background:transparent;
+  box-shadow:none;
+  padding:4px 1px 3px;
+  gap:1px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-end;
+  position:relative;
+  overflow:visible;
+  transition:transform .12s ease,filter .12s ease;
+}
+.v2-bottom button:not(.main)::before{
+  content:'';
+  position:absolute;
+  left:12%;right:12%;bottom:20px;
+  height:36px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,#c1946e26,transparent 75%);
+  pointer-events:none;
+}
+.v2-bottom button:not(.main):active{
+  filter:brightness(1.2);
+  transform:translateY(1px) scale(.96);
+}
+.v2-bottom button:not(.main)>img{
+  position:relative;
+  z-index:1;
+  flex:none;
+  width:clamp(35px,9vw,49px);
+  height:clamp(35px,9vw,49px);
+  max-width:90%;
+  object-fit:contain;
+  filter:drop-shadow(0 2px 2px #0d101c);
+}
+.v2-bottom button:not(.main)>span{
+  display:block;
+  position:relative;
+  z-index:1;
+  width:100%;
+  min-height:13px;
+  font-size:clamp(9px,2.7vw,12px);
+  font-weight:1000;
+  color:#fff5e6;
+  line-height:1.06;
+  letter-spacing:-.015em;
+  text-shadow:0 2px 2px #0a0f1b,1px 1px #0a0f1b;
+  white-space:normal;
+  text-wrap:balance;
+  text-align:center;
+}
+.v2-bottom button.main{
+  width:100%;
+  height:96px;
+  min-height:96px;
+  align-self:end;
+  margin-top:-22px;
+  padding:7px 3px 7px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:0;
+  position:relative;
+  z-index:5;
+  border:0;
+  border-radius:0;
+  color:white;
+  background:linear-gradient(145deg,#f0e8c3 0%,#b5ecff 21%,#537da9 49%,#bfeaff 74%,#26335d 100%);
+  box-shadow:none;
+  clip-path:polygon(50% 0%,96% 22%,96% 78%,50% 100%,4% 78%,4% 22%);
+  filter:drop-shadow(0 0 5px #a5e6ffb7);
+  transform:none;
+}
+.v2-bottom button.main::before{
+  content:'';
+  position:absolute;
+  inset:4px;
+  z-index:0;
+  pointer-events:none;
+  background:linear-gradient(160deg,#20699e 0%,#0a2c55 48%,#081936 100%);
+  clip-path:polygon(50% 0%,96% 22%,96% 78%,50% 100%,4% 78%,4% 22%);
+}
+.v2-bottom button.main::after{
+  content:'';
+  position:absolute;
+  inset:11px 15px;
+  z-index:0;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 50% 33%,#5ed3ff49,transparent 66%);
+  border-radius:40%;
+}
+.v2-bottom button.main>img{
+  flex:none;
+  position:relative;
+  z-index:1;
+  width:clamp(42px,11vw,55px);
+  height:clamp(42px,11vw,55px);
+  object-fit:contain;
+  filter:drop-shadow(0 2px 3px #050d1c);
+}
+.v2-bottom button.main .v2-nav-fight{
+  position:relative;
+  z-index:1;
+  font-weight:1000;
+  font-size:clamp(10px,2.8vw,14px);
+  line-height:1.1;
+  color:#fff1c7;
+  letter-spacing:.08em;
+  text-shadow:0 2px 3px #061224;
+  margin-top:-1px;
+}
+.v2-bottom button.main .v2-nav-demo{
+  position:relative;
+  z-index:1;
+  color:#fff3d4;
+  font-weight:950;
+  font-size:clamp(9px,2.4vw,11px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  line-height:1.05;
+  margin-top:0;
+}
+.v2-bottom button.main .v2-nav-demo img{
+  display:block;
+  width:13px;height:13px;
+  object-fit:contain;
+}
+.v2-bottom button.main:active{
+  filter:brightness(1.22);
+  transform:scale(.97);
+}
+
+/* small phones: priorities are the quest, center Battle, and legible shortcuts */
+@media(max-width:370px){
+  .v2-left-buttons{width:clamp(49px,14.4%,59px);top:59px}
+  .v2-right-buttons{width:clamp(49px,14.4%,59px);top:58px;bottom:24%}
+  .v2-shortcut .v2-shortcut-label{font-size:8px!important}
+  .v2-left-buttons .v2-shortcut .v2-shortcut-emblem,
+  .v2-right-buttons .v2-shortcut .v2-shortcut-emblem{
+    width:clamp(26px,5dvh,37px);
+    height:clamp(26px,5dvh,37px);
+  }
+  .v2-commands{height:49px;padding:3px 4px}
+  .v2-command-actions{gap:2px}
+  .v2-command-actions .v2-control{height:35px;border-radius:8px}
+  .v2-commands .v2-task small{font-size:7.6px}
+  .v2-bottom{height:72px;padding-left:2px;padding-right:2px}
+  .v2-bottom button.main{height:88px;min-height:88px;margin-top:-18px}
+  .v2-bottom button:not(.main)>img{width:34px;height:34px}
+}
+@media(max-height:650px){
+  .v2-left-buttons{top:52px;bottom:1px}
+  .v2-right-buttons{top:52px;bottom:20%}
+  .v2-left-buttons .v2-shortcut .v2-shortcut-emblem,
+  .v2-right-buttons .v2-shortcut .v2-shortcut-emblem{height:24px;width:25px;border-radius:8px}
+  .v2-left-buttons .v2-shortcut .v2-shortcut-label,
+  .v2-right-buttons .v2-shortcut .v2-shortcut-label{font-size:7px;line-height:1}
+  .v2-equipment{height:90px;min-height:90px}
+  .v2-commands{height:44px}
+  .v2-bottom{height:62px}
+  .v2-bottom button:not(.main)>img{width:29px;height:29px}
+  .v2-bottom button.main{height:75px;min-height:75px;margin-top:-15px}
+  .v2-bottom button.main>img{width:38px;height:38px}
+}
+@media(prefers-reduced-motion:reduce){
+  .v2-shortcut,.v2-control,.v2-bottom button,.v2-gear{transition:none!important}
+}
