@@ -17,7 +17,7 @@ for(const expr of [
   '-webkit-line-clamp:2','max-height:18px','@media(max-width:370px)',
   '@media(max-height:650px)','prefers-reduced-motion',
 ]) assert(style.includes(expr),'Missing mobile-visual correction: '+expr);
-assert(!/\\.v2-battle\\s*[,{]|\\.v2-biome-\\d\\s*[,{]/.test(style.replace(/\\/\\*[\\s\\S]*?\\*\\//g,'')),
+assert(!style.includes('.v2-battle{') && !style.includes('.v2-biome-'),
   'Video audit must not modify the locked battle background');
 for(let n=1;n<=14;n++)assert(spec.includes('V-'+String(n).padStart(3,'0')),
   'Missing concrete owner-reported visual issue '+n);
@@ -32,5 +32,5 @@ for(const [f,title] of [
  assert(spec.includes(title),'Video timecode missing: '+title);
 }
 assert(spec.includes('Камни')&&spec.includes('Задания')&&spec.includes('Навыки'));
-assert(spec.includes('ВНЕШНИЙ ВИД')&&spec.includes('приоритет'));
+assert(spec.includes('ВНЕШНИЙ ВИД')&&spec.includes('Приоритет'));
 console.log('OK: screenshot byte-identity, 14 documented visual bugs, V2-only mobile adjustments, 2 real owner video frames in GitHub');
