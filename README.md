@@ -34,6 +34,10 @@ Independent source repository. Based on approved development branch from TERRITO
 `npm run test:master-spec` проверяет полноту документации и SHA-256 владельческого эталона. **Документы не равны готовой игре.** Экраны, источники и зафиксированные механики должны проходить E2E и серверные тесты перед публикацией. Не подключать production первой TERRITORY.
 
 
+## Проверенный серверный Telegram API (staging)
+
+**Новый:** [Telegram gateway, защищённое создание игрока/героя и HTTPS-проверка](docs/TERRITORY_2_0_TELEGRAM_GATEWAY_20261024_RU.md). Edge Function `territory-v2-api` развёрнута только в V2 Supabase `ksikzkrvuuhermhnbycn`; **выключена для реальных игроков до подключения нового Telegram бота**, frontend Pages остаётся демоверсией. Фон не меняли.
+
 ## Серверный PvE согласно ТЗ — 24.10.2026
 
 [Серверный расчёт боя, защита от двойных активных боёв и однократная запись результата в отдельном Supabase](docs/TERRITORY_2_0_SERVER_PVE_MILESTONE_RU.md). **SQL внедрён и проверен на staging; реальный PvE API для игроков и выдача наград ещё не включены.** Фон и визуальные файлы не менялись.
