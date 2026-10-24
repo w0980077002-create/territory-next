@@ -9,6 +9,7 @@ const parse = p => JSON.parse(read(p));
 const master = read('docs/TERRITORY_2_0_MASTER_TZ_RU.md');
 const arch = read('docs/TERRITORY_2_0_TECHNICAL_ARCHITECTURE_RU.md');
 const acceptance = read('docs/TERRITORY_2_0_ACCEPTANCE_AND_TRACEABILITY_RU.md');
+const atlas = read('docs/TERRITORY_2_0_SCREEN_BY_SCREEN_CONTRACT_RU.md');
 const unknown = read('docs/TERRITORY_2_0_UNVERIFIED_PARAMETERS_RU.md');
 const research = read('docs/TERRITORY_2_0_REFERENCE_RESEARCH_20261024_RU.md');
 const catalog = parse('docs/TERRITORY_2_0_EVIDENCE_CATALOG.json');
@@ -26,6 +27,7 @@ assert.equal(createHash('sha256').update(bytes).digest('hex'),
 for (let n=1;n<=34;n++) {
   const id='SCR-'+String(n).padStart(2,'0');
   assert.ok(master.includes('| '+id+' |'), 'missing spec screen '+id);
+  assert.ok(atlas.includes('### '+id+'.'), 'missing screen interaction contract '+id);
 }
 for (let n=1;n<=13;n++) {
   const id='GMP-'+String(n).padStart(2,'0');
