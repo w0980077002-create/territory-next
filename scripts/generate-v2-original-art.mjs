@@ -43,7 +43,6 @@ function generateV2OriginalArt() {
   hero:'M50 12Q23 14 24 38L27 57Q32 78 50 87Q70 75 75 57L75 38Q73 14 50 12ZM32 37H68M37 53H64',
   companions:'M50 12Q80 21 79 53Q74 79 50 88Q23 79 21 53Q21 21 50 12ZM34 46H42 M58 46H66 M37 65Q50 77 65 65',
   clan:'M15 80H85V45L71 33V14L61 22V41H37V18L25 13V35L15 46ZM39 80V62Q50 47 60 62V80',
-  games:'M19 17H81V83H19ZM35 36H39M60 36H64M48 52H53M35 67H39M60 67H64',
   mail:'M15 25H85V78H15ZM16 26L50 57L84 26M16 77L38 55M84 77L61 55',
   settings:'M50 13V26M50 74V88M13 50H26M74 50H88M25 25L35 35M65 65L75 75M75 25L65 35M25 75L35 65M50 28A22 22 0 1 0 50 72A22 22 0 1 0 50 28M50 42A8 8 0 1 0 50 58A8 8 0 1 0 50 42',
   gold:'M50 15A35 35 0 1 0 50 85A35 35 0 1 0 50 15M50 24L58 40L76 43L63 55L66 75L50 65L34 75L38 55L25 43L43 40Z',
@@ -58,11 +57,6 @@ function generateV2OriginalArt() {
   ring:'M50 31A23 23 0 1 0 50 77A23 23 0 1 0 50 31M34 37L50 10L68 37Z',
   amulet:'M23 12Q22 38 49 45Q76 38 73 12M49 42L74 56L59 87L34 81L25 56Z',
   runes:'M28 19H67L76 80H20ZM35 31V70M35 31L64 45L35 55L67 72',
-  treasure:'M19 38H82V84H19ZM16 38L25 20H75L85 38M25 52H75 M51 37V84',
-  board:'M14 14H86V86H14ZM14 38H86M14 62H86M38 14V86M62 14V86',
-  reels:'M15 21H85V79H15ZM36 21V79M63 21V79M23 42H30M47 42H55M73 42H80',
-  dice:'M20 20H80V80H20ZM35 35H40M61 36H66M48 49H53M35 63H40M61 64H66',
-  wheel:'M50 11A38 38 0 1 0 50 87A38 38 0 1 0 50 11M50 13V87M12 49H88M23 23L77 77M77 22L23 77',
   };
   let q=0;for(const [name,path] of Object.entries(sigils)){const accent=name==='red'?'#e96c7d':name==='blue'?'#4bd7f6':name==='gold'?'#ffe58b':['#8adbf7','#f3bd6d','#d0a0fe','#a2e0b0'][q%4];q++;write(`icons/${name}.svg`,`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><defs><radialGradient id="bg"><stop stop-color="${accent}" stop-opacity=".7"/><stop offset="1" stop-color="#13283d" stop-opacity=".1"/></radialGradient><linearGradient id="metal"><stop stop-color="#fff8d1"/><stop offset=".38" stop-color="${accent}"/><stop offset="1" stop-color="#ab7855"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#bg)"/><path d="${path}" stroke="url(#metal)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="#2e5574" fill-opacity=".42"/><path d="M12 72L18 64M80 13L87 20" stroke="#fff7cc" stroke-width="3"/></svg>`);}
   const palettes=[['#75c4f0','#307dad','#e5f6fc'],['#98c2f1','#526d9b','#eff7fc'],['#b3b5ed','#5b8996','#def0e6'],['#eeae91','#a06d86','#f0e7df'],['#7db6e3','#5a5f91','#f5dfcb']];
