@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { encounterForChapter, nextPreviewTick, startPreviewEncounter, type HeroClass, type RuneKind, type CompanionKind } from './core/autoBattle';
 import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, type V2ScreenId } from './interfaceContract';
 import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
+import { QuestExperience } from './QuestExperience';
+import {createV2DemoQuestState,recordV2DemoQuestVictory,claimV2DemoQuest,type V2DemoQuestId} from './core/demoQuests';
 import { DEMO_START_CHAPTER, DEMO_WAVES_PER_CHAPTER, chooseDemoChapter, nextDemoChapterVictory, demoCombatSample } from './core/campaignFlow';
 import { V2_SKILL_CATEGORIES, type V2SkillCategory } from './core/buildLoadout';
 import { createDemoBuildSlots, saveDemoBuildSlot, loadDemoBuildSlot } from './core/previewBuilds';
@@ -132,6 +134,7 @@ export function NextApp() {
   const [defeats,setDefeats] = useState(offlineSave?.defeats??0);
   const [notice,setNotice] = useState('');
   const [progress,setProgress] = useState<V2Progression>(()=>offlineSave?.progress??createV2DemoProgress());
+  const [questState,setQuestState] = useState(()=>offlineSave?.quests??createV2DemoQuestState());
   const [encounterId,setEncounterId] = useState(offlineSave?.encounterId??1);
   const [gearFocus,setGearFocus] = useState<V2GearSlot>('weapon');
   const heroStats = useMemo(()=>statsFromV2Progress(progress),[progress]);
@@ -151,11 +154,11 @@ export function NextApp() {
       v2DemoStorage(),
       {version:1,savedAt:Date.now(),chapter,wave,highestUnlockedChapter,
        encounterId,heroClass,rune,companion,speed,auto,victories,defeats,
-       progress,builds:demoBuilds}
+       progress,builds:demoBuilds,quests:questState}
     );
     setSaveStatus(ok?'local':'memory');
   },[chapter,wave,highestUnlockedChapter,encounterId,heroClass,rune,
-     companion,speed,auto,victories,defeats,progress,demoBuilds]);
+     companion,speed,auto,victories,defeats,progress,demoBuilds,questState]);
   useEffect(()=>{
     if(!auto || battle.finished) return;
     const interval = window.setInterval(()=>{
@@ -180,6 +183,7 @@ export function NextApp() {
           ((encounterId*531+chapter*73+wave*17)%997)/997
         ));
         setVictories(v=>v+1);
+        setQuestState(q=>recordV2DemoQuestVictory(q,'v2-demo-encounter-'+encounterId,wave===DEMO_WAVES_PER_CHAPTER,Date.now()));
         const outcome=nextDemoChapterVictory({chapter,wave},highestUnlockedChapter);
         setHighestUnlockedChapter(outcome.highestUnlockedChapter);
         setChapter(outcome.nextRoute.chapter);
@@ -372,14 +376,16 @@ export function NextApp() {
               setChapter(next.chapter);setWave(next.wave);setOverlay(null);setAuto(true);
             }}>{x>highestUnlockedChapter?'🔒 ':''}Глава {x}<small>{x>highestUnlockedChapter?'Победи босса предыдущей главы':'Доступна · демо'}</small></button>)}</div>
           </>}
-          {overlay==='quests'&&<><h3>Боевые задания</h3><div className="v2-info-row">Победы в демонстрационном походе <b>{progress.wins}</b></div><div className="v2-info-row">Побеждённые боссы <b>{progress.bosses}</b></div><div className="v2-info-row">Камни за обычного врага <b>0</b></div><div className="v2-info-row">Опыт героя <b>{progress.xp}/{nextXp(progress.level)}</b></div>
-            {progress.latestLoot&&<div className="v2-quest-loot">
-              <h3>Последняя добыча</h3>
-              <p>🪙 +{progress.latestLoot.gold} · ⭐ +{progress.latestLoot.xp} XP · ⚒ +{progress.latestLoot.materials}</p>
-              <strong>{progress.latestLoot.item?'🎒 '+progress.latestLoot.item.name:'Без предмета'}</strong>
-              <button className="v2-cta" type="button" onClick={()=>open('warehouse')}>Посмотреть склад</button>
-            </div>}
-          </>}
+{(overlay==='quests'||overlay==='rewards'||overlay==='events')&&<QuestExperience
+            mode={overlay}
+            state={questState}
+            progress={progress}
+            highestUnlockedChapter={highestUnlockedChapter}
+            onClaim={(questId:V2DemoQuestId)=>setQuestState(q=>claimV2DemoQuest(
+              q,questId,progress,highestUnlockedChapter,Date.now(),
+            ))}
+            onOpenAdventure={()=>open('expedition')}
+          />}
           {overlay==='arena'&&<><p>Арена TERRITORY 2.0: PvP-чат во время боя, снаряжение, эликсиры, сезоны и 30 минут переписки после боя.</p><p>Пока доступен только интерфейс. Настоящие PvP-матчи требуют отдельного сервера.</p></>}
           {overlay==='ranking'&&<><h3>Рейтинг похода · локальная демонстрация</h3><div className="v2-info-row">Победы <b>{victories}</b></div><div className="v2-info-row">Боссы <b>{progress.bosses}</b></div><div className="v2-info-row">Поражения <b>{defeats}</b></div><p>Настоящий рейтинг появится после подключения независимого серверного учёта матчей.</p></>}
           {overlay==='settings'&&<div className="v2-feature-cards">
@@ -396,7 +402,7 @@ export function NextApp() {
             }}>Начать демонстрацию заново</button>
             <p>Выбор десяти разных фонов будет добавлен отдельным этапом; текущий фон по решению владельца не меняется.</p>
           </div>}
-          {['shop','specialMarket','welcomeBundle','trials','events','rewards','friends','invitation','socialRewards','seaBundle','clan','professions','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
+          {['shop','specialMarket','welcomeBundle','trials','friends','invitation','socialRewards','seaBundle','clan','professions','games','mail'].includes(overlay)&&<div className="v2-feature-cards">
             <p>Раздел «{routeTitle[overlay]}» входит в нашу структуру TERRITORY 2.0.</p><p>Исходные механики уже перенесены в новый репозиторий. Здесь будет их обновлённый интерфейс после интеграции с тестовой базой.</p>
             <button className="v2-cta" onClick={()=>open('menu')}>Открыть меню</button>
           </div>}
