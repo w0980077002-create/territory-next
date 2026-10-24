@@ -7,7 +7,7 @@
  */
 export type V2ScreenId =
   | 'port' | 'skills' | 'expedition' | 'adventure' | 'shop'
-  | 'hero' | 'warehouse' | 'runes' | 'companions'
+  | 'hero' | 'warehouse' | 'gems' | 'runes' | 'companions'
   | 'arena' | 'quests' | 'events' | 'friends' | 'rewards'
   | 'clan' | 'mail'
   | 'specialMarket' | 'trials' | 'welcomeBundle' | 'settings'
@@ -48,6 +48,7 @@ export const V2_RIGHT_SHORTCUTS = [
 export const V2_EXTRA_MENU = [
   { id: 'hero', label: 'Герой' },
   { id: 'warehouse', label: 'Склад' },
+  { id: 'gems', label: 'Драгоценный камень' },
   { id: 'runes', label: 'Руны' },
   { id: 'companions', label: 'Последователи' },
   { id: 'clan', label: 'Клан' },
