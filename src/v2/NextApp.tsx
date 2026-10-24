@@ -36,7 +36,18 @@ const enemies = [
   asset('assets/territory/characters/enemies/troll/idle.webp'),
   asset('assets/territory/characters/bosses/giant_king/idle.webp'),
 ];
-const bottomIcon: Record<string, string> = {port:'⚓',skills:'ᛟ',expedition:'⚔',adventure:'🗺',shop:'⚒'};
+const bottomIcon: Record<string, string> = {
+  port:'ic-sea.webp',
+  skills:'ic-blessing.webp',
+  expedition:'nav-battle.webp',
+  adventure:'nav-map-parchment.webp',
+  shop:'ic-shop.webp',
+};
+const shortcutArt: Record<string,string> = {
+  quests:'ic-quests.webp',events:'ic-events.webp',friends:'ic-invite.webp',
+  rewards:'ic-daily.webp',settings:'ic-settings.webp',specialMarket:'ic-shop.webp',
+  trials:'ic-trials.webp',welcomeBundle:'ic-blessing.webp',
+};
 const shortcutIcon: Record<string, string> = {
   quests:'📜', events:'🎇', friends:'🤝', rewards:'🎁', specialMarket:'💰', trials:'🐲',
   welcomeBundle:'🎖', hero:'🛡', warehouse:'🎒', runes:'ᚱ', companions:'🐂', arena:'⚔',
@@ -73,7 +84,7 @@ function DemoNote() {
 }
 function Shortcut({id,label,onClick}: {id:string;label:string;onClick:()=>void}) {
   return <button className="v2-shortcut" type="button" onClick={onClick} title={label}>
-    <b aria-hidden="true">{shortcutIcon[id] ?? '✦'}</b><span>{label}</span>
+    <b aria-hidden="true">{shortcutArt[id]?<img src={asset(shortcutArt[id])} alt="" loading="lazy"/>:shortcutIcon[id]??'✦'}</b><span>{label}</span>
   </button>;
 }
 function ViewTile({name,icon,onClick}: {name:string;icon:string;onClick:()=>void}) {
@@ -229,7 +240,7 @@ export function NextApp() {
       {V2_BOTTOM_NAV.map(({id,label})=><button key={id} onClick={()=>open(id)}
         className={id==='expedition'?'main':''}
         type="button" aria-label={label||'Бой'}>
-        <b>{bottomIcon[id]}</b>{label&&<span>{label}</span>}
+        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label&&<span>{label}</span>}
       </button>)}
     </nav>
 
