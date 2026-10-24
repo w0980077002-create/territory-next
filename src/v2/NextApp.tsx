@@ -64,7 +64,7 @@ const featureScreens:readonly string[]=[
 const menuTileArt:Readonly<Record<string,string>>={
   hero:'art/avatar.svg',warehouse:'art/icons/armor.svg',
   runes:'art/icons/runes.svg',companions:'art/icons/companions.svg',
-  clan:'art/icons/clan.svg',professions:'art/icons/professions.svg',
+  clan:'art/icons/clan.svg',
   games:'art/icons/games.svg',mail:'art/icons/mail.svg',settings:'art/icons/settings.svg',
   ranking:'art/icons/ranking.svg',
 };
@@ -84,7 +84,7 @@ const shortcutArt: Record<string,string> = {
 const shortcutIcon: Record<string, string> = {
   quests:'📜', events:'🎇', friends:'🤝', rewards:'🎁', specialMarket:'💰', trials:'🐲',
   welcomeBundle:'🎖', hero:'🛡', warehouse:'🎒', runes:'ᚱ', companions:'🐂', arena:'⚔',
-  clan:'🏰', professions:'⚒', games:'🎲', mail:'✉', settings:'⚙',
+  clan:'🏰', games:'🎲', mail:'✉', settings:'⚙',
   port:'⚓', skills:'ᛟ', expedition:'⚔', adventure:'🗺', shop:'🏪',
   invitation:'✉', socialRewards:'🏅', seaBundle:'⛵',ranking:'🏆',
 };
@@ -286,7 +286,7 @@ export function NextApp() {
     setEncounterId(id=>id+1);setAuto(true);setOverlay(null);
   };
   const xpPct=progress.level>=300?100:Math.min(100,progress.xp/nextXp(progress.level)*100);
-  const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',professions:'Профессии',games:'Игровой зал',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Первый взнос',settings:'Настройки',menu:'Меню',invitation:'Приглашение',socialRewards:'Социальные награды',seaBundle:'Морской набор',ranking:'Рейтинг'};
+  const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',games:'Игровой зал',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Первый взнос',settings:'Настройки',menu:'Меню',invitation:'Приглашение',socialRewards:'Социальные награды',seaBundle:'Морской набор',ranking:'Рейтинг'};
   const open = (id: V2ScreenId | 'menu')=>id==='expedition'?(setOverlay(null),setAuto(true)):setOverlay(id);
 
   return <div className="v2-shell">
@@ -404,15 +404,12 @@ export function NextApp() {
           {overlay==='menu'&&<div className="v2-tilegrid">
             {V2_EXTRA_MENU.map(x=><ViewTile key={x.id} id={x.id} name={x.label} onClick={()=>open(x.id as V2ScreenId)}/>)}
           </div>}
-          {(overlay==='port'||overlay==='professions')&&<PortExperience
-            mode={overlay}
+          {overlay==='port'&&<PortExperience
             state={miningState}
-            blueGems={progress.gems}
             onBegin={(resource:V2DemoResource)=>setMiningState(s=>beginV2DemoMining(s,resource,Date.now()))}
             onClaim={()=>setMiningState(s=>claimV2DemoMining(s,Date.now()))}
             onCancel={()=>setMiningState(cancelV2DemoMining)}
             onWarehouse={()=>open('warehouse')}
-            onProfessions={()=>open('professions')}
           />}
           {(overlay==='hero'||overlay==='warehouse')&&<InventoryExperience
             view={overlay}
