@@ -49,7 +49,10 @@ for (const label of ['Задания','События','Друзья','Нагр�
   assert(layout.includes("label: '"+label+"'"),'left shortcut missing: '+label);
 }
 assert(app.includes('V2_LEFT_SHORTCUTS.map('),'UI does not render all seven shortcuts');
-assert(app.includes('disabled={x>highestUnlockedChapter}'),'locked route must be disabled in UI');
+const stageMap=readFileSync('src/v2/visual/StageMapExperience.tsx','utf8');
+assert(app.includes('<StageMapExperience state={campaign}'),'100-stage map is not mounted');
+assert(stageMap.includes('disabled={!available}'),'locked stage must be disabled in UI');
+assert(stageMap.includes('stage.id<=state.highestUnlockedStage'),'stage lock must use V2 campaign source');
 assert(app.includes('nextDemoChapterVictory'),'stage result must use progression gate');
 assert(app.includes('demoCombatSample(encounterId,b.tick)'),'battle animation must be deterministic demo');
 assert(!app.includes('Math.random('),'unpredictable preview visual causes inconsistent screenshots');
