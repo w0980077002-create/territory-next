@@ -46,7 +46,7 @@ Telegram Mini App / web client
 | `server/combat` | Серверно подтверждённая встреча, детерминированные тики/правила, сохранение фазы и результат |
 | `server/loot` | Версионированная таблица и строго однократная генерация результата по серверному seed/receipt |
 | `server/economy` | Ledger, ограничения, акции/покупки/камни/билеты, антидубли и аудит |
-| `server/progression` | XP, уровни, допустимые stage transitions, задания/профессии/спутники |
+| `server/progression` | XP, уровни, допустимые stage transitions, задания и спутники |
 | `server/social` | PvP, события, письма, чаты, приглашения, кланы, рейтинги |
 | `server/admin` | Независимая ролевая проверка, выдачи, журналы, расписания, ручные блокировки |
 | `server/jobs` | Обработка outbox и времени сервера, регулярные события, восстановление после сбоя |
@@ -167,8 +167,8 @@ Telegram Mini App / web client
 | `GET /v2/builds` | — | навыки, руны, классы, сохранённые пресеты |
 | `PUT /v2/builds/:id` | валидный blueprint, revision | атомарная смена сборки |
 | `POST /v2/companions/assign` | main/support IDs, revision | состав отряда и расчётные ауры |
-| `POST /v2/professions/start` | resource, professionId | заявка на единственную добычу |
-| `POST /v2/professions/claim` | miningJobId | единичная выдача |
+| `POST /v2/mining/start` | resourceId | заявка на единственную добычу |
+| `POST /v2/mining/claim` | miningJobId | единичная выдача |
 | `POST /v2/voyages/start` | shipId, routeId | voyageId и серверное returnAt |
 | `POST /v2/voyages/claim` | voyageId | результат/receipt |
 | `POST /v2/arena/match` | допустимый режим | matchId + проверенные snapshots |
