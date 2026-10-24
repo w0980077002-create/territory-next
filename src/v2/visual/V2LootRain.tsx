@@ -1,6 +1,6 @@
 import {type V2LootBurst} from '../core/gameplayOverhaul';
 import './overhaul-ui.css';
-const art=(slot:string)=>import.meta.env.BASE_URL+'item-'+slot+'.webp';
+const art=(slot:string)=>import.meta.env.BASE_URL+'art/icons/'+slot+'.svg';
 export function V2LootRain({burst}:Readonly<{burst:V2LootBurst|null}>){
  if(!burst)return null;
  return <div className="v2-overhaul-rain" aria-label="Добыча после боя" role="status" key={burst.receiptId}>
