@@ -3,10 +3,11 @@ import {quoteV2Shop,V2_MAX_SHOP_SKILL_LEVEL,
 import type {V2Progression} from '../core/progression';
 import type {CompanionKind} from '../core/autoBattle';
 import './overhaul-ui.css';
+const asset=(path:string)=>import.meta.env.BASE_URL+path;
 const cards:readonly {id:V2ShopKind;icon:string;name:string;summary:string}[]=[
- {id:'companion',icon:'🐂',name:'Призыв спутника',summary:'Случайный союзник из коллекции. Увеличивает число призывов.'},
- {id:'skill',icon:'ᚱ',name:'Усиление навыков',summary:'Постоянный локальный множитель атаки +3,5% за уровень.'},
- {id:'reset',icon:'♻',name:'Сброс характеристик',summary:'Сбрасывает распределение очков навыков и купленный бонус атаки, сохраняя предметы.'},
+ {id:'companion',icon:'companions',name:'Призыв спутника',summary:'Случайный союзник из коллекции. Увеличивает число призывов.'},
+ {id:'skill',icon:'skills',name:'Усиление навыков',summary:'Постоянный локальный множитель атаки +3,5% за уровень.'},
+ {id:'reset',icon:'runes',name:'Сброс характеристик',summary:'Сбрасывает распределение очков навыков и купленный бонус атаки, сохраняя предметы.'},
 ];
 export function OverhaulShopExperience({
  campaign,progress,selectedCompanion,onBuy,onViewSkills,onViewCompanions
@@ -27,7 +28,7 @@ export function OverhaulShopExperience({
    const noReset=card.id==='reset'&&campaign.skillMultiplier===0;
    const affordable=progress.gold>=quote.gold&&campaign.runes>=quote.runes&&!maxed&&!noReset;
    return <article className="v2-overhaul-shop-card" key={card.id} data-offer={card.id}>
-    <span className="v2-overhaul-shop-art" aria-hidden="true">{card.icon}</span>
+    <span className="v2-overhaul-shop-art" aria-hidden="true"><img src={asset('art/icons/'+card.icon+'.svg')} alt=""/></span>
     <div className="v2-overhaul-shop-text"><strong>{card.name}</strong><p>{card.summary}</p>
       {card.id==='skill'&&<small>Усиление {campaign.skillMultiplier}/{V2_MAX_SHOP_SKILL_LEVEL}</small>}
       {card.id==='companion'&&<small>Призывов: {campaign.companionRolls}</small>}
