@@ -9,7 +9,7 @@ export type V2ScreenId =
   | 'port' | 'skills' | 'expedition' | 'adventure' | 'shop'
   | 'hero' | 'warehouse' | 'runes' | 'companions'
   | 'arena' | 'quests' | 'events' | 'friends' | 'rewards'
-  | 'clan' | 'professions' | 'games' | 'mail'
+  | 'clan' | 'games' | 'mail'
   | 'specialMarket' | 'trials' | 'welcomeBundle' | 'settings'
   | 'invitation' | 'socialRewards' | 'seaBundle' | 'ranking';
 
@@ -51,7 +51,6 @@ export const V2_EXTRA_MENU = [
   { id: 'runes', label: 'Руны' },
   { id: 'companions', label: 'Последователи' },
   { id: 'clan', label: 'Клан' },
-  { id: 'professions', label: 'Профессии' },
   { id: 'games', label: 'Игры' },
   { id: 'mail', label: 'Почта' },
   { id: 'settings', label: 'Настройки' },
