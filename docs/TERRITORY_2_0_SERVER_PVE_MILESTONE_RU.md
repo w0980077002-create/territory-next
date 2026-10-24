@@ -15,3 +15,15 @@
 - **Нет живого API для игроков**: браузерная демоверсия по-прежнему локальная, серверные функции не вызываются клиентом, отдельный server-to-server handler и отдельный Telegram-бот всё ещё отсутствуют. Клиент ни при каких обстоятельствах не должен передавать `outcome`, `trace hash`, `player ID`, `seed` или статы в privileged SQL функции — они поступят от доверенного бэкенда после проверки Telegram HMAC и player authorization.
 - **Значение слова «готово»**: это завершённый проверяемый кирпич для будущего серверного боя, не полная живая PvE-игра. Нельзя включать реальные награды до безопасного backend API и утверждения балансных таблиц.
 - **Безопасность 1.0:** никакие изменения `territory-game-builde` или `wmyrdpbwlkzsktnhookx` не допускаются.
+
+## Фактическое развёртывание в staging 24.10.2026
+
+**Проверено и завершено:** SQL-миграция `territory_v2_private_authoritative_pve_protocol` успешно применена **исключительно** к Supabase проекту `ksikzkrvuuhermhnbycn`. Созданы отдельные `territory_v2.pve_rulebooks` и `territory_v2.pve_combat_records`, индекс, ограничивающий один активный бой, и две private server-only SQL-функции.
+
+Прямой smoke-тест на Supabase: `BEGIN → создание временного игрока/персонажа/правил → первый бой → запрет второго → settlement → повтор прежнего settlement → запрет конфликта результата → проверка ledger=0 → ROLLBACK` прошёл. Контрольное чтение после проверки: `V2 players=0, battles=0, operation_receipts=0, wallet_ledger=0, rulebooks=0`. Публичные роли не имеют права выполнять функции: `anon_start=false`, `authenticated_settle=false`, `server_settle=true`.
+
+`pve_rulebooks` пуст и **ни один боевой ruleset не включён для игроков**. Оба источника результата и настроек остаются на защищённом сервере. Не включать начисления/XP до реализации и отдельного аудита серверной авторизации, утверждённой игровой конфигурации и reward settlement.
+
+**GitHub CI:** [успешная проверка исходников и PGlite](https://github.com/w0980077002-create/territory-next/actions/runs/40081821331).
+
+**Аудит безопасности:** Supabase сообщает информационные `rls_enabled_no_policy` для закрытых V2-таблиц. Это намеренный запрет клиентского доступа в данном этапе; нельзя «исправлять» его созданием публичной политики для экономики. [Объяснение проверки RLS](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy).
