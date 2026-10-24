@@ -56,6 +56,19 @@ const deps={
   enabled,
   allowOrigin:ALLOWED_ORIGIN,
   verify:(initData:string)=>verifyV2TelegramInitData(initData,botToken),
+  // PostgreSQL-backed buckets are shared by all Edge workers. Input user ID
+  // is taken from verified signed initData, never request JSON.
+  enforceRateLimit:async(user:V2VerifiedTelegramUser,action:'profile'|'join')=>{
+    if(!sql)throw new Error('V2_GATEWAY_NOT_CONFIGURED');
+    // Separate route limits; not configured by or disclosed to the browser.
+    const max=action==='join'?4:60;
+    const seconds=action==='join'?3600:600;
+    const rows=await sql`select territory_v2.try_gateway_rate_limit(
+      ${user.telegramUserId.toString()}::bigint,
+      ${action}::text,${max}::integer,${seconds}::integer
+    ) as allowed`;
+    return rows[0]?.allowed===true;
+  },
   getProfile,
   register:async(user:V2VerifiedTelegramUser,classId:'berserker'|'runemage'|'ranger')=>{
     if(!sql)throw new Error('V2_GATEWAY_NOT_CONFIGURED');
