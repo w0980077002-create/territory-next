@@ -10,7 +10,8 @@ export type V2ScreenId =
   | 'hero' | 'warehouse' | 'runes' | 'companions'
   | 'arena' | 'quests' | 'events' | 'friends' | 'rewards'
   | 'clan' | 'professions' | 'games' | 'mail'
-  | 'specialMarket' | 'trials' | 'welcomeBundle' | 'settings';
+  | 'specialMarket' | 'trials' | 'welcomeBundle' | 'settings'
+  | 'invitation' | 'socialRewards' | 'seaBundle' | 'ranking';
 
 export type V2Shortcut = Readonly<{
   id: V2ScreenId;
@@ -32,6 +33,9 @@ export const V2_LEFT_SHORTCUTS = [
   { id: 'events', label: 'События' },
   { id: 'friends', label: 'Друзья' },
   { id: 'rewards', label: 'Награды' },
+  { id: 'invitation', label: 'Приглашение' },
+  { id: 'socialRewards', label: 'Социальные награды' },
+  { id: 'seaBundle', label: 'Морской набор' },
 ] as const satisfies readonly V2Shortcut[];
 
 export const V2_RIGHT_SHORTCUTS = [
@@ -51,6 +55,7 @@ export const V2_EXTRA_MENU = [
   { id: 'games', label: 'Игры' },
   { id: 'mail', label: 'Почта' },
   { id: 'settings', label: 'Настройки' },
+  { id: 'ranking', label: 'Рейтинг' },
 ] as const satisfies readonly V2Shortcut[];
 
 export const V2_BATTLE_HUD = {
