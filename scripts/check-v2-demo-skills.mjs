@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import ts from 'typescript';
+import vm from 'node:vm';
+const load=(path)=>{
+ const source=readFileSync(path,'utf8');
+ const result=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}});
+ const module={exports:{}};
+ vm.runInNewContext(result.outputText,{module,exports:module.exports,console});
+ return module.exports;
+};
+const s=load('src/v2/core/demoSkills.ts'),c=load('src/v2/core/autoBattle.ts');
+assert.equal(s.v2DemoSkillBudget(12),6);
+assert.equal(s.v2DemoSkillBudget(300),25);
+assert.equal(s.v2DemoSkillBudget(-1),0);
+const original=s.createV2DemoSkillState();
+let trained=original;
+for(const id of ['basic','core','control','ultimate','passive','basic'])trained=s.learnV2DemoSkill(trained,id,12);
+assert.equal(s.availableV2DemoSkills(trained,12),0);
+assert.equal(s.learnV2DemoSkill(trained,'core',12),trained);
+assert.equal(s.learnV2DemoSkill(original,'hacker',12),original);
+assert.equal(s.spentV2DemoSkills(original),0);
+assert.equal(s.parseV2DemoSkillState({...trained,levels:{...trained.levels,basic:12}},300),null);
+assert.equal(s.parseV2DemoSkillState(trained,1),null);
+assert.equal(s.parseV2DemoSkillState({...trained,levels:{...trained.levels,extra:1}},300),null);
+const clean=JSON.parse(JSON.stringify(trained));
+assert.equal(s.parseV2DemoSkillState(clean,12).levels.basic,2);
+const cfg=c.encounterForChapter(3,1);
+const skills={basic:5,core:5,control:5,ultimate:5,passive:5};
+let a=c.startPreviewEncounter(cfg),b=c.startPreviewEncounter({...cfg,skills});
+for(let i=0;i<10;i++){a=c.nextPreviewTick(a,.5);b=c.nextPreviewTick(b,.5);}
+assert(b.enemyHp<a.enemyHp,'Training must affect battle damage');
+assert(b.heroHp>=a.heroHp,'Defensive upgrades must help');
+assert.equal(b.stonesSpent,0);
+const app=readFileSync('src/v2/NextApp.tsx','utf8');
+assert(app.includes('learnV2DemoSkill')&&app.includes('skills:demoSkills.levels'));
+assert(!/from ['"].*\/game\/supabase/.test(app));
+console.log('V2: skill points, capped ranks, combat effects, safe offline state OK');

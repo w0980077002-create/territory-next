@@ -16,12 +16,14 @@ const progressURL=asURL(code('src/v2/core/progression.ts'));
 const buildURL=asURL(code('src/v2/core/previewBuilds.ts'));
 const questsURL=asURL(code('src/v2/core/demoQuests.ts'));
 const portURL=asURL(code('src/v2/core/demoPort.ts'));
+const skillsURL=asURL(code('src/v2/core/demoSkills.ts'));
 
 let module=code('src/v2/core/localDemoSave.ts');
 module=module.replace(/from ['"]\.\/progression['"]/, "from '"+progressURL+"'");
 module=module.replace(/from ['"]\.\/previewBuilds['"]/, "from '"+buildURL+"'");
 module=module.replace(/from ['"]\.\/demoQuests['"]/, "from '"+questsURL+"'");
 module=module.replace(/from ['"]\.\/demoPort['"]/, "from '"+portURL+"'");
+module=module.replace(/from ['"]\.\/demoSkills['"]/, "from '"+skillsURL+"'");
 const {
   createV2DemoProgress,
   applyV2DemoVictory,
@@ -74,6 +76,7 @@ const invalid=[
   {...copy,encounterId:-1},
   {...copy,heroClass:'hacker'},
   {...copy,auto:'yes'},
+  {...copy,skills:{version:1,levels:{basic:20,core:0,control:0,ultimate:0,passive:0}}},
   {...copy,progress:{...copy.progress,gold:-1}},
   {...copy,progress:{...copy.progress,gems:1e18}},
   {...copy,progress:{...copy.progress,level:301}},

@@ -14,6 +14,7 @@ import {createDemoBuildSlots,validDemoBuild,type DemoBuildSlot} from './previewB
 import type {HeroClass,RuneKind,CompanionKind} from './autoBattle';
 import {parseV2DemoQuestState,type V2DemoQuestState} from './demoQuests';
 import {parseV2DemoMiningState,type V2DemoMiningState} from './demoPort';
+import {parseV2DemoSkillState,type V2DemoSkillState} from './demoSkills';
 
 export const V2_LOCAL_DEMO_SAVE_KEY='territory-next-v2:offline-demo:v1';
 export const V2_LOCAL_DEMO_SAVE_VERSION=1;
@@ -37,6 +38,7 @@ export type V2LocalDemoSave={
   readonly builds:readonly DemoBuildSlot[];
   readonly quests?:V2DemoQuestState; // optional: older v1 saves retain their progress
   readonly mining?:V2DemoMiningState; // optional: older saves still restore
+  readonly skills?:V2DemoSkillState; // optional: older saves still restore
 };
 const classes=new Set<HeroClass>(['berserker','runemage','ranger']);
 const runes=new Set<RuneKind>(['flame','frost','thunder','guardian']);
@@ -151,6 +153,8 @@ export function decodeV2LocalDemoSave(json:string):V2LocalDemoSave|null {
   if(raw.quests!==undefined&&!quests)return null;
   const mining=raw.mining===undefined?undefined:parseV2DemoMiningState(raw.mining);
   if(raw.mining!==undefined&&!mining)return null;
+  const skills=raw.skills===undefined?undefined:parseV2DemoSkillState(raw.skills,progress.level);
+  if(raw.skills!==undefined&&!skills)return null;
   return {
     version:1,
     savedAt:raw.savedAt as number,
@@ -169,6 +173,7 @@ export function decodeV2LocalDemoSave(json:string):V2LocalDemoSave|null {
     builds,
     ...(quests?{quests}:{}),
     ...(mining?{mining}:{}),
+    ...(skills?{skills}:{}),
   };
 }
 export function encodeV2LocalDemoSave(save:V2LocalDemoSave):string|null{

@@ -28,6 +28,7 @@ export interface CombatConfig {
   readonly boss: boolean;
   readonly rune: RuneKind;
   readonly companion: CompanionKind;
+  readonly skills?: Readonly<{basic:number;core:number;control:number;ultimate:number;passive:number}>;
   readonly speed: 1 | 2;
 }
 
@@ -128,6 +129,7 @@ function incomingDamage(attack: number, defense: number, multiplier = 1): number
 export function nextPreviewTick(state: PreviewCombatState, random: number): PreviewCombatState {
   if (state.finished) return state;
   const { hero, enemy, heroClass, companion, rune, boss } = state.config;
+  const rank=(id:'basic'|'core'|'control'|'ultimate'|'passive')=>round(cap(state.config.skills?.[id]??0,0,5));
   const r = randomUnit(random);
   const tick = state.tick + 1;
   const effects: BattleEffect[] = [];
@@ -150,12 +152,13 @@ export function nextPreviewTick(state: PreviewCombatState, random: number): Prev
   // Hero skill every fourth tick. Different classes interact with different
   // runes; keep cooldown deterministic so players understand the battle.
   const skillReady = tick % 4 === 0 && mana >= 25;
-  let multiplier = 1;
+  let multiplier = 1+rank('basic')*.04;
   if (skillReady && enemyHp > 0) {
     mana -= 25;
-    if (heroClass === 'berserker') multiplier = 1.8;
-    if (heroClass === 'runemage') multiplier = 1.48;
-    if (heroClass === 'ranger') multiplier = 1.58;
+    if (heroClass === 'berserker') multiplier += .8;
+    if (heroClass === 'runemage') multiplier += .48;
+    if (heroClass === 'ranger') multiplier += .58;
+    multiplier += rank('core')*.1;
     if (rune === 'flame') burn = 3;
     if (rune === 'frost') stun = Math.max(stun, 1);
     if (rune === 'thunder') charge = Math.min(3, charge + 1);
@@ -165,6 +168,10 @@ export function nextPreviewTick(state: PreviewCombatState, random: number): Prev
     }
   }
 
+  if(enemyHp>0&&rank('ultimate')>0&&tick%10===0&&mana>=35){
+    mana-=35; multiplier*=1+rank('ultimate')*.2;
+  }
+  if(enemyHp>0&&rank('control')>0&&tick%8===0)stun=Math.max(stun,1);
   if (enemyHp > 0 && r >= enemy.dodgeChance) {
     const critical = r > 1 - hero.critChance;
     const chargeBoost = charge > 0 ? 1 + charge * 0.18 : 1;
@@ -199,7 +206,7 @@ export function nextPreviewTick(state: PreviewCombatState, random: number): Prev
       stun -= 1;
       effects.push({ kind: 'stun', target: 'enemy', amount: 0, caption: 'Оглушён' });
     } else if (r >= hero.dodgeChance) {
-      const resist = companion === 'guardian' ? 0.77 : companion === 'warcow' ? 0.87 : 1;
+      const resist = (companion === 'guardian' ? 0.77 : companion === 'warcow' ? 0.87 : 1)*(1-rank('passive')*.03);
       const bossPhase = boss && enemyHp < enemy.hp / 2 ? 1.15 : 1;
       let damage = incomingDamage(enemy.attack, hero.defense, resist * bossPhase);
       const absorbed = Math.min(shield, damage);

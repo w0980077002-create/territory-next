@@ -8,6 +8,7 @@ import {createV2DemoMiningState,beginV2DemoMining,claimV2DemoMining,cancelV2Demo
 import {createV2DemoQuestState,recordV2DemoQuestVictory,claimV2DemoQuest,type V2DemoQuestId} from './core/demoQuests';
 import { DEMO_START_CHAPTER, DEMO_WAVES_PER_CHAPTER, chooseDemoChapter, nextDemoChapterVictory, demoCombatSample } from './core/campaignFlow';
 import { V2_SKILL_CATEGORIES, type V2SkillCategory } from './core/buildLoadout';
+import {createV2DemoSkillState,learnV2DemoSkill,availableV2DemoSkills,V2_SKILL_TRAINING} from './core/demoSkills';
 import { createDemoBuildSlots, saveDemoBuildSlot, loadDemoBuildSlot } from './core/previewBuilds';
 import {readV2LocalDemoSave,writeV2LocalDemoSave,clearV2LocalDemoSave,v2DemoStorage} from './core/localDemoSave';
 import {
@@ -122,6 +123,7 @@ export function NextApp() {
   const [chapter,setChapter] = useState(offlineSave?.chapter??DEMO_START_CHAPTER);
   const [highestUnlockedChapter,setHighestUnlockedChapter] = useState(offlineSave?.highestUnlockedChapter??DEMO_START_CHAPTER);
   const [skillCategory,setSkillCategory] = useState<V2SkillCategory>('core');
+  const [demoSkills,setDemoSkills] = useState(()=>offlineSave?.skills??createV2DemoSkillState());
   const [demoBuilds,setDemoBuilds] = useState(()=>offlineSave?.builds??createDemoBuildSlots(3));
   const [buildNotice,setBuildNotice] = useState('');
   const settledDemoEncounters = useRef<Set<number>>(new Set(offlineSave?.progress.receipts.map(id=>Number(id.replace('v2-demo-encounter-','')))??[]));
@@ -144,8 +146,8 @@ export function NextApp() {
   const config = useMemo(() => ({
     ...encounterForChapter(chapter,wave,heroClass),
     hero: {level:progress.level,...heroStats},
-    rune,companion,speed:1 as const
-  }),[chapter,wave,heroClass,rune,companion,progress.level,heroStats]);
+    rune,companion,skills:demoSkills.levels,speed:1 as const
+  }),[chapter,wave,heroClass,rune,companion,demoSkills,progress.level,heroStats]);
   const [battle,setBattle] = useState(() => startPreviewEncounter(config));
 
   useEffect(()=>{setBattle(startPreviewEncounter(config));},[config]);
@@ -157,11 +159,11 @@ export function NextApp() {
       v2DemoStorage(),
       {version:1,savedAt:Date.now(),chapter,wave,highestUnlockedChapter,
        encounterId,heroClass,rune,companion,speed,auto,victories,defeats,
-       progress,builds:demoBuilds,quests:questState,mining:miningState}
+       progress,builds:demoBuilds,quests:questState,mining:miningState,skills:demoSkills}
     );
     setSaveStatus(ok?'local':'memory');
   },[chapter,wave,highestUnlockedChapter,encounterId,heroClass,rune,
-     companion,speed,auto,victories,defeats,progress,demoBuilds,questState,miningState]);
+     companion,speed,auto,victories,defeats,progress,demoBuilds,questState,miningState,demoSkills]);
   useEffect(()=>{
     if(!auto || battle.finished) return;
     const interval = window.setInterval(()=>{
@@ -365,11 +367,20 @@ export function NextApp() {
               {V2_SKILL_CATEGORIES.map(id=><button key={id} type="button" className={skillCategory===id?'chosen':''} onClick={()=>setSkillCategory(id)}>{skillCategories[id].label}</button>)}
             </div>
             <div className="v2-skill-detail">
-              <strong>{skillCategories[skillCategory].label}</strong>
+              <strong>Очки навыков: {availableV2DemoSkills(demoSkills,progress.level)} · демо-баланс (+1 каждые 2 уровня)</strong>
               <p>{skillCategories[skillCategory].desc}</p>
-              {skillCategory==='core'
-                ? <><span className="v2-preview-chip">ДЕМО · руна: {runeOptions.find(x=>x.id===rune)?.name}</span><button className="v2-cta" type="button" onClick={()=>open('runes')}>Настроить руну основной атаки</button></>
-                : <p className="v2-preview-chip">Система категории подтверждена для региональной игры; слоты, уровни и численные эффекты в TERRITORY ещё не настроены.</p>}
+              <div className="v2-choice chosen" aria-live="polite">
+                <b>{V2_SKILL_TRAINING[skillCategory].icon} {V2_SKILL_TRAINING[skillCategory].name}</b>
+                <span>{V2_SKILL_TRAINING[skillCategory].description}</span>
+                <em>Уровень {demoSkills.levels[skillCategory]}/5</em>
+              </div>
+              <button className="v2-cta" type="button"
+                disabled={demoSkills.levels[skillCategory]>=5||availableV2DemoSkills(demoSkills,progress.level)===0}
+                onClick={()=>setDemoSkills(s=>learnV2DemoSkill(s,skillCategory,progress.level))}>
+                {demoSkills.levels[skillCategory]>=5?'Навык прокачан':'Улучшить навык · 1 очко'}
+              </button>
+              {skillCategory==='core'&&<button className="v2-cta" type="button" onClick={()=>open('runes')}>Изменить руну навыка</button>}
+              <p className="v2-preview-chip">Навыки действительно влияют на автобой и хранятся только в локальной демоверсии. Это тестовые значения, не настоящие начисления.</p>
             </div>
           </>}
           {overlay==='runes'&&<>
