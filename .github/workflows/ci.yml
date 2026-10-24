@@ -30,6 +30,8 @@ jobs:
         run: npm run typecheck
       - name: V2 isolated UI and combat checks
         run: npm run test:v2
+      - name: Live staging Edge HTTP smoke (read-only, no credentials)
+        run: node scripts/check-v2-edge-health.mjs
       - name: Build against fake offline endpoint only
         env:
           VITE_SUPABASE_URL: https://offline-territory-v2-test.supabase.co
