@@ -13,6 +13,7 @@ import {
 import './next.css';
 import './navigation.css';
 import './approved-ui.css';
+import './sunlit-reference-polish.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
@@ -116,7 +117,7 @@ export function NextApp() {
   const [wave,setWave] = useState(2);
   const [heroClass,setHeroClass] = useState<HeroClass>('berserker');
   const [rune,setRune] = useState<RuneKind>('flame');
-  const [companion,setCompanion] = useState<CompanionKind>('guardian');
+  const [companion,setCompanion] = useState<CompanionKind>('warcow');
   const [overlay,setOverlay] = useState<Overlay>(null);
   const [speed,setSpeed] = useState<1|2>(1);
   const [auto,setAuto] = useState(true);
@@ -183,7 +184,7 @@ export function NextApp() {
   const open = (id: V2ScreenId | 'menu')=>id==='expedition'?(setOverlay(null),setAuto(true)):setOverlay(id);
 
   return <div className="v2-shell">
-    <div className="v2-prelabel">TERRITORY 2.0 <span>DEMO</span></div>
+    <div className="v2-prelabel" aria-label="Режим проверки">TERRITORY 2.0 <span>DEMO</span></div>
     <header className="v2-header">
       <button className="v2-profile" type="button" onClick={()=>open('hero')}>
         <img src={altHeroAssets[heroClass]} alt="" />
@@ -210,7 +211,7 @@ export function NextApp() {
         </div>
         <strong>[Глава {chapter}] Северные земли</strong>
         <small>{chapter}-{wave} · {wave===DEMO_WAVES_PER_CHAPTER?'Босс: ':''}{config.enemyName}</small>
-        <button className="v2-stage-enter" type="button" onClick={()=>setAuto(true)} aria-label="Войти в текущий этап">{auto?'В бою':'Войти'}</button>
+        <button className="v2-stage-enter" type="button" onClick={()=>setAuto(true)} aria-label="Войти в текущий этап"><span className="v2-portal-spark" aria-hidden="true"/><span>Войти</span></button>
       </div>
       <div className="v2-left-buttons">
         {V2_LEFT_SHORTCUTS.map(x=><Shortcut key={x.id} {...x} onClick={()=>open(x.id)}/>)}
@@ -264,16 +265,19 @@ export function NextApp() {
         <strong>Задание главы</strong><span>Победи {wave===5?'босса':'врагов'}</span>
         <small>{progress.wins} побед · {progress.bosses} боссов · 🎒 {progress.inventory.length}</small>
       </button>
-      <button className="v2-control" type="button" onClick={()=>setSpeed(s=>s===1?2:1)} aria-label="Скорость">×{speed}</button>
-      <button className={'v2-control repeat'+(auto?' active':'')} type="button" onClick={()=>setAuto(a=>!a)} aria-label={auto?'Остановить автобой':'Начать автобой'}>⟳</button>
-      <button className="v2-control" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('ic-trophy.webp')} alt=""/></button>
+      <span className="v2-command-spacer" aria-hidden="true"/>
+      <div className="v2-command-actions">
+        <button className="v2-control" type="button" onClick={()=>setSpeed(s=>s===1?2:1)} aria-label="Скорость">×{speed}</button>
+        <button className={'v2-control repeat'+(auto?' active':'')} type="button" onClick={()=>setAuto(a=>!a)} aria-label={auto?'Остановить автобой':'Начать автобой'}>⟳</button>
+        <button className="v2-control" type="button" onClick={()=>open('ranking')} aria-label="Рейтинг"><img className="v2-rank-icon" src={asset('ic-trophy.webp')} alt=""/></button>
+      </div>
     </section>
 
     <nav className="v2-bottom" aria-label="Основная навигация">
       {V2_BOTTOM_NAV.map(({id,label})=><button key={id} onClick={()=>open(id)}
         className={id==='expedition'?'main':''}
         type="button" aria-label={label||'Бой'}>
-        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<small className="v2-nav-demo">ДЕМО</small>}
+        <img src={asset(bottomIcon[id])} alt="" loading="lazy"/>{label?<span>{label}</span>:<><span className="v2-nav-fight">БОЙ</span><small className="v2-nav-demo">ДЕМО</small></>}
       </button>)}
     </nav>
 
