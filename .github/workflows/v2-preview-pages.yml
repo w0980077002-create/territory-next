@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
-      name: github-pages
+      name: v2-owner-preview
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Configure GitHub Pages (owner enabled Pages)
