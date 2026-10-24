@@ -15,7 +15,7 @@ const unchangedGitBlob=(buf)=>createHash('sha1')
 assert.equal(unchangedGitBlob(scene),'cb2964f9582fdd20bcc551ce1aaa98852ba365b3',
   'Current scene changed without owner approval — backgrounds are a separate future stage');
 assert.equal(createHash('sha256').update(reference).digest('hex'),
-  'ab4201e4d5b168d9941b287329c097ec217bd6510af',
+  'ab4201e4d5b168d9941b287329c097ec217bd6510af503e421a957132924384c',
   'Official unique visual reference changed unexpectedly');
 
 assert(app.includes("import './sunlit-reference-polish.css';\nimport './owner-ui-controls.css';"),
