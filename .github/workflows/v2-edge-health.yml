@@ -1,0 +1,28 @@
+name: TERRITORY 2.0 - staging Edge HTTP smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'server/api/**'
+      - 'server/telegram/**'
+      - 'supabase/functions/territory-v2-api/**'
+      - 'scripts/check-v2-edge-health.mjs'
+      - '.github/workflows/v2-edge-health.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  secure-edge-health:
+    name: Check independent V2 Supabase HTTP edge
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify live V2 gateway fail-closed over HTTPS
+        run: node scripts/check-v2-edge-health.mjs
