@@ -4,15 +4,12 @@ import ts from 'typescript';
 const input=readFileSync('src/v2/core/demoPort.ts','utf8');
 const js=ts.transpileModule(input,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
 const {
- V2_DEMO_MINING_DURATION_MS,V2_DEMO_PROFESSION_LEVEL_CAP,
- V2_DEMO_PROFESSION_UNLOCK_BLUE_GEMS,V2_DEMO_RESOURCES,
+ V2_DEMO_MINING_DURATION_MS,V2_DEMO_RESOURCES,
  createV2DemoMiningState,parseV2DemoMiningState,beginV2DemoMining,
  claimV2DemoMining,cancelV2DemoMining,v2DemoMiningSecondsLeft,
 }=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
 const ms=Date.parse('2026-10-24T09:30:00Z');
 assert.equal(V2_DEMO_MINING_DURATION_MS,14400000,'Owner-approved one extraction = four hours');
-assert.equal(V2_DEMO_PROFESSION_LEVEL_CAP,300);
-assert.equal(V2_DEMO_PROFESSION_UNLOCK_BLUE_GEMS,1000);
 assert.equal(V2_DEMO_RESOURCES.length,3,'UI has three DEMO examples, not a promise of profession taxonomy');
 let state=createV2DemoMiningState();
 assert.equal(state.version,1);
@@ -57,17 +54,17 @@ for(const candidate of [
 assert.strictEqual(beginV2DemoMining(state,'gems',ms),state,'no invented currency mining');
 assert.strictEqual(beginV2DemoMining(state,'ore',NaN),state);
 const app=readFileSync('src/v2/NextApp.tsx','utf8');
-assert(app.includes("overlay==='port'||overlay==='professions'"),'Port and professions screens must be live');
+assert(app.includes("overlay==='port'&&<PortExperience"),'Port screen must be accessible');
+assert(!app.includes("open('professions')"),'No profession route');
 assert(app.includes('onClaim={()=>setMiningState(s=>claimV2DemoMining(s,Date.now()))}'));
 assert(app.includes('mining:miningState'),'Mining job must be included in isolated V2 save');
 const save=readFileSync('src/v2/core/localDemoSave.ts','utf8');
 assert(save.includes('parseV2DemoMiningState(raw.mining)'),'must validate data from untrusted localStorage');
 const ui=readFileSync('src/v2/PortExperience.tsx','utf8');
-assert(ui.includes('V2_DEMO_PROFESSION_UNLOCK_BLUE_GEMS'));
-assert(ui.includes('V2_DEMO_PROFESSION_LEVEL_CAP'));
+assert(!/profession|профессии|лицензии мастера/i.test(ui),'Profession content must not return');
 assert(ui.includes('Тестовый таймер'));
 assert(ui.includes('одну добычу')||ui.includes('одна добыча'));
 assert(!/wallet_ledger|apply_wallet_delta|SUPABASE_SERVICE_ROLE_KEY/.test(input+ui));
 assert(!/\.v2-battle\.v2-biome|city-bg|winter-stage/i.test(readFileSync('src/v2/portExperience.css','utf8')),
   'Port UI must never polish or change battle background');
-console.log('OK: four-hour V2 mining, one active, cancel/claim exactly once, immutable job clock, 300 profession cap, no wallet or background writes');
+console.log('OK: four-hour V2 mining, one active, cancel/claim exactly once, immutable job clock, no wallet or background writes');
