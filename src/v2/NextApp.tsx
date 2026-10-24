@@ -27,6 +27,7 @@ const companionArt: Record<CompanionKind, string> = {
   healer: asset('assets/territory/characters/followers/forest_healer/idle.webp'),
   hunter: asset('assets/territory/characters/followers/moon_hunter/idle.webp'),
   mage: asset('assets/territory/characters/followers/rune_mage/idle.webp'),
+  warcow: asset('assets/territory/v2/followers/battle-cow.svg'),
 };
 const enemies = [
   asset('assets/territory/characters/enemies/wolf/idle.webp'),
@@ -58,6 +59,7 @@ const followerOptions: {id:CompanionKind; name:string; desc:string}[] = [
   {id:'healer',name:'Хранитель леса',desc:'Восстанавливает HP'},
   {id:'hunter',name:'Лунный охотник',desc:'Поддерживает атаки'},
   {id:'mage',name:'Маг рун',desc:'Наносит дополнительный урон'},
+  {id:'warcow',name:'Боевая корова',desc:'Броня, защита и мощная атака рогами'},
 ];
 const classes: {id:HeroClass; name:string; desc:string}[] = [
   {id:'berserker',name:'Берсерк',desc:'Мощный ближний бой'},
@@ -179,7 +181,7 @@ export function NextApp() {
       <div className={'v2-combatants'+(!auto?' paused':'')}>
         <div className="v2-follow">
           <img src={companionArt[companion]} alt="Спутник"/>
-          <span className="v2-cow-motif" aria-label="Будущая боевая корова">🐂</span>
+
         </div>
         <div className="v2-warrior">
           <img src={altHeroAssets[heroClass]} alt="Викинг"/>
@@ -260,7 +262,7 @@ export function NextApp() {
           {overlay==='companions'&&<>
             <p>Выбран один активный спутник. Его роль изменяет бой.</p>
             <div className="v2-comp-list">{followerOptions.map(x=><button key={x.id} onClick={()=>setCompanion(x.id)} className={companion===x.id?'chosen':''}><img src={companionArt[x.id]} alt=""/><span><b>{x.name}</b><small>{x.desc}</small></span>{companion===x.id&&<strong>✓</strong>}</button>)}</div>
-            <div className="v2-cow-preview"><span>🐂</span><div><strong>Боевая корова</strong><p>Наш будущий особенный спутник. Для финальной версии понадобится отдельный взрослый боевой арт, без детского стиля.</p></div></div>
+            <div className="v2-cow-preview"><img src={companionArt.warcow} alt="Боевая корова в доспехах" className="v2-cow-sprite"/><div><strong>Боевая корова</strong><p>Особенный шестой спутник! Таранит врагов и частично защищает героя. Авторский первый векторный арт — ещё будем совершенствовать перед выпуском.</p><button type="button" className="v2-cow-select" onClick={()=>setCompanion('warcow')}>Выбрать боевую корову</button></div></div>
           </>}
           {overlay==='adventure'&&<>
             <p>Главы приключений · выбирай этап для демонстрационного похода.</p>
