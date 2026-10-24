@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { encounterForChapter, nextPreviewTick, startPreviewEncounter, type HeroClass, type RuneKind, type CompanionKind } from './core/autoBattle';
 import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, type V2ScreenId } from './interfaceContract';
+import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
+import {
+  createV2DemoProgress,applyV2DemoVictory,statsFromV2Progress,nextXp,
+  equipV2Item,unequipV2Item,salvageV2Item,upgradeV2Equipped,
+  V2_GEAR_SLOTS,type V2Progression,
+} from './core/progression';
 import './next.css';
 
 /**
@@ -63,12 +69,6 @@ type Overlay = V2ScreenId | 'menu' | null;
 function DemoNote() {
   return <div className="v2-demo-note">ТЕСТОВАЯ ВЕРСИЯ · Сохранения игроков и реальные валюты не подключены</div>;
 }
-function GearCard({id,name,onClick}: {id:string;name:string;onClick:()=>void}) {
-  return <button type="button" className={'v2-gear v2-gear-'+id} onClick={onClick} aria-label={name}>
-    <img src={asset('item-'+id+'.webp')} alt="" loading="lazy"/>
-    <small>85</small>
-  </button>;
-}
 function Shortcut({id,label,onClick}: {id:string;label:string;onClick:()=>void}) {
   return <button className="v2-shortcut" type="button" onClick={onClick} title={label}>
     <b aria-hidden="true">{shortcutIcon[id] ?? '✦'}</b><span>{label}</span>
@@ -90,10 +90,14 @@ export function NextApp() {
   const [victories,setVictories] = useState(0);
   const [defeats,setDefeats] = useState(0);
   const [notice,setNotice] = useState('');
-
+  const [progress,setProgress] = useState<V2Progression>(createV2DemoProgress);
+  const [encounterId,setEncounterId] = useState(1);
+  const heroStats = useMemo(()=>statsFromV2Progress(progress),[progress]);
   const config = useMemo(() => ({
-    ...encounterForChapter(chapter,wave,heroClass),rune,companion,speed:1 as const
-  }),[chapter,wave,heroClass,rune,companion]);
+    ...encounterForChapter(chapter,wave,heroClass),
+    hero: {level:progress.level,...heroStats},
+    rune,companion,speed:1 as const
+  }),[chapter,wave,heroClass,rune,companion,progress.level,heroStats]);
   const [battle,setBattle] = useState(() => startPreviewEncounter(config));
 
   useEffect(()=>{setBattle(startPreviewEncounter(config));},[config]);
@@ -111,6 +115,12 @@ export function NextApp() {
     setNotice(status==='victory'?'Победа! Следующая волна':'Герой восстанавливается');
     const timeout=window.setTimeout(()=>{
       if(status==='victory'){
+        // Local demo receipts are unique per encounter. Replaying an effect
+        // can never mint twice; real economy needs server-generated receipts.
+        setProgress(p=>applyV2DemoVictory(
+          p,'v2-demo-encounter-'+encounterId,chapter,wave,
+          ((encounterId*531+chapter*73+wave*17)%997)/997
+        ));
         setVictories(v=>v+1);
         if(wave===5){setChapter(c=>c+1);setWave(1);}
         else setWave(w=>w+1);
@@ -118,16 +128,18 @@ export function NextApp() {
         setDefeats(v=>v+1);
         setBattle(startPreviewEncounter(config));
       }
+      setEncounterId(x=>x+1);
       setNotice('');
     },1350);
     return ()=>window.clearTimeout(timeout);
-  },[battle.finished,config,wave]);
+  },[battle.finished,config,wave,chapter,encounterId]);
 
   const heroHpPct=Math.max(0,100*battle.heroHp/config.hero.hp);
   const enemyHpPct=Math.max(0,100*battle.enemyHp/config.enemy.hp);
   const energyPct=Math.max(0,100*battle.mana/battle.maxMana);
   const latestHit = [...battle.events].reverse().find(e=>e.target==='enemy' && e.amount>0);
   const chapterPercent=(wave-1)*20+(1-enemyHpPct/100)*20;
+  const xpPct=progress.level>=300?100:Math.min(100,progress.xp/nextXp(progress.level)*100);
   const routeTitle:Record<string,string>={port:'Порт',skills:'Навыки',expedition:'Поход',adventure:'Приключение',shop:'Магазин',hero:'Герой',warehouse:'Склад',runes:'Руны',companions:'Последователи',arena:'Арена',quests:'Задания',events:'События',friends:'Друзья',rewards:'Награды',clan:'Клан',professions:'Профессии',games:'Игровой зал',mail:'Почта',specialMarket:'Рынок',trials:'Испытания',welcomeBundle:'Наборы',settings:'Настройки',menu:'Меню'};
   const open = (id: V2ScreenId | 'menu')=>id==='expedition'?(setOverlay(null),setAuto(true)):setOverlay(id);
 
@@ -136,16 +148,17 @@ export function NextApp() {
     <header className="v2-header">
       <button className="v2-profile" type="button" onClick={()=>open('hero')}>
         <img src={altHeroAssets[heroClass]} alt="" />
-        <span className="v2-level-badge">{config.hero.level}</span>
+        <span className="v2-level-badge">{progress.level}</span>
       </button>
       <div className="v2-identity">
-        <strong>Викинг <i>VIP 5</i></strong>
+        <strong>Викинг <i>VIP 5 · DEMO</i></strong>
         <small>⚔ Сила {Math.round(config.hero.attack*87).toLocaleString('ru-RU')}</small>
+        <span className="v2-experience-line" title={progress.xp+' / '+nextXp(progress.level)+' XP'}><span style={{width:xpPct+'%'}}/></span>
       </div>
       <div className="v2-wallet" aria-label="Пример игровых валют">
-        <div><img src={asset('gold-coin.webp')} alt=""/>12,4M</div>
-        <div><img src={asset('blue-gem.webp')} alt=""/>3 280</div>
-        <div><img src={asset('red-gem.webp')} alt=""/>850</div>
+        <div><img src={asset('gold-coin.webp')} alt=""/>{progress.gold.toLocaleString('ru-RU')}</div>
+        <div><img src={asset('blue-gem.webp')} alt=""/>{progress.gems.toLocaleString('ru-RU')}</div>
+        <div><img src={asset('red-gem.webp')} alt=""/>{progress.redGems.toLocaleString('ru-RU')}</div>
       </div>
     </header>
 
@@ -187,7 +200,7 @@ export function NextApp() {
     <section className="v2-healthrow" aria-label="Здоровье и энергия">
       <div className="v2-orb hp"><b>HP</b></div>
       <div className="v2-hp-wrap">
-        <span className="v2-lvl">{config.hero.level}</span>
+        <span className="v2-lvl">{progress.level}</span>
         <div className="v2-hp-bar"><div style={{width:heroHpPct+'%'}}/><strong>{battle.heroHp.toLocaleString('ru-RU')} / {config.hero.hp.toLocaleString('ru-RU')}</strong></div>
       </div>
       <button className="v2-hud-stat" onClick={()=>open('hero')} aria-label="Характеристики">▥</button>
@@ -197,13 +210,13 @@ export function NextApp() {
     </section>
 
     <section className="v2-equipment" aria-label="Экипировка">
-      {gear.map(([id,name])=><GearCard id={id} name={name} onClick={()=>open('hero')} key={id}/>)}
+      {V2_GEAR_SLOTS.map(slot=><EquipmentSlot key={slot} slot={slot} item={progress.equipped[slot]} onClick={()=>open('hero')}/>)}
     </section>
 
     <section className="v2-commands">
       <button className="v2-task" onClick={()=>open('quests')}>
         <strong>Задание главы</strong><span>Победи {wave===5?'босса':'врагов'}</span>
-        <small>{victories} побед · {defeats} поражений</small>
+        <small>{progress.wins} побед · {progress.bosses} боссов · 🎒 {progress.inventory.length}</small>
       </button>
       <button className="v2-control" type="button" onClick={()=>setSpeed(s=>s===1?2:1)} aria-label="Скорость">×{speed}</button>
       <button className={'v2-control repeat'+(auto?' active':'')} type="button" onClick={()=>setAuto(a=>!a)} aria-label={auto?'Остановить автобой':'Начать автобой'}>⟳</button>
@@ -225,14 +238,16 @@ export function NextApp() {
           {(overlay==='menu'||overlay==='port')&&<div className="v2-tilegrid">
             {(overlay==='menu'?V2_EXTRA_MENU:[...V2_EXTRA_MENU.slice(0,4),{id:'adventure',label:'Приключение'},{id:'arena',label:'Арена'},{id:'games',label:'Игры'},{id:'professions',label:'Профессии'}]).map(x=><ViewTile key={x.id} name={x.label} icon={shortcutIcon[x.id]??'✦'} onClick={()=>open(x.id as V2ScreenId)}/>)}
           </div>}
-          {(overlay==='hero'||overlay==='warehouse')&&<>
-            <div className="v2-hero-review"><img src={altHeroAssets[heroClass]} alt="Герой"/><div><strong>Викинг · Ур. {config.hero.level}</strong><p>❤️ {config.hero.hp} HP</p><p>⚔ {config.hero.attack} атака</p><p>🛡 {config.hero.defense} защита</p></div></div>
-            <div className="v2-hero-tabs">
-              {(['hero','warehouse','runes','companions'] as const).map(x=><button key={x} onClick={()=>open(x)} className={overlay===x?'selected':''}>{routeTitle[x]}</button>)}
-            </div>
-            <div className="v2-inventory-grid">{gear.map(([id,name])=><div key={id}><img src={asset('item-'+id+'.webp')} alt={name}/><span>{name} +0</span></div>)}</div>
-            <p className="v2-explain">Предметы демонстрационные. Реальный склад и сравнение вещей подключу к отдельному игровому серверу.</p>
-          </>}
+          {(overlay==='hero'||overlay==='warehouse')&&<InventoryExperience
+            view={overlay}
+            progress={progress}
+            heroArt={altHeroAssets[heroClass]}
+            onView={open}
+            onEquip={id=>setProgress(p=>equipV2Item(p,id))}
+            onUnequip={slot=>setProgress(p=>unequipV2Item(p,slot))}
+            onUpgrade={slot=>setProgress(p=>upgradeV2Equipped(p,slot))}
+            onSalvage={id=>setProgress(p=>salvageV2Item(p,id))}
+          />}
           {overlay==='skills'&&<>
             <h3>Выбор класса</h3>
             {classes.map(x=><button className={'v2-choice'+(heroClass===x.id?' chosen':'')} key={x.id} onClick={()=>setHeroClass(x.id)}><b>{x.name}</b><span>{x.desc}</span>{heroClass===x.id&&<em>Активен</em>}</button>)}
@@ -251,7 +266,14 @@ export function NextApp() {
             <p>Главы приключений · выбирай этап для демонстрационного похода.</p>
             <div className="v2-stage-grid">{[1,2,3,4,5,6,7,8,9,10,11,12].map(x=><button className={chapter===x?'chosen':''} key={x} onClick={()=>{setChapter(x);setWave(1);setOverlay(null);setAuto(true);}}>Глава {x}<small>{x%3===0?'Ледяные земли':x%2===0?'Дремучие леса':'Зелёные долины'}</small></button>)}</div>
           </>}
-          {overlay==='quests'&&<><h3>Боевые задания</h3><div className="v2-info-row">Победы в демонстрационном походе <b>{victories}</b></div><div className="v2-info-row">Побеждённые боссы <b>{Math.floor(victories/5)}</b></div><div className="v2-info-row">Камни за обычного врага <b>0</b></div></>}
+          {overlay==='quests'&&<><h3>Боевые задания</h3><div className="v2-info-row">Победы в демонстрационном походе <b>{progress.wins}</b></div><div className="v2-info-row">Побеждённые боссы <b>{progress.bosses}</b></div><div className="v2-info-row">Камни за обычного врага <b>0</b></div><div className="v2-info-row">Опыт героя <b>{progress.xp}/{nextXp(progress.level)}</b></div>
+            {progress.latestLoot&&<div className="v2-quest-loot">
+              <h3>Последняя добыча</h3>
+              <p>🪙 +{progress.latestLoot.gold} · ⭐ +{progress.latestLoot.xp} XP · ⚒ +{progress.latestLoot.materials}</p>
+              <strong>{progress.latestLoot.item?'🎒 '+progress.latestLoot.item.name:'Без предмета'}</strong>
+              <button className="v2-cta" type="button" onClick={()=>open('warehouse')}>Посмотреть склад</button>
+            </div>}
+          </>}
           {overlay==='arena'&&<><p>Арена TERRITORY 2.0: PvP-чат во время боя, снаряжение, эликсиры, сезоны и 30 минут переписки после боя.</p><p>Пока доступен только интерфейс. Настоящие PvP-матчи требуют отдельного сервера.</p></>}
           {['shop','specialMarket','welcomeBundle','trials','events','rewards','friends','clan','professions','games','mail','settings'].includes(overlay)&&<div className="v2-feature-cards">
             <p>Раздел «{routeTitle[overlay]}» входит в нашу структуру TERRITORY 2.0.</p><p>Исходные механики уже перенесены в новый репозиторий. Здесь будет их обновлённый интерфейс после интеграции с тестовой базой.</p>
