@@ -1,0 +1,429 @@
+{
+  "title": "TERRITORY 2.0 verified reference mechanics",
+  "asOf": "2026-10-24",
+  "visualReference": "docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg",
+  "notice": "Research metadata, not server economy configuration. Unknown coefficients must NOT be inferred.",
+  "sources": {
+    "play": "https://play.google.com/store/apps/details?id=com.global.loot",
+    "apple": "https://apps.apple.com/cn/app/%E8%8B%B1%E9%9B%84%E6%B2%A1%E6%9C%89%E9%97%AA/id6740508579",
+    "globalApple": "https://apps.apple.com/ua/app/lootborn-warriors/id6744716171",
+    "guide": "https://www.10100.com/article/47305789",
+    "community": "https://www.taptap.cn/moment/665631454645981142",
+    "guide2": "https://ykmys.com/guide?lang=en",
+    "patch": "https://www.taptap.cn/moment/686315198453124818",
+    "friend": "https://m.ali213.net/news/gl2503/1625803.html",
+    "cChannel": "https://t.me/s/COC_Web3_News/51",
+    "cIntro": "https://t.me/s/COC_Web3_News/7",
+    "cArchive": "https://tgtop.org/tg/coc_web3_news",
+    "cWhite": "https://doc.cocweb3.xyz/",
+    "shutdown": "https://telemetr.me/content/COC_Web3_News",
+    "reddit": "https://www.reddit.com/r/BeerMoneyGameGuides/comments/1ly1bfo"
+  },
+  "features": [
+    {
+      "id": "LW-01",
+      "game": "lootborn-global",
+      "system": "vertical-idle-battle",
+      "evidence": "official",
+      "source": "play",
+      "title": "Вертикальный автономный RPG-бой",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-02",
+      "game": "lootborn-cn",
+      "system": "campaign-auto-loot",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Сюжетные PvE-этапы и автодобыча",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-03",
+      "game": "lootborn-global",
+      "system": "classes-melee-magic-ranged",
+      "evidence": "official",
+      "source": "play",
+      "title": "Ближний, магический и стрелковый классы",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-04",
+      "game": "lootborn-global",
+      "system": "runes-skills-sets-builds",
+      "evidence": "official",
+      "source": "globalApple",
+      "title": "Сборки из рун, умений и комплектов",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-05",
+      "game": "lootborn-global",
+      "system": "counterbuild-pvp",
+      "evidence": "official",
+      "source": "play",
+      "title": "PvP и контр-сборки",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-06",
+      "game": "lootborn-global",
+      "system": "sidekick-active-aura",
+      "evidence": "official",
+      "source": "play",
+      "title": "Спутники и усиливающие ауры",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-07",
+      "game": "lootborn-global",
+      "system": "pve-dungeons",
+      "evidence": "official",
+      "source": "play",
+      "title": "Подземелья и фарм врагов",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-08",
+      "game": "lootborn-global",
+      "system": "multiphase-boss",
+      "evidence": "official",
+      "source": "play",
+      "title": "Многофазные боссы",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-09",
+      "game": "lootborn-cn",
+      "system": "skill-groups-five",
+      "evidence": "secondary",
+      "source": "guide",
+      "title": "Пять категорий навыков",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-10",
+      "game": "lootborn-cn",
+      "system": "companion-primary-support",
+      "evidence": "secondary",
+      "source": "friend",
+      "title": "Основной и поддерживающие спутники",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-11",
+      "game": "lootborn-cn",
+      "system": "companion-talent-reroll",
+      "evidence": "secondary",
+      "source": "friend",
+      "title": "Таланты и улучшение спутников",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-12",
+      "game": "lootborn-cn",
+      "system": "class-switching",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Смена классов (CN 1.4.0)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-13",
+      "game": "lootborn-cn",
+      "system": "ranger-class",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Следопыт (CN 1.6.7)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-14",
+      "game": "lootborn-cn",
+      "system": "dark-energy-gear-sets",
+      "evidence": "secondary",
+      "source": "guide2",
+      "title": "Тёмное снаряжение, наборы и характеристики",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-15",
+      "game": "lootborn-cn",
+      "system": "enchantments-and-seasonal-talent",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Гравировки и сезонные таланты (CN 1.6.2)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-16",
+      "game": "lootborn-cn",
+      "system": "high-end-seasonal-dungeons",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Сезонные, трудные и бесконечные подземелья",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-17",
+      "game": "lootborn-cn",
+      "system": "artifact-awakening",
+      "evidence": "official",
+      "source": "patch",
+      "title": "Пробуждение и ранги артефактов",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-18",
+      "game": "lootborn-cn",
+      "system": "companion-combat-rotation",
+      "evidence": "official",
+      "source": "patch",
+      "title": "Ротация спутников после ухода основного",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-19",
+      "game": "lootborn-cn",
+      "system": "guild-war",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Гильдейские войны (CN)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-20",
+      "game": "lootborn-cn",
+      "system": "group-trials",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Командные испытания (CN)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-21",
+      "game": "lootborn-cn",
+      "system": "mining-resources-auto-collection",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Шахты и авто-сбор ресурсов",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-22",
+      "game": "lootborn-cn",
+      "system": "character-cosmetics-wings-mounts",
+      "evidence": "official",
+      "source": "apple",
+      "title": "Облики, крылья, маунты (CN)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-23",
+      "game": "lootborn-cn",
+      "system": "weekly-dice-event",
+      "evidence": "official",
+      "source": "patch",
+      "title": "Событие с бросанием кубика",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "LW-24",
+      "game": "lootborn-player",
+      "system": "manual-loot-interruptions",
+      "evidence": "secondary",
+      "source": "reddit",
+      "title": "Сообщение игрока о паузах фарма для предметов",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-01",
+      "game": "coc",
+      "system": "telegram-miniapprpg",
+      "evidence": "official-channel",
+      "source": "cIntro",
+      "title": "Telegram викингский автобой",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-02",
+      "game": "coc",
+      "system": "staged-main-campaign",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Главы и уровневое продвижение",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-03",
+      "game": "coc",
+      "system": "gauntlets-chain-slots",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Новые слоты перчаток и цепи (v3.0)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-04",
+      "game": "coc",
+      "system": "dark-energy-sets",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Тёмные комплекты Ancient / Primal (v3.1)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-05",
+      "game": "coc",
+      "system": "chaos-ranch-floor-progression",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Многоэтажное Chaos Ranch (v3.3)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-06",
+      "game": "coc",
+      "system": "level-locked-referral",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Рефералы с условием уровня 10 (v3.3)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-07",
+      "game": "coc",
+      "system": "monopoly-event",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Событие с бросанием кубиков Monopoly",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-08",
+      "game": "coc",
+      "system": "weekly-redemption-gift-codes",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Еженедельные промокоды в профиле",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-09",
+      "game": "coc",
+      "system": "inbox-rewards-and-compensation",
+      "evidence": "official-channel",
+      "source": "cChannel",
+      "title": "Игровая почта и компенсационные подарки",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-10",
+      "game": "coc",
+      "system": "leaderboards-and-72h-event",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Рейтинги, награды и 72-часовой стартовый ивент",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-11",
+      "game": "coc",
+      "system": "arena-and-server-ranking",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Арена и отдельные серверные рейтинги",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-12",
+      "game": "coc",
+      "system": "pet-progression",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Прокачка питомцев (v3.0–3.1)",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-13",
+      "game": "coc",
+      "system": "sailing-mining-ships",
+      "evidence": "official-channel",
+      "source": "cIntro",
+      "title": "Розыгрыши по корабельным рейсам",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-14",
+      "game": "coc",
+      "system": "plunder-mining-battle-stones",
+      "evidence": "official-channel",
+      "source": "cIntro",
+      "title": "Отдельная добыча участием боевыми камнями",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-15",
+      "game": "coc",
+      "system": "black-market-stones",
+      "evidence": "official-channel",
+      "source": "cChannel",
+      "title": "Обмен валют на боевые камни",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-16",
+      "game": "coc",
+      "system": "ad-reward-flying-dragon",
+      "evidence": "official-channel",
+      "source": "cChannel",
+      "title": "Рекламные награды за драконов",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-17",
+      "game": "coc",
+      "system": "level-fund-cosmetics",
+      "evidence": "official-channel",
+      "source": "cArchive",
+      "title": "Фонды уровней, косметика и Lucky Cache",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-18",
+      "game": "coc",
+      "system": "tokenomic-historical",
+      "evidence": "official",
+      "source": "cWhite",
+      "title": "Историческая модель токена и on-chain записей; НЕ правило экономики TERRITORY",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-19",
+      "game": "coc",
+      "system": "official-shutdown",
+      "evidence": "official-channel",
+      "source": "shutdown",
+      "title": "Закрытие серверов 29.09.2026",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-20",
+      "game": "coc",
+      "system": "announced-cross-server-pvp",
+      "evidence": "announcement-only",
+      "source": "cArchive",
+      "title": "Объявленные будущие межсерверные бои; релиз не подтверждён",
+      "implementation": "candidate-not-complete"
+    },
+    {
+      "id": "COC-21",
+      "game": "coc",
+      "system": "announced-guild-feature",
+      "evidence": "announcement-only",
+      "source": "cArchive",
+      "title": "Анонс гильдий; запуск не подтверждён",
+      "implementation": "candidate-not-complete"
+    }
+  ]
+}
