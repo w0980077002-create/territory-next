@@ -135,7 +135,6 @@ create table if not exists territory_v2.battle_sessions (
 create table if not exists territory_v2.mining_jobs (
   id uuid primary key default gen_random_uuid(),
   player_id uuid not null references territory_v2.players(id),
-  profession_code text not null,
   resource_code text not null,
   status text not null check (status in ('running','finished','claimed','cancelled')),
   started_at timestamptz not null default now(),
@@ -143,7 +142,7 @@ create table if not exists territory_v2.mining_jobs (
   claimed_operation_id uuid unique references territory_v2.operation_receipts(operation_id),
   check (finished_at > started_at)
 );
--- Exactly one running legacy mining job per player, enforced by the DB.
+-- Exactly one active V2 port resource collection per player, enforced by the DB.
 create unique index if not exists one_running_mining_job_per_player
   on territory_v2.mining_jobs(player_id) where status='running';
 
