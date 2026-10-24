@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" role="img" aria-label="Взрослая боевая корова в северной броне, мультяшный стиль">
+<defs>
+ <linearGradient id="hide" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#f8f5df"/><stop offset=".48" stop-color="#d6d1bd"/><stop offset="1" stop-color="#878a86"/></linearGradient>
+ <linearGradient id="dark" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#62636e"/><stop offset=".48" stop-color="#272937"/><stop offset="1" stop-color="#171a27"/></linearGradient>
+ <linearGradient id="steel" x1=".1" y1="0" x2="1" y2="1"><stop stop-color="#f9fcfd"/><stop offset=".2" stop-color="#6facc7"/><stop offset=".5" stop-color="#1e4164"/><stop offset=".82" stop-color="#658bad"/><stop offset="1" stop-color="#26324d"/></linearGradient>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2=".8"><stop stop-color="#fff1a6"/><stop offset=".35" stop-color="#edb34f"/><stop offset=".7" stop-color="#9e551b"/><stop offset="1" stop-color="#f5ca69"/></linearGradient>
+ <linearGradient id="horn" x1="0" y1="0" x2=".5" y2="1"><stop stop-color="#f6e9c1"/><stop offset=".7" stop-color="#d5a464"/><stop offset="1" stop-color="#806040"/></linearGradient>
+ <radialGradient id="snout"><stop stop-color="#eebcaa"/><stop offset=".75" stop-color="#bd7b70"/><stop offset="1" stop-color="#84505a"/></radialGradient>
+ <filter id="shadow"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+<ellipse cx="474" cy="796" rx="300" ry="35" fill="#060c1b" opacity=".38" filter="url(#shadow)"/>
+<!-- curled war tail -->
+<path d="M227 484C129 437 125 316 194 301C233 298 246 331 221 348C203 363 179 356 174 339" fill="none" stroke="#414550" stroke-width="38" stroke-linecap="round"/>
+<path d="M167 319C155 285 128 278 113 313C106 347 135 368 160 356Z" fill="#22273a" stroke="#0a1422" stroke-width="9"/>
+<!-- rear legs, strong hooves -->
+<path d="M260 558L240 702L256 768L353 769L363 723L336 550Z" fill="url(#hide)" stroke="#202435" stroke-width="16"/>
+<path d="M232 741L350 732L354 789L230 789L221 774Z" fill="url(#dark)" stroke="#101a2d" stroke-width="12"/>
+<path d="M357 588L339 723L353 778L443 778L450 729L453 585Z" fill="url(#hide)" stroke="#202435" stroke-width="14"/>
+<path d="M338 750L445 746L453 794L332 794Z" fill="url(#dark)" stroke="#111626" stroke-width="11"/>
+<!-- adult powerful torso, cow markings -->
+<path d="M220 374C291 332 460 336 557 365C646 394 675 474 636 553C606 621 474 648 329 616C205 611 158 550 175 470C179 434 188 404 220 374Z" fill="url(#hide)" stroke="#1e2638" stroke-width="19" stroke-linejoin="round"/>
+<path d="M215 408C252 364 313 371 364 409C387 455 337 505 297 513C236 530 199 494 197 461Z" fill="url(#dark)"/>
+<path d="M387 560C425 502 475 501 496 552C501 592 473 607 432 609Z" fill="url(#dark)"/>
+<path d="M526 425C547 385 598 392 618 431C644 485 619 523 582 543C545 528 507 480 526 425Z" fill="url(#dark)"/>
+<!-- metal barding plate -->
+<path d="M251 351C344 322 485 327 553 359L563 507C458 536 357 524 258 497L237 418Z" fill="url(#steel)" stroke="#162f45" stroke-width="17"/>
+<path d="M254 363C349 335 477 335 547 365" fill="none" stroke="#e1f6ff" stroke-width="10" opacity=".8"/>
+<path d="M245 418C348 453 457 459 561 418" fill="none" stroke="#e8c46d" stroke-width="19"/>
+<path d="M248 418C347 450 466 450 561 416" fill="none" stroke="#794726" stroke-width="5"/>
+<!-- decorated plated crest -->
+<path d="M390 347L445 356L483 418L441 486L390 490L349 414Z" fill="url(#gold)" stroke="#3a291f" stroke-width="12"/>
+<path d="M411 376L444 410L423 462L384 420Z" fill="#264b72" stroke="#effbff" stroke-width="6"/>
+<path d="M412 376L412 459" stroke="#d2f9ff" stroke-width="7"/>
+<path d="M383 414L454 413" stroke="#d2f9ff" stroke-width="7"/>
+<!-- front armored legs -->
+<path d="M519 564L509 690L523 768L621 768L639 717L612 555Z" fill="url(#hide)" stroke="#1c2533" stroke-width="17"/>
+<path d="M507 743L623 740L639 797L511 796Z" fill="url(#dark)" stroke="#121b2b" stroke-width="12"/>
+<path d="M610 570L628 699L629 778L724 777L731 716L711 531Z" fill="url(#hide)" stroke="#1f2631" stroke-width="17"/>
+<path d="M624 751L727 748L743 800L622 800Z" fill="url(#dark)" stroke="#121b2b" stroke-width="12"/>
+<!-- shin guards -->
+<path d="M527 644L608 636L617 699L521 709Z" fill="url(#steel)" stroke="#22435d" stroke-width="10"/>
+<path d="M631 639L719 620L729 700L628 711Z" fill="url(#steel)" stroke="#22435d" stroke-width="10"/>
+<path d="M530 661L606 656M633 658L713 639" stroke="#e7c673" stroke-width="7"/>
+<!-- muscular neck with red war scarf -->
+<path d="M546 377C583 321 659 306 721 363C749 415 744 486 700 548C668 582 592 584 562 550L547 502Z" fill="url(#hide)" stroke="#20283c" stroke-width="19"/>
+<path d="M549 393C606 365 659 375 702 418L683 461C640 427 609 427 554 448Z" fill="#8f2539" stroke="#541622" stroke-width="11"/>
+<path d="M598 424L649 449L625 535L571 505Z" fill="#a82d42" stroke="#621623" stroke-width="10"/>
+<path d="M611 437L617 505" stroke="#edb35d" stroke-width="8"/>
+<!-- ears and horns -->
+<path d="M592 291C547 260 507 237 492 188C491 169 506 154 518 175C550 223 584 229 618 232L644 273Z" fill="url(#horn)" stroke="#433a34" stroke-width="13"/>
+<path d="M719 285C777 247 794 191 787 146C800 120 815 142 817 159C839 225 800 288 749 321Z" fill="url(#horn)" stroke="#433a34" stroke-width="13"/>
+<path d="M567 338C535 312 529 283 559 277C596 278 615 311 608 340Z" fill="url(#hide)" stroke="#273243" stroke-width="14"/>
+<path d="M726 311C770 274 785 296 780 320C772 343 749 363 725 353Z" fill="url(#hide)" stroke="#273243" stroke-width="14"/>
+<path d="M567 309L587 327L566 320Z" fill="#b77a7a"/>
+<!-- face -->
+<path d="M597 284C647 252 719 275 760 330C787 369 791 438 759 498C732 544 642 555 589 518C550 481 553 426 563 373C570 336 577 306 597 284Z" fill="url(#hide)" stroke="#20273b" stroke-width="19"/>
+<path d="M585 346C606 307 636 287 671 282C649 343 644 390 612 409L569 392Z" fill="url(#dark)"/>
+<path d="M648 297C681 285 708 303 727 333L703 377L658 364Z" fill="url(#dark)"/>
+<!-- iron helm brow with central gemstone -->
+<path d="M570 310C628 273 711 283 756 335L761 362C701 327 621 333 567 367Z" fill="url(#steel)" stroke="#1f334c" stroke-width="12"/>
+<path d="M591 314C636 292 705 303 738 333" fill="none" stroke="#fff5cc" stroke-width="6"/>
+<path d="M643 300L665 274L690 304L683 351L652 352Z" fill="url(#gold)" stroke="#67401d" stroke-width="9"/>
+<path d="M661 311L670 294L680 313L669 337Z" fill="#68effb" stroke="#e6ffff" stroke-width="5"/>
+<!-- angry but friendly-eyed adult face -->
+<path d="M626 389C643 374 663 376 679 389" fill="none" stroke="#333546" stroke-width="10" stroke-linecap="round"/>
+<ellipse cx="655" cy="402" rx="13" ry="17" fill="#ffefdd" stroke="#263446" stroke-width="5"/>
+<ellipse cx="659" cy="403" rx="7" ry="10" fill="#1e6083"/>
+<circle cx="660" cy="399" r="3.5" fill="#f1fbfa"/>
+<path d="M601 382C619 366 644 365 662 380" fill="none" stroke="#262b3a" stroke-width="11" stroke-linecap="round"/>
+<!-- muzzle with nostrils -->
+<path d="M653 425C703 403 777 414 803 453C821 486 790 528 746 539C694 550 650 533 638 489C633 466 637 437 653 425Z" fill="url(#snout)" stroke="#613c42" stroke-width="15"/>
+<ellipse cx="704" cy="474" rx="12" ry="17" fill="#653d46" transform="rotate(14 704 474)"/>
+<ellipse cx="767" cy="476" rx="12" ry="17" fill="#653d46" transform="rotate(-6 767 476)"/>
+<path d="M708 516C731 530 751 529 768 513" fill="none" stroke="#6a3641" stroke-width="6" stroke-linecap="round"/>
+<ellipse cx="664" cy="477" rx="14" ry="6" fill="#fff1f2" opacity=".42"/>
+<!-- weapon neck plate and runic decoration -->
+<path d="M561 497L589 522L615 518L642 564L601 590L548 560Z" fill="url(#steel)" stroke="#19314b" stroke-width="12"/>
+<path d="M582 528L598 556L572 551Z" fill="url(#gold)"/>
+<path d="M599 551L599 579" stroke="#fdf6bc" stroke-width="7"/>
+<circle cx="264" cy="423" r="12" fill="url(#gold)" stroke="#603c24" stroke-width="4"/>
+<circle cx="534" cy="437" r="12" fill="url(#gold)" stroke="#603c24" stroke-width="4"/>
+</svg>
