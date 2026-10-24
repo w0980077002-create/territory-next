@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { encounterForChapter, nextPreviewTick, startPreviewEncounter, type HeroClass, type RuneKind, type CompanionKind } from './core/autoBattle';
+import { encounterForChapter, type HeroClass, type RuneKind, type CompanionKind } from './core/autoBattle';
+import { nextPreviewTick, startPreviewEncounter } from './core/moduleCombat';
 import { V2_BOTTOM_NAV, V2_LEFT_SHORTCUTS, V2_RIGHT_SHORTCUTS, V2_EXTRA_MENU, type V2ScreenId } from './interfaceContract';
 import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import { QuestExperience } from './QuestExperience';
