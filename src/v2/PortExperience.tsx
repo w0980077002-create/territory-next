@@ -1,7 +1,6 @@
 import {useEffect,useState} from 'react';
 import {
   V2_DEMO_MINING_DURATION_MS,V2_DEMO_RESOURCES,
-  V2_DEMO_PROFESSION_LEVEL_CAP,V2_DEMO_PROFESSION_UNLOCK_BLUE_GEMS,
   v2DemoMiningSecondsLeft,type V2DemoResource,type V2DemoMiningState,
 } from './core/demoPort';
 import './portExperience.css';
@@ -13,11 +12,11 @@ const timeFormat=(seconds:number)=>{
   return [h,m,s].map(n=>String(n).padStart(2,'0')).join(':');
 };
 export function PortExperience({
-  mode,state,blueGems,onBegin,onClaim,onCancel,onWarehouse,onProfessions,
+  state,onBegin,onClaim,onCancel,onWarehouse,
 }:{
-  mode:'port'|'professions';state:V2DemoMiningState;blueGems:number;
+  state:V2DemoMiningState;
   onBegin:(resource:V2DemoResource)=>void;onClaim:()=>void;
-  onCancel:()=>void;onWarehouse:()=>void;onProfessions:()=>void;
+  onCancel:()=>void;onWarehouse:()=>void;
 }){
   const [selected,setSelected]=useState<V2DemoResource>('ore');
   const [now,setNow]=useState(()=>Date.now());
@@ -28,13 +27,12 @@ export function PortExperience({
   const resource=V2_DEMO_RESOURCES.find(x=>x.id===state.job?.resource);
   const remaining=v2DemoMiningSecondsLeft(state,now);
   const done=!!state.job&&remaining===0;
-  const unlockedPreview=blueGems>=V2_DEMO_PROFESSION_UNLOCK_BLUE_GEMS;
   return <div className="v2-port-experience">
     <section className="v2-port-hero">
       <span className="v2-port-sea-crest" aria-hidden="true">⚓</span>
       <div>
-        <strong>{mode==='port'?'Северная гавань':'Мастерство и ремёсла'}</strong>
-        <small>Мастерские, шахты и корабли TERRITORY</small>
+        <strong>Северная гавань</strong>
+        <small>Добыча ресурсов и корабельные маршруты TERRITORY 2.0</small>
       </div>
     </section>
 
@@ -78,24 +76,7 @@ export function PortExperience({
       <small className="v2-port-caution">Тестовый таймер хранится только на этом устройстве. Завершение не добавляет реальных материалов или валюты.</small>
     </section>
 
-    <section className="v2-port-pane" aria-label="Профессии">
-      <h3><span>⚒</span> Профессии</h3>
-      <p>Утверждённые правила TERRITORY: одна добыча, развитие профессии до {V2_DEMO_PROFESSION_LEVEL_CAP}-го уровня, лицензия мастера после достижения предела.</p>
-      <div className="v2-port-requirement">
-        <span>🔷 Открытие профессии</span>
-        <strong>{V2_DEMO_PROFESSION_UNLOCK_BLUE_GEMS.toLocaleString('ru-RU')} синих алмазов</strong>
-      </div>
-      <div className="v2-port-requirement">
-        <span>Баланс демоверсии</span><strong>{blueGems.toLocaleString('ru-RU')} 🔷</strong>
-      </div>
-      <div className="v2-port-status">
-        {unlockedPreview?'Стоимость доступна в демобалансе; реальная покупка пока отключена':
-          'Недостаточно алмазов для открытия. Списание недоступно в деморежиме.'}
-      </div>
-      {mode==='port'&&<button type="button" className="v2-port-secondary" onClick={onProfessions}>Открыть мастерские</button>}
-    </section>
-
-    {mode==='port'&&<section className="v2-port-pane" aria-label="Корабельные экспедиции">
+    <section className="v2-port-pane" aria-label="Корабельные экспедиции">
       <h3><span>⛵</span> Корабельные экспедиции</h3>
       <div className="v2-port-ships">
         <div className="v2-port-ship-icon" aria-hidden="true">⛵</div>
@@ -103,7 +84,7 @@ export function PortExperience({
       </div>
       <div className="v2-port-status">Отправка кораблей станет доступна после подключения отдельного серверного расписания. Время и прибыль не выдумываются.</div>
       <button className="v2-port-secondary" type="button" onClick={onWarehouse}>Посмотреть склад</button>
-    </section>}
-    <p className="v2-port-footer">Демонстрация правил. Профессии, лицензии мастера, добыча и груз будут начисляться только проверенным сервером TERRITORY 2.0.</p>
+    </section>
+    <p className="v2-port-footer">Демонстрационный порт: клиент не начисляет материалы, валюты или корабельный груз. Реальные результаты потребуют отдельного защищённого сервера TERRITORY 2.0.</p>
   </div>;
 }
