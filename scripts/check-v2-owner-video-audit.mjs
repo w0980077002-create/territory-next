@@ -37,4 +37,7 @@ for(const [f,title] of [
 }
 assert(['камни','задания','навыки'].every(x=>spec.toLocaleLowerCase('ru-RU').includes(x)),'Missing major video sections');
 assert(spec.includes('ВНЕШНИЙ ВИД')&&spec.includes('Приоритет'));
+for(const key of ['gold','gems','redGems']) assert(app.includes('formatHudWalletAmount(progress.'+key),'Header amount must remain readable: '+key);
+assert(style.includes('.v2-wallet-amount-short')&&style.includes('@media(max-width:370px)'),
+  'Small-screen compact amounts must not change actual wallet state');
 console.log('OK: screenshot byte-identity, 14 documented visual bugs, V2-only mobile adjustments, 6 real owner video frames in GitHub');

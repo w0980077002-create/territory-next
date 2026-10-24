@@ -113,6 +113,21 @@ const skillCategories: Readonly<Record<V2SkillCategory,{label:string;desc:string
 
 type Overlay = V2ScreenId | 'menu' | null;
 
+/** Compact labels are display-only; precise amounts stay in title/aria-label and the wallet. */
+function formatHudWalletAmount(value:number,narrow=false):string {
+  const amount=Number.isFinite(value)?Math.max(0,Math.floor(value)):0;
+  if(amount<(narrow?1000:100_000))return amount.toLocaleString('ru-RU');
+  const units:ReadonlyArray<readonly [number,string]> = [[1_000_000_000,'B'],[1_000_000,'M'],[1000,'K']];
+  for(const [scale,suffix] of units){
+    if(amount>=scale){
+      const scaled=amount/scale;
+      const decimals=scaled>=100?0:scaled>=10?1:2;
+      const precision=10**decimals;
+      return String(Math.floor(scaled*precision)/precision)+suffix;
+    }
+  }
+  return amount.toLocaleString('ru-RU');
+}
 function DemoNote() {
   return <div className="v2-demo-note">ДЕМО · Прогресс хранится только в браузере этого устройства; реальный аккаунт и валюты не подключены</div>;
 }
@@ -271,9 +286,9 @@ export function NextApp() {
         <span className="v2-experience-line" title={progress.xp+' / '+nextXp(progress.level)+' XP'}><span style={{width:xpPct+'%'}}/></span>
       </div>
       <div className="v2-wallet" aria-label="Демонстрационные валюты">
-        <button type="button" onClick={()=>open('shop')} aria-label="Золото — открыть магазин"><img src={asset('gold-coin.webp')} alt=""/>{progress.gold.toLocaleString('ru-RU')}<b>+</b></button>
-        <button type="button" onClick={()=>open('shop')} aria-label="Синие алмазы — открыть магазин"><img src={asset('blue-gem.webp')} alt=""/>{progress.gems.toLocaleString('ru-RU')}<b>+</b></button>
-        <button type="button" onClick={()=>open('shop')} aria-label="Красные алмазы — открыть магазин"><img src={asset('red-gem.webp')} alt=""/>{progress.redGems.toLocaleString('ru-RU')}<b>+</b></button>
+        <button type="button" onClick={()=>open('shop')} aria-label={`Золото: ${progress.gold.toLocaleString('ru-RU')}. Открыть магазин`} title={`Золото: ${progress.gold.toLocaleString('ru-RU')}`}><img src={asset('gold-coin.webp')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.gold)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.gold,true)}</span><b aria-hidden="true">+</b></button>
+        <button type="button" onClick={()=>open('shop')} aria-label={`Синие алмазы: ${progress.gems.toLocaleString('ru-RU')}. Открыть магазин`} title={`Синие алмазы: ${progress.gems.toLocaleString('ru-RU')}`}><img src={asset('blue-gem.webp')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.gems)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.gems,true)}</span><b aria-hidden="true">+</b></button>
+        <button type="button" onClick={()=>open('shop')} aria-label={`Красные алмазы: ${progress.redGems.toLocaleString('ru-RU')}. Открыть магазин`} title={`Красные алмазы: ${progress.redGems.toLocaleString('ru-RU')}`}><img src={asset('red-gem.webp')} alt=""/><span className="v2-wallet-amount-full">{formatHudWalletAmount(progress.redGems)}</span><span className="v2-wallet-amount-short" aria-hidden="true">{formatHudWalletAmount(progress.redGems,true)}</span><b aria-hidden="true">+</b></button>
       </div>
     </header>
 
