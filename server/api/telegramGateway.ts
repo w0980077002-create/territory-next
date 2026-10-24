@@ -27,6 +27,8 @@ export type GatewayDeps={
   readonly enabled:boolean;
   readonly allowOrigin:string;
   readonly verify:(initData:string)=>Promise<V2VerifiedTelegramUser>;
+  /** Atomic account-based budget, invoked only after authentic HMAC verification. */
+  readonly enforceRateLimit:(user:V2VerifiedTelegramUser,action:'profile'|'join')=>Promise<boolean>;
   readonly getProfile:(user:V2VerifiedTelegramUser)=>Promise<V2GatewaySnapshot>;
   readonly register:(user:V2VerifiedTelegramUser,classId:'berserker'|'runemage'|'ranger')=>Promise<V2GatewaySnapshot>;
 };
@@ -94,6 +96,8 @@ export async function handleV2GatewayRequest(request:Request,deps:GatewayDeps):P
     let user:V2VerifiedTelegramUser;
     try{user=await deps.verify(input.initData);}
     catch{return response({error:'INVALID_TELEGRAM_SIGNATURE'},401,corsOrigin);}
+    if(!(await deps.enforceRateLimit(user,action)))
+      return response({error:'RATE_LIMITED'},429,corsOrigin);
     if(action==='join'){
       const klass=input.classId;
       if(klass!=='berserker'&&klass!=='runemage'&&klass!=='ranger')
