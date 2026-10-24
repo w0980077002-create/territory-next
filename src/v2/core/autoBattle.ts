@@ -7,7 +7,7 @@
  */
 export type HeroClass = 'berserker' | 'runemage' | 'ranger';
 export type RuneKind = 'flame' | 'frost' | 'thunder' | 'guardian';
-export type CompanionKind = 'guardian' | 'warrior' | 'healer' | 'hunter' | 'mage';
+export type CompanionKind = 'guardian' | 'warrior' | 'healer' | 'hunter' | 'mage' | 'warcow';
 export type CombatEventKind = 'attack' | 'crit' | 'block' | 'dodge' | 'burn' | 'stun' | 'heal' | 'shield' | 'follower' | 'defeat' | 'victory';
 export type CombatTarget = 'hero' | 'enemy';
 
@@ -180,8 +180,8 @@ export function nextPreviewTick(state: PreviewCombatState, random: number): Prev
   // Only one ACTIVE follower. Auras and extra support slots must be designed
   // independently and capped before joining a real PvP ruleset.
   if (enemyHp > 0) {
-    if (companion === 'warrior' || companion === 'hunter' || companion === 'mage') {
-      const portion = companion === 'warrior' ? 0.28 : companion === 'hunter' ? 0.2 : 0.22;
+    if (companion === 'warrior' || companion === 'hunter' || companion === 'mage' || (companion === 'warcow' && tick % 3 === 0)) {
+      const portion = companion === 'warrior' ? 0.28 : companion === 'hunter' ? 0.2 : companion === 'warcow' ? 0.26 : 0.22;
       const actual = Math.min(enemyHp, Math.max(1, round(hero.attack * portion)));
       enemyHp -= actual;
       effects.push({ kind: 'follower', target: 'enemy', amount: actual, caption: 'Спутник' });
@@ -199,7 +199,7 @@ export function nextPreviewTick(state: PreviewCombatState, random: number): Prev
       stun -= 1;
       effects.push({ kind: 'stun', target: 'enemy', amount: 0, caption: 'Оглушён' });
     } else if (r >= hero.dodgeChance) {
-      const resist = companion === 'guardian' ? 0.77 : 1;
+      const resist = companion === 'guardian' ? 0.77 : companion === 'warcow' ? 0.87 : 1;
       const bossPhase = boss && enemyHp < enemy.hp / 2 ? 1.15 : 1;
       let damage = incomingDamage(enemy.attack, hero.defense, resist * bossPhase);
       const absorbed = Math.min(shield, damage);
