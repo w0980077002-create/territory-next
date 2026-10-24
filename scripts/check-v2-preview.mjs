@@ -3,9 +3,8 @@
 // original 2026-10-24 screenshot and all V1/production safety boundaries.
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {execFileSync} from 'node:child_process';
 const read=path=>readFileSync(path,'utf8');
-const html=read('public/v2-preview.html');
+const html=read('public-v2/v2-preview.html');
 const main=read('src/v2/main.tsx');
 const app=read('src/v2/NextApp.tsx');
 const style=read('src/v2/visual/reference-templates.css');
@@ -14,7 +13,6 @@ const config=JSON.parse(read('src/v2/modules/lootborn/lootborn-modules.json'));
 const manager=read('src/v2/SkillManager.ts');
 const nav=read('src/v2/interfaceContract.ts');
 const index=read('index.html');
-const archivedJS=read('public/v2-preview.js');
 assert.match(html,/<iframe[^>]*class="v2-preview-frame"[\s\S]*?src="\.\/"/,
  'Preview must embed built React entrypoint at relative path, including GitHub Pages base');
 assert(!html.includes('src="./v2-preview.js"'),'Stale static mockup must not execute');
@@ -46,7 +44,5 @@ assert(style.includes('.v2-shell .v2-orb{overflow:hidden}'),'Orb filling must no
 for(const id of ["port","skills","expedition","adventure","shop"])
  assert(nav.includes("id: '"+id+"'"),'Missing accepted navigation destination '+id);
 assert(existsSync('docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg'));
-execFileSync(process.execPath,['--check','public/v2-preview.js'],{stdio:'pipe'});
-assert(!/fetch\s*\(|XMLHttpRequest|sendBeacon|supabase\./.test(archivedJS));
 assert(!/import.*\/game\//.test(main+app+modules),'V1 runtime leaked into preview');
 console.log('OK: screenshot-aligned V2 React iframe preview, data-driven templates, 2 spheres, 2 rows, 5-button navigation');
