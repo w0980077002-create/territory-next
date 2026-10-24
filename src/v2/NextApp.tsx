@@ -92,8 +92,8 @@ export function NextApp() {
   const [notice,setNotice] = useState('');
 
   const config = useMemo(() => ({
-    ...encounterForChapter(chapter,wave,heroClass),rune,companion,speed
-  }),[chapter,wave,heroClass,rune,companion,speed]);
+    ...encounterForChapter(chapter,wave,heroClass),rune,companion,speed:1 as const
+  }),[chapter,wave,heroClass,rune,companion]);
   const [battle,setBattle] = useState(() => startPreviewEncounter(config));
 
   useEffect(()=>{setBattle(startPreviewEncounter(config));},[config]);
@@ -198,7 +198,6 @@ export function NextApp() {
 
     <section className="v2-equipment" aria-label="Экипировка">
       {gear.map(([id,name])=><GearCard id={id} name={name} onClick={()=>open('hero')} key={id}/>)}
-      <button type="button" className="v2-gear v2-gear-rune" onClick={()=>open('runes')}>ᚱ<small>Руны</small></button>
     </section>
 
     <section className="v2-commands">
