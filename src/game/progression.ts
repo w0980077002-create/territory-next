@@ -1,0 +1,164 @@
+import type { GameState, InventoryItem } from './types';
+import { grantRewards, updateProgress } from './actions';
+import type { Enemy } from './types';
+import { useLive } from './live';
+import { calendarDayKey, previousCalendarDayKey } from './weeklyQuests';
+
+export const dayKey = calendarDayKey;
+
+export interface Reward {
+  gold?: number;
+  gems?: number;
+  redGems?: number;
+  stones?: number;
+  largeHealthPotions?: number;
+}
+
+/** Award the exact same 150-HP potion as the Shop. Stack by type/name, never mint equipment. */
+function addDailyHealthPotions(inventory: InventoryItem[], count: number): InventoryItem[] {
+  if (!Number.isSafeInteger(count) || count <= 0) return inventory;
+  // Same consumable as generateShopItems(1).shop_potion_hp_large. Keep these
+  // properties aligned; the daily regression test checks the canonical shop.
+  const potion = {
+    name: 'Большое зелье здоровья',
+    icon: '⚗️',
+    type: 'potion' as const,
+    rarity: 'rare' as const,
+    description: 'Восстанавливает 150 HP мгновенно',
+    effect: { stat: 'hp' as const, value: 150, duration: 'instant' as const },
+  };
+  const existing = inventory.find((item) => item.type === 'potion' && item.name === potion.name);
+  if (existing) {
+    return inventory.map((item) => item.id === existing.id
+      ? { ...item, qty: item.qty + count } : item);
+  }
+  return [...inventory, {
+    id: `inv_daily_hp_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+    name: potion.name,
+    icon: potion.icon,
+    type: 'potion',
+    rarity: potion.rarity,
+    qty: count,
+    description: potion.description,
+    effect: potion.effect,
+  }];
+}
+
+export function applyReward(state: GameState, r: Reward): GameState {
+  return {
+    ...state,
+    inventory: r.largeHealthPotions
+      ? addDailyHealthPotions(state.inventory, r.largeHealthPotions)
+      : state.inventory,
+    battleStones: state.battleStones + (r.stones ?? 0),
+    player: {
+      ...state.player,
+      gold: state.player.gold + (r.gold ?? 0),
+      gems: state.player.gems + (r.gems ?? 0),
+      redGems: state.player.redGems + (r.redGems ?? 0),
+    },
+  };
+}
+
+export const DAILY_REWARDS: Reward[] = [
+  { gold: 150, stones: 2 },
+  { gold: 250, stones: 2 },
+  { gems: 5, stones: 3 },
+  { gold: 400, stones: 3 },
+  { gems: 8, stones: 3 },
+  { gold: 600, stones: 4 },
+  { gems: 15, stones: 5, largeHealthPotions: 5 },
+];
+
+export function dailyStatus(state: GameState, now = Date.now()) {
+  const today = dayKey(now);
+  const yesterday = previousCalendarDayKey(now);
+  const { streak, lastDay } = state.dailyReward;
+  // Respect a saved device-local receipt during the calendar migration.
+  const claimedToday = lastDay === today || lastDay === new Date(now).toDateString();
+  const continues = lastDay === yesterday || lastDay === new Date(now - 86400000).toDateString();
+  const nextIndex = claimedToday ? (streak - 1) % 7 : continues ? streak % 7 : 0;
+  return { claimedToday, dayIndex: nextIndex };
+}
+
+export function claimDaily(state: GameState, now = Date.now()): GameState | null {
+  const { claimedToday, dayIndex } = dailyStatus(state, now);
+  if (claimedToday) return null;
+  const yesterday = previousCalendarDayKey(now);
+  const last = state.dailyReward.lastDay;
+  const streak = last === yesterday || last === new Date(now - 86400000).toDateString() ? state.dailyReward.streak + 1 : 1;
+  return {
+    ...applyReward(state, DAILY_REWARDS[dayIndex]),
+    dailyReward: { streak, lastDay: dayKey(now) },
+  };
+}
+
+export interface Letter {
+  id: string;
+  from: string;
+  title: string;
+  body: string;
+  reward: Reward;
+}
+
+export const MAIL: Letter[] = [
+  {
+    id: 'welcome',
+    from: 'Совет ярлов',
+    title: 'Добро пожаловать в Territory',
+    body: 'Земли ждут нового героя. Проходи главы похода, сражайся на арене и собирай снаряжение. Прими подарок на первые шаги.',
+    reward: { gold: 300, gems: 10, stones: 5 },
+  },
+  {
+    id: 'stones_intro',
+    from: 'Хранитель камней',
+    title: 'Боевые камни',
+    body: 'Каждый бой в походе и в Испытаниях стоит 1 боевой камень. Камни не восстанавливаются сами: получай их за ежедневную награду, задания и в Лавке.',
+    reward: { stones: 3 },
+  },
+];
+
+export function claimMail(state: GameState, id: string): GameState | null {
+  const letter = MAIL.find((l) => l.id === id);
+  if (!letter || state.mailClaimed.includes(id)) return null;
+  return { ...applyReward(state, letter.reward), mailClaimed: [...state.mailClaimed, id] };
+}
+
+export const BLESSING_CHARGES = 3;
+export const BLESSING_BONUS = 0.5;
+
+export const blessingReady = (state: GameState, now = Date.now()) => state.blessing.day !== dayKey(now);
+
+export function claimBlessing(state: GameState, now = Date.now()): GameState | null {
+  if (!blessingReady(state, now)) return null;
+  return { ...state, blessing: { day: dayKey(now), charges: BLESSING_CHARGES } };
+}
+
+export function blessedGold(state: GameState, gold: number) {
+  const boosted = useLive.get().goldX2 ? gold * 2 : gold;
+  return state.blessing.charges > 0 ? Math.round(boosted * (1 + BLESSING_BONUS)) : boosted;
+}
+
+export function consumeBlessing(state: GameState): GameState {
+  if (state.blessing.charges <= 0) return state;
+  return { ...state, blessing: { ...state.blessing, charges: state.blessing.charges - 1 } };
+}
+
+export function spendStones(state: GameState, amount: number): GameState | null {
+  // Invalid/negative amounts must never become stone credits.
+  if (!Number.isSafeInteger(amount) || amount <= 0 || !Number.isSafeInteger(state.battleStones)
+    || state.battleStones < amount) return null;
+  return { ...state, battleStones: state.battleStones - amount };
+}
+
+export function trialReward(level: number): Reward {
+  return { gold: 40 + level * 12, gems: level % 5 === 0 ? 5 : 1 };
+}
+
+export function recordTrialWin(state: GameState, enemy: Enemy): GameState {
+  const r = trialReward(state.trialLevel);
+  let next = grantRewards(applyReward(state, { gems: r.gems }), r.gold ?? 0, enemy.rewardXp);
+  next = { ...next, trialLevel: next.trialLevel + 1, forgeMaterials: next.forgeMaterials + 1 };
+  return updateProgress(next, 'battle_win', 1);
+}
+

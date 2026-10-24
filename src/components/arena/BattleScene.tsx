@@ -1,0 +1,257 @@
+import type { ReactNode } from 'react';
+import { Shield, Sword, Loader2, Check, Lock, RotateCcw, Skull, Bot, Hourglass } from 'lucide-react';
+import { ZONES, type ArenaFighter, type Zone } from '@/game/arenaApi';
+import type { StrikeEvent } from '@/game/useStrikeQueue';
+import { useStore } from '@/game/store';
+import { useGame } from '@/game/actions';
+import { getCombatAppearance } from '@/game/appearance';
+import { selectedFollower } from '@/game/followers';
+import { getFollowerArt, getFollowerCombatFrames } from '@/game/combatArt';
+import { FighterFigure } from './FighterFigure';
+import { useLanguage } from '@/game/i18n';
+
+interface Props {
+  me: ArenaFighter;
+  enemy: ArenaFighter | null;
+  active: boolean;
+  finished: boolean;
+  moved: boolean;
+  auto: boolean;
+  autoLocked: boolean;
+  autoMinVip: number;
+  attack: Zone | null;
+  blocks: Zone[];
+  busy: boolean;
+  movedCount: number;
+  aliveCount: number;
+  strike: StrikeEvent | null;
+  canRepeat: boolean;
+  onAttack: (z: Zone) => void;
+  onToggleBlock: (z: Zone) => void;
+  onStrike: () => void;
+  onRepeat: () => void;
+  onToggleAuto: () => void;
+  resultPanel?: ReactNode;
+}
+
+function Plate({ fighter, side }: { fighter: ArenaFighter; side: 'ally' | 'enemy' }) {
+  const { language } = useLanguage();
+  const pct = Math.max(0, (fighter.hp / fighter.maxHp) * 100);
+  const low = pct <= 30;
+  return (
+    <div className="w-full rounded-lg bg-black/55 backdrop-blur-sm px-2 py-1 border border-white/10">
+      <div className="flex items-center justify-between gap-1">
+        <span className={`text-[11px] font-semibold truncate ${side === 'ally' ? 'text-teal-200' : 'text-red-200'}`}>{fighter.name}</span>
+        <span className="text-[10px] text-gray-300 shrink-0">{fighter.level} {language === 'en' ? 'Lv.' : 'ур.'}</span>
+      </div>
+      <div className="h-1.5 rounded-full bg-black/60 overflow-hidden mt-0.5">
+        <div
+          className={`h-full rounded-full transition-all duration-500 bg-gradient-to-r ${
+            low ? 'from-red-500 to-orange-400' : side === 'ally' ? 'from-emerald-500 to-teal-300' : 'from-red-600 to-red-400'
+          }`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <p className="text-[10px] text-gray-200 tabular-nums text-right leading-tight mt-0.5">{fighter.hp}/{fighter.maxHp}</p>
+    </div>
+  );
+}
+
+function ZoneButton({ label, sub, selected, tone, disabled, onClick }: {
+  label: string; sub?: string; selected: boolean; tone: 'def' | 'atk'; disabled: boolean; onClick: () => void;
+}) {
+  const on = tone === 'def'
+    ? 'bg-sky-500/35 border-sky-300 text-white shadow-[0_0_14px_rgba(56,189,248,0.45)]'
+    : 'bg-red-500/35 border-red-300 text-white shadow-[0_0_14px_rgba(248,113,113,0.45)]';
+  const Icon = tone === 'def' ? Shield : Sword;
+  return (
+    <button
+      disabled={disabled}
+      onClick={onClick}
+      className={`relative w-full h-12 rounded-xl border flex flex-col items-center justify-center transition-all duration-200 active:scale-95 disabled:opacity-40 disabled:active:scale-100 ${
+        selected ? on : 'bg-black/55 border-white/15 text-gray-200 hover:border-white/40 backdrop-blur-sm'
+      }`}
+    >
+      <Icon className={`w-3.5 h-3.5 ${selected ? '' : tone === 'def' ? 'text-sky-300' : 'text-red-300'}`} />
+      <span className="text-[10px] font-semibold leading-tight mt-0.5">{label}</span>
+      {sub && <span className="text-[8px] leading-none text-gray-300">{sub}</span>}
+    </button>
+  );
+}
+
+export function BattleScene(props: Props) {
+  const {
+    me, enemy, active, finished, moved, auto, autoLocked, autoMinVip, attack, blocks, busy,
+    movedCount, aliveCount, strike, canRepeat, onAttack, onToggleBlock, onStrike, onRepeat, onToggleAuto, resultPanel,
+  } = props;
+  const game = useStore(useGame);
+  const portraitFollower = selectedFollower(game);
+  const { language } = useLanguage();
+  const alive = me.hp > 0;
+  const controls = active && alive && !moved && !auto;
+  const ready = controls && !!attack && blocks.length === 2 && !!enemy && enemy.hp > 0;
+
+  const status = !active ? null
+    : !alive ? { icon: Skull, text: language === 'en' ? 'You fell' : 'Ты пал', tone: 'text-gray-200' }
+    : auto ? { icon: Bot, text: language === 'en' ? 'Auto-battle' : 'Автобой', tone: 'text-amber-200' }
+    : moved ? { icon: Hourglass, text: language === 'en' ? `Waiting ${movedCount}/${aliveCount}` : `Ждём ${movedCount}/${aliveCount}`, tone: 'text-emerald-200' }
+    : null;
+
+  const hint = !controls ? '' : !enemy ? (language === 'en' ? 'Choose a target' : 'Выбери цель') : blocks.length < 2
+    ? (language === 'en' ? `Choose ${2 - blocks.length} more defense zone(s)` : `Защита: выбери ещё ${2 - blocks.length}`) : !attack ? (language === 'en' ? 'Choose an attack zone' : 'Выбери зону удара') : (language === 'en' ? `Attack ${enemy.name}` : `Удар по ${enemy.name}`);
+
+  return (
+    <div className="arena-battle relative rounded-2xl overflow-hidden border border-amber-400/40 shadow-xl shadow-black/50">
+      <img
+        src={import.meta.env.BASE_URL + 'assets/territory/scenes/arena-viking.webp'}
+        onError={(event) => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'arena-bg.webp'; }}
+        alt=""
+        draggable={false}
+        className="arena-battle-art absolute inset-0 w-full h-full object-cover pointer-events-none"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/50 pointer-events-none" />
+
+      <div className={`relative grid gap-2 p-2 pt-3 ${finished ? 'grid-cols-1' : 'grid-cols-[56px_1fr_56px]'}`}>
+        {!finished && <div className="flex flex-col gap-1.5 pt-6">
+          <p className="text-[9px] uppercase tracking-wider text-sky-200 text-center font-semibold">{language === 'en' ? 'DEFENSE' : 'Защита'} {blocks.length}/2</p>
+          {ZONES.map((z) => (
+            <ZoneButton key={z.id} label={language === 'en' ? ({ head: 'Head', chest: 'Chest', belly: 'Belly', legs: 'Legs' } as Record<string, string>)[z.id] : z.label} tone="def" selected={blocks.includes(z.id)} disabled={!controls} onClick={() => onToggleBlock(z.id)} />
+          ))}
+        </div>}
+
+        <div className="relative grid grid-cols-2 gap-1 min-h-[260px]">
+          {status && (
+            <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20 px-2.5 py-1 rounded-full bg-black/70 border border-white/10 flex items-center gap-1 animate-fade-in">
+              <status.icon className={`w-3 h-3 ${status.tone}`} />
+              <span className={`text-[10px] font-semibold whitespace-nowrap ${status.tone}`}>{status.text}</span>
+            </div>
+          )}
+
+          <div className="flex flex-col min-w-0">
+            <Plate fighter={me} side="ally" />
+            <div className="relative flex-1 mt-1">
+              <span aria-hidden="true" className="absolute left-[6%] right-0 bottom-[1%] h-[7%] rounded-full bg-black/60 blur-md pointer-events-none" />
+              {/* A companion is a cosmetic PvP spectator, not a damage source.
+                  It used to sit behind the hero in a 48%-wide/52%-tall box;
+                  the hero hid it almost entirely on narrow Telegram screens.
+                  Keep it in its own foreground lane to make both faces visible. */}
+              <div className="absolute inset-0 z-20 pointer-events-none">
+                <FighterFigure
+                  src={import.meta.env.BASE_URL + 'assets/territory/characters/heroes/male_viking/idle.webp'}
+                  combatFrames={getCombatAppearance(game.appearance)}
+                  name={me.name}
+                  dir={1}
+                  alive={alive}
+                  strike={strike}
+                  idleSeconds={3.1}
+                  className={`absolute bottom-0 h-[98%] w-full object-contain object-right-bottom ${portraitFollower ? '-right-[12%]' : 'right-0'}`}
+                />
+              </div>
+              {portraitFollower && (
+                <div
+                  data-testid="arena-visible-follower"
+                  title={portraitFollower.name}
+                  className="absolute left-0 bottom-0 z-30 h-[68%] w-[66%] pointer-events-none"
+                >
+                  <FighterFigure
+                    src={getFollowerArt(portraitFollower.id)}
+                    combatFrames={getFollowerCombatFrames(portraitFollower.id)}
+                    name={portraitFollower.name}
+                    dir={1}
+                    alive={alive}
+                    strike={null}
+                    idleSeconds={3.7}
+                    className="absolute left-0 bottom-0 h-full w-full object-contain object-left-bottom"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col min-w-0">
+            {enemy ? (
+              <>
+                <Plate fighter={enemy} side="enemy" />
+                <div className="relative flex-1 mt-1">
+                  <span aria-hidden="true" className="absolute left-0 right-[8%] bottom-[1%] h-[7%] rounded-full bg-black/60 blur-md pointer-events-none" />
+                  <FighterFigure
+                    key={enemy.id}
+                    src={import.meta.env.BASE_URL + 'enemy-viking.webp'}
+                    combatFrames={getCombatAppearance(enemy.appearance)}
+                    name={enemy.name}
+                    dir={-1}
+                    mirror
+                    alive={enemy.hp > 0}
+                    strike={strike}
+                    idleSeconds={2.8}
+                    className="absolute left-0 bottom-0 h-[96%] w-full object-contain object-left-bottom"
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="flex-1 flex items-center justify-center text-[11px] text-gray-300">{language === 'en' ? 'No enemies' : 'Противников нет'}</div>
+            )}
+          </div>
+        </div>
+
+        {!finished && <div className="flex flex-col gap-1.5 pt-6">
+          <p className="text-[9px] uppercase tracking-wider text-red-200 text-center font-semibold">{language === 'en' ? 'ATTACK' : 'Удар'}</p>
+          {ZONES.map((z) => (
+            <ZoneButton
+              key={z.id}
+              label={language === 'en' ? ({ head: 'Head', chest: 'Chest', belly: 'Belly', legs: 'Legs' } as Record<string, string>)[z.id] : z.label}
+              sub={z.mult !== 1 ? `×${z.mult}` : undefined}
+              tone="atk"
+              selected={attack === z.id}
+              disabled={!controls}
+              onClick={() => onAttack(z.id)}
+            />
+          ))}
+        </div>}
+      </div>
+
+      {active && alive && (
+        <div className="relative px-2 pb-2">
+          <p className="text-[11px] text-gray-200 text-center h-4 mb-1 truncate">{hint}</p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onToggleAuto}
+              disabled={busy || (autoLocked && !auto)}
+              title={autoLocked ? (language === 'en' ? `Auto-battle requires VIP ${autoMinVip}` : `Автобой доступен с VIP ${autoMinVip}`) : (language === 'en' ? 'The server will fight for you' : 'Сервер будет бить за тебя')}
+              className="shrink-0 flex items-center gap-1.5 h-11 px-2 rounded-xl bg-black/55 border border-white/15 backdrop-blur-sm transition-colors hover:border-amber-300/50 disabled:opacity-50"
+            >
+              <span className={`w-4 h-4 rounded flex items-center justify-center border transition-colors ${auto ? 'bg-amber-400 border-amber-400' : 'border-white/40'}`}>
+                {auto && <Check className="w-3 h-3 text-black" strokeWidth={3} />}
+              </span>
+              <span className="text-[10px] font-semibold text-gray-100 leading-tight text-left">
+                {language === 'en' ? <>Auto<br />battle</> : <>Авто<br />бой</>}
+              </span>
+              {autoLocked && <Lock className="w-3 h-3 text-amber-300" />}
+            </button>
+
+            <button
+              disabled={!ready || busy}
+              onClick={onStrike}
+              className={`arena-attack-button flex-1 h-11 rounded-xl font-black tracking-[0.2em] text-base flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.97] disabled:opacity-40 disabled:active:scale-100 bg-gradient-to-b from-red-500 to-red-700 text-white border border-red-300/40 ${
+                ready && !busy ? 'animate-strike-ready' : ''
+              }`}
+            >
+              {busy ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sword className="w-5 h-5" />} {language === 'en' ? 'STRIKE' : 'УДАР'}
+            </button>
+
+            <button
+              onClick={onRepeat}
+              disabled={!controls || !canRepeat}
+              title={language === 'en' ? 'Repeat the previous zone selection' : 'Повторить прошлый выбор зон'}
+              className="shrink-0 w-11 h-11 rounded-xl bg-black/55 border border-white/15 flex items-center justify-center text-gray-100 transition-colors hover:border-white/40 disabled:opacity-40"
+            >
+              <RotateCcw className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {resultPanel}
+    </div>
+  );
+}
