@@ -51,14 +51,14 @@
 }
 
 /* Daytime, vivid mountains, waterfalls and a Viking settlement.
-   Existing placeholder image is only a stepping stone toward approved winter art. */
+   The scenery uses a winter derivative of the owner's single approved screenshot. */
 .v2-battle.v2-biome-0,
 .v2-battle.v2-biome-1,
 .v2-battle.v2-biome-2,
 .v2-battle.v2-biome-3{
   background-image:
     linear-gradient(180deg,rgba(103,190,251,.07) 0%,rgba(235,250,255,.12) 52%,rgba(150,212,250,.14) 82%,rgba(217,239,248,.18) 100%),
-    url('/city-bg-vibrant.webp');
+    url('/v2-snowy-approved-derived.webp');
   background-position:center,center 46%;
   background-size:100% 100%,100% 100%;
   background-repeat:no-repeat;
