@@ -1,0 +1,45 @@
+/* Port, professions and resource-extraction drawer. Main battle art untouched. */
+.v2-port-experience{display:flex;flex-direction:column;gap:11px;padding-bottom:14px;color:#f9ead2;}
+.v2-port-hero{display:flex;align-items:center;gap:12px;min-height:76px;border:2px solid #e2b775;border-radius:13px;padding:12px;background:linear-gradient(155deg,#275574,#173044 60%,#2d283b);box-shadow:inset 0 1px #fff5c44b,0 3px 5px #050e1d80;}
+.v2-port-sea-crest{width:58px;height:58px;border:2px ridge #ffe2a5;border-radius:50%;background:radial-gradient(#617c91,#22233d);display:grid;place-items:center;font-size:36px;text-shadow:0 2px 2px #131625;flex:none;}
+.v2-port-hero>div{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.v2-port-hero strong{font-size:20px;color:#ffdf9c;}
+.v2-port-hero small{font-size:12px;color:#c0e1ee;line-height:1.2;}
+.v2-port-stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.v2-port-stat-grid>div{padding:8px 2px;background:linear-gradient(#71543f,#322b39);border:1px solid #c39965;border-radius:9px;display:flex;flex-direction:column;gap:5px;text-align:center;}
+.v2-port-stat-grid small{font-size:10px;color:#dfcda7;}
+.v2-port-stat-grid strong{font-size:13px;color:#fff0ce;}
+.v2-port-pane{border:2px solid #a78769;border-radius:13px;padding:12px 10px;background:linear-gradient(160deg,#39485b,#1d2b42 64%,#332c3b);box-shadow:inset 0 1px #fff4de2a,0 3px 4px #10152073;display:flex;flex-direction:column;gap:10px;}
+.v2-port-pane h3{display:flex;align-items:center;gap:7px;color:#ffda91;margin:0;font-size:16px;}
+.v2-port-pane h3 span{font-size:23px;}
+.v2-port-pane p{margin:0!important;color:#d2e5ef!important;font-size:12px;line-height:1.43;}
+.v2-port-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.v2-port-choices button{border:2px solid #69869f;border-radius:11px;padding:9px 4px;background:linear-gradient(#415574,#24344b);color:#fbeccf;display:flex;flex-direction:column;gap:3px;align-items:center;min-width:0;}
+.v2-port-choices button.selected{border-color:#ffdd85;background:linear-gradient(#6c6a63,#5e3f3c);box-shadow:inset 0 1px #fffbd76b,0 0 5px #e6b85a70;}
+.v2-port-choices button b{font-size:29px;}
+.v2-port-choices button strong{font-size:12px;}
+.v2-port-choices button small{font-size:9px;color:#d7e3ee;line-height:1.18;text-align:center;}
+.v2-port-primary,.v2-port-secondary{border:2px solid #f6d39d;border-radius:10px;color:#30212a;font-weight:1000;font-size:13px;padding:11px 8px;background:linear-gradient(#fce2a0,#ca8d3f);box-shadow:inset 0 1px #fff9df99,0 2px 3px #0a112274;}
+.v2-port-secondary{color:#fff7e3;border-color:#8bc9e5;background:linear-gradient(#326a8d,#1b395f);}
+.v2-port-primary:active,.v2-port-secondary:active{filter:brightness(1.16);transform:translateY(1px);}
+.v2-port-active-job{display:flex;align-items:center;gap:13px;background:#18344a;border:1px solid #59758b;border-radius:9px;padding:10px;}
+.v2-port-active-job>span{font-size:38px;}
+.v2-port-active-job>div{display:flex;flex-direction:column;gap:4px;}
+.v2-port-active-job strong{color:#ffe2a3;font-size:16px;}
+.v2-port-active-job small{color:#d0e0e8;font-size:11px;}
+.v2-port-active-job b{font-size:21px;letter-spacing:.04em;color:#b3f9fa;font-variant-numeric:tabular-nums;}
+.v2-port-progress{height:14px;border:2px solid #759caf;background:#0e2437;border-radius:8px;overflow:hidden;box-shadow:inset 0 2px 2px #08131a;}
+.v2-port-progress>span{display:block;height:100%;border-radius:8px;background:linear-gradient(#b6ffcf,#55bfa1);transition:width 1s linear;}
+.v2-port-actions{display:grid;}
+.v2-port-caution{font-size:10px;color:#b8d1df;line-height:1.4;}
+.v2-port-requirement{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #64738a;padding:5px 0;font-size:11px;}
+.v2-port-requirement strong{text-align:right;color:#ffe0a3;font-size:12px;}
+.v2-port-status{border:1px solid #5c8093;border-radius:8px;background:#183249;padding:9px;color:#bcdceb;font-size:11px;line-height:1.4;}
+.v2-port-ships{display:flex;align-items:center;gap:10px;}
+.v2-port-ship-icon{flex:none;width:61px;height:59px;border:2px solid #e1b877;border-radius:12px;background:linear-gradient(#476886,#18344d);display:grid;place-items:center;font-size:37px;}
+.v2-port-ships>div:last-child{display:flex;flex-direction:column;gap:5px;}
+.v2-port-ships strong{color:#ffe9bd;font-size:12px;}
+.v2-port-ships small{color:#cedfe8;font-size:11px;line-height:1.35;}
+.v2-port-footer{margin:0!important;color:#b0cbd8!important;font-size:10px;line-height:1.42!important;text-align:center;}
+@media(max-width:350px){.v2-port-choices button small{font-size:8px}.v2-port-hero strong{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.v2-port-progress>span{transition:none}}
