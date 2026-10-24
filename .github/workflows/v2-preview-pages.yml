@@ -1,0 +1,74 @@
+name: TERRITORY 2.0 - public demo preview (NO player data)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: territory-next-demo-pages
+  cancel-in-progress: true
+
+jobs:
+  build-demo:
+    name: Build isolated V2 demo
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Security and gameplay checks
+        run: |
+          npm run typecheck
+          npm run test:v2
+      - name: Build isolated demo with NO backend credentials
+        env:
+          VITE_V2_STAGING_APPROVED: "no"
+        run: |
+          # No Supabase key, URL or Telegram bot secret is supplied to this build.
+          npm run build
+          test -s dist/index.html
+          test -s dist/v2-preview.html
+          # Exact approved game entrypoint (not the legacy frontend).
+          grep -q 'territory-next' dist/index.html
+      - name: Ensure demo artifact contains no production project reference or leaked credentials
+        run: |
+          if grep -R -l --include='*.js' --include='*.html' --include='*.css' 'wmyrdpbwlkzsktnhookx' dist; then
+            echo "::error::TERRITORY 1.0 Supabase reference in public demo"
+            exit 1
+          fi
+          if grep -R -l --include='*.js' --include='*.html' --include='*.css' 'VITE_SUPABASE_ANON_KEY\|service_role\|BOT_TOKEN' dist; then
+            echo "::error::Forbidden backend secret key identifier in static demo"
+            exit 1
+          fi
+          touch dist/.nojekyll
+      - name: Upload demo artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy-demo:
+    name: Deploy PUBLIC demo only
+    if: github.ref == 'refs/heads/main'
+    needs: build-demo
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Deploy test-only public static demo
+        id: deployment
+        uses: actions/deploy-pages@v4
