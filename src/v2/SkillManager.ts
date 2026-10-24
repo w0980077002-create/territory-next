@@ -65,7 +65,7 @@ function validateFormula(raw:unknown,positive=false):void{
 function validateModifiers(value:unknown):void{
  requireRule(arr(value,8),'modifiers');
  for(const m of value){
-  requireRule(obj(m)&&stats.has(m.stat)&&m.operation==='multiply','modifier operation/stat');
+  requireRule(obj(m)&&stats.has(m.stat as string)&&m.operation==='multiply','modifier operation/stat');
   validateFormula(m.formula,true);
  }
 }
@@ -80,7 +80,7 @@ export function parseV2Modules(value:unknown):ModuleConfig{
  requireRule(arr(value.skills,30)&&arr(value.companions,30),'lists');
  const skillIds=new Set<string>(),aliases=new Set<string>(),companionIds=new Set<string>();
  for(const s of value.skills){
-  requireRule(obj(s)&&id(s.id)&&shortText(s.name)&&skillKinds.has(s.type)&&
+  requireRule(obj(s)&&id(s.id)&&shortText(s.name)&&skillKinds.has(s.type as string)&&
     id(s.bindingCategory),'skill id/type');
   requireRule(!skillIds.has(s.id),'duplicate skill');skillIds.add(s.id);
   requireRule(obj(s.trigger)&&int(s.trigger.energyCost,0,100)&&
@@ -89,7 +89,7 @@ export function parseV2Modules(value:unknown):ModuleConfig{
     'skill trigger');
   validateModifiers(s.modifiers);
   if(s.effect!==null){
-   requireRule(s.type==='active'&&obj(s.effect)&&actionKinds.has(s.effect.kind)&&
+   requireRule(s.type==='active'&&obj(s.effect)&&actionKinds.has(s.effect.kind as string)&&
     (s.effect.scaleBy==='attack'||s.effect.scaleBy==='hp'),'active skill effect');
    validateFormula((s.effect as Record<string,unknown>).formula,true);
   }else requireRule(s.type!=='active','missing active effect');
@@ -97,7 +97,7 @@ export function parseV2Modules(value:unknown):ModuleConfig{
  }
  for(const c of value.companions){
   requireRule(obj(c)&&id(c.id)&&shortText(c.name)&&
-   stances.has(c.stance)&&id(c.selectorAlias),'companion id/stance');
+   stances.has(c.stance as string)&&id(c.selectorAlias),'companion id/stance');
   requireRule(!companionIds.has(c.id)&&!aliases.has(c.selectorAlias),'duplicate companion selector');
   companionIds.add(c.id);aliases.add(c.selectorAlias);
   for(const field of [c.baseStats,c.perLevel]){
@@ -111,8 +111,8 @@ export function parseV2Modules(value:unknown):ModuleConfig{
     arr(c.ai.patterns,3)&&c.ai.patterns.length>0,'helper AI patterns');
   const local=new Set<string>();
   for(const p of c.ai.patterns){
-   requireRule(obj(p)&&stances.has(p.stance)&&int(p.attackEveryTicks,0,300),'stance attack');
-   requireRule(!local.has(p.stance),'duplicate stance');local.add(p.stance as string);
+   requireRule(obj(p)&&stances.has(p.stance as string)&&int(p.attackEveryTicks,0,300),'stance attack');
+   requireRule(!local.has(p.stance as string),'duplicate stance');local.add(p.stance as string);
    validateFormula(p.damageMultiplier,true);
   }
   requireRule(local.has(c.stance as string),'initial stance missing');
