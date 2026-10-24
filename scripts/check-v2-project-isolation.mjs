@@ -20,7 +20,7 @@ const main=read('src/v2/main.tsx');
 assert(main.includes("from './NextApp'"),'V2 must mount NextApp');
 for(const f of ['src/v2/main.tsx','src/v2/NextApp.tsx','src/v2/InventoryExperience.tsx']){
   const code=read(f);
-  assert(!/from\s*['"](?:@\/game|\.\.\/game|\.\.\/\.\.\/game|@\/admin|\.?\.?\/App|@\/game\/supabase)/.test(code),'Old game's runtime imported by V2: '+f);
+  assert(!/from\s*['"](?:@\/game|\.\.\/game|\.\.\/\.\.\/game|@\/admin|\.?\.?\/App|@\/game\/supabase)/.test(code),'Legacy game runtime imported by V2: '+f);
   assert(!/createClient\s*\(/.test(code),'V2 page may not instantiate a Supabase client: '+f);
   assert(!/VITE_SUPABASE_(?:URL|ANON_KEY)/.test(code),'V2 page must not read legacy DB config: '+f);
 }
