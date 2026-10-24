@@ -12,6 +12,7 @@ import {createV2DemoProgress,makeV2Item,V2_GEAR_SLOTS,V2_RARITIES,
 } from './progression';
 import {createDemoBuildSlots,validDemoBuild,type DemoBuildSlot} from './previewBuilds';
 import type {HeroClass,RuneKind,CompanionKind} from './autoBattle';
+import {parseV2DemoQuestState,type V2DemoQuestState} from './demoQuests';
 
 export const V2_LOCAL_DEMO_SAVE_KEY='territory-next-v2:offline-demo:v1';
 export const V2_LOCAL_DEMO_SAVE_VERSION=1;
@@ -33,6 +34,7 @@ export type V2LocalDemoSave={
   readonly defeats:number;
   readonly progress:V2Progression;
   readonly builds:readonly DemoBuildSlot[];
+  readonly quests?:V2DemoQuestState; // optional: older v1 saves retain their progress
 };
 const classes=new Set<HeroClass>(['berserker','runemage','ranger']);
 const runes=new Set<RuneKind>(['flame','frost','thunder','guardian']);
@@ -143,6 +145,8 @@ export function decodeV2LocalDemoSave(json:string):V2LocalDemoSave|null {
     return {slot:v.slot,build:{heroClass:b.heroClass,rune:b.rune,companion:b.companion}};
   });
   if(builds.some(b=>b.slot===0))return null;
+  const quests=raw.quests===undefined?undefined:parseV2DemoQuestState(raw.quests);
+  if(raw.quests!==undefined&&!quests)return null;
   return {
     version:1,
     savedAt:raw.savedAt as number,
@@ -159,6 +163,7 @@ export function decodeV2LocalDemoSave(json:string):V2LocalDemoSave|null {
     defeats:raw.defeats as number,
     progress,
     builds,
+    ...(quests?{quests}:{}),
   };
 }
 export function encodeV2LocalDemoSave(save:V2LocalDemoSave):string|null{
