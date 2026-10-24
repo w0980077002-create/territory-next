@@ -7,7 +7,7 @@ import {createHash} from 'node:crypto';
 const read=p=>readFileSync(p,'utf8');
 const app=read('src/v2/NextApp.tsx');
 const controls=read('src/v2/owner-ui-controls.css');
-const scene=readFileSync('public/v2-winter-stage-v5.webp');
+const scene=readFileSync('public-v2/v2-winter-stage-v5.webp');
 const reference=readFileSync('docs/reference/TERRITORY_2_0_APPROVED_2026-10-24.jpg');
 const unchangedGitBlob=(buf)=>createHash('sha1')
   .update(Buffer.from('blob '+buf.byteLength+'\0')).update(buf).digest('hex');
@@ -42,19 +42,19 @@ for(const label of ['Задания','События','Друзья','Награ
 assert(app.includes('v2-shortcut--')||app.includes("'v2-shortcut v2-shortcut--'"));
 assert(app.includes("id!=='settings'")&&app.includes('aria-label={label}'),
   'Top-right grid menu must have accessible name, no extra caption');
-assert(app.includes("skills:'v2-ui-skills-book.svg'"),
+assert(app.includes("skills:'art/icons/skills.svg'"),
   'New Skills book icon must appear in bottom bar');
-assert(app.includes("asset('v2-ui-crown.svg')"),
+assert(app.includes("asset('art/icons/ranking.svg')"),
   'Ranking control must use original gold crown icon');
 assert(app.includes('aria-pressed={speed===2}'),'Speed toggle must expose state');
 assert(app.includes('aria-pressed={auto}'),'Auto-battle toggle must expose state');
-assert(app.includes('v2-nav-demo')&&app.includes("asset('battle-stone.webp')"),
+assert(app.includes('v2-nav-demo')&&app.includes("asset('art/icons/stone.svg')"),
   'Raised Fight must show count with stone icon');
-for(const path of ['public/v2-ui-skills-book.svg','public/v2-ui-crown.svg']){
+for(const path of ['public-v2/art/icons/skills.svg','public-v2/art/icons/ranking.svg']){
   assert(existsSync(path),'Missing original fantasy icon: '+path);
   const svg=read(path);
   assert(svg.includes('<svg ')&&svg.includes('</svg>')&&svg.includes('viewBox='));
-  assert(svg.includes('<defs>')&&svg.includes('filter='));
+  assert(svg.includes('<defs>')&&svg.includes('radialGradient'));
 }
 assert(!app.includes('src/game/supabase') && !app.includes("from '../game/"),
   'V2 UI must not import V1 backend');
