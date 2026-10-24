@@ -15,10 +15,13 @@ function asURL(src){
 const progressURL=asURL(code('src/v2/core/progression.ts'));
 const buildURL=asURL(code('src/v2/core/previewBuilds.ts'));
 const questsURL=asURL(code('src/v2/core/demoQuests.ts'));
+const portURL=asURL(code('src/v2/core/demoPort.ts'));
+
 let module=code('src/v2/core/localDemoSave.ts');
 module=module.replace(/from ['"]\.\/progression['"]/, "from '"+progressURL+"'");
 module=module.replace(/from ['"]\.\/previewBuilds['"]/, "from '"+buildURL+"'");
 module=module.replace(/from ['"]\.\/demoQuests['"]/, "from '"+questsURL+"'");
+module=module.replace(/from ['"]\.\/demoPort['"]/, "from '"+portURL+"'");
 const {
   createV2DemoProgress,
   applyV2DemoVictory,
