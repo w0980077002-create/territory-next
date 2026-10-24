@@ -3,11 +3,10 @@ import type {V2ScreenId} from '../interfaceContract';
 import type {V2Progression} from '../core/progression';
 import type {V2StageCampaign} from '../core/gameplayOverhaul';
 import './inner-panels.css';
-import {GameHallExperience} from './GameHallExperience';
 
 export type FeaturePanelId=Extract<V2ScreenId,
   'mail'|'trials'|'arena'|'friends'|'invitation'|'socialRewards'|
-  'specialMarket'|'welcomeBundle'|'seaBundle'|'clan'|'games'>;
+  'specialMarket'|'welcomeBundle'|'seaBundle'|'clan'>;
 
 const asset=(path:string)=>import.meta.env.BASE_URL+path.replace(/^\//,'');
 const mailItems=[
@@ -111,7 +110,6 @@ export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
   </section>;
  }
 
- if(mode==='games')return <GameHallExperience/>;
 
  if(mode==='friends'||mode==='invitation'||mode==='socialRewards')return <section className="v2-inner-screen" data-screen="social">
   <HallTitle eyebrow="СОЮЗЫ И ПРИГЛАШЕНИЯ" title={mode==='socialRewards'?'Награды за друзей':mode==='invitation'?'Пригласить в отряд':'Мои друзья'}
