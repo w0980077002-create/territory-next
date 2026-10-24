@@ -21,7 +21,7 @@ assert(!style.includes("url('/v2-snowy-approved-derived.webp')"),'Old flat snow 
 assert(app.includes("warcow: asset('v2-battle-cow-approved.webp')"),'Wireframe cow cannot be active art');
 assert(app.includes("asset('v2-approved-avatar.webp')"),'Approved player portrait not rendered');
 assert(!style.includes("city-bg-vibrant.webp"),'Old city image cannot be the new winter scene');
-assert(app.includes("useState<CompanionKind>('warcow')"),'Reference battle cow must be default companion in demo');
+assert(app.includes("offlineSave?.companion??'warcow'"),'Reference battle cow must be default companion when no local demo save exists');
 assert(app.includes('v2-command-actions') && app.includes('v2-command-spacer'),'No reserved center gap — bottom battle button obscures quest');
 assert(style.includes('grid-template-columns:minmax(0,41%) minmax(61px,18%) minmax(0,1fr)'),'Quest and command spacing regressed');
 assert(app.includes('v2-nav-fight') && app.includes('БОЙ'),'Center combat button lost its caption');
