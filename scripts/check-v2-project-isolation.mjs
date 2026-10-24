@@ -24,11 +24,9 @@ for(const f of ['src/v2/main.tsx','src/v2/NextApp.tsx','src/v2/InventoryExperien
   assert(!/createClient\s*\(/.test(code),'V2 page may not instantiate a Supabase client: '+f);
   assert(!/VITE_SUPABASE_(?:URL|ANON_KEY)/.test(code),'V2 page must not read legacy DB config: '+f);
 }
-const legacyGuard=read('src/game/supabase.ts');
-assert(legacyGuard.includes('isLegacyProduction'),'Required V1 production denylist missing');
-assert(legacyGuard.includes('isApprovedV2Staging'),'V2 exact project allowlist missing');
-assert(legacyGuard.includes("VITE_V2_STAGING_APPROVED"),'Explicit staging gate missing');
-assert(legacyGuard.includes(cfg.stagingProjectRef),'Unexpected staging project reference in legacy module');
+for(const old of ['src/game','src/components','src/admin','public','supabase/migrations']){
+ assert(!existsSync(old),'Deleted TERRITORY 1.0 source folder unexpectedly reappeared: '+old);
+}
 
 const schema=read('server/staging/territory_v2_schema.sql');
 assert(schema.includes('create schema if not exists territory_v2;'));
@@ -78,4 +76,4 @@ const envUrl=process.env.VITE_SUPABASE_URL ?? '';
 if(envUrl){
   assert(!envUrl.includes(cfg.production1ProjectRef),'Production Supabase URL was supplied to a V2 test');
 }
-console.log('OK: V1 and V2 project refs differ; exact V2 staging allowlisted; isolated V2 entrypoint; no live deployment or shared game key');
+console.log('OK: V2 isolated: old game source directories physically absent; private staging allowlisted; no live deployment');
