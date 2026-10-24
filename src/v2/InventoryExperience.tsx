@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import './inventory.css';
 import {
   V2_GEAR_SLOTS,V2_RARITY_LABEL,V2_SLOT_LABEL,sortV2Inventory,
   itemScore,v2UpgradeQuote,statsFromV2Progress,
