@@ -343,7 +343,7 @@ export function NextApp() {
           {currentBoss&&<span className="v2-boss-phase" data-phase={bossPhase.phase}
             aria-label={'Фаза босса '+bossPhase.phase+' из 3'}>
             Фаза {bossPhase.phase}/3 · {bossPhase.label}
-          </span>
+          </span>}
           {latestHit&&auto&&<b className="v2-damage" key={battle.tick}>−{latestHit.amount}</b>}
         </div>
         {combatMessage&&auto&&<span className="v2-fight-event" key={battle.tick}>
