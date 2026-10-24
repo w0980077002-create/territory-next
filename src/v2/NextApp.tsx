@@ -5,7 +5,7 @@ import { InventoryExperience, EquipmentSlot } from './InventoryExperience';
 import { DEMO_START_CHAPTER, DEMO_WAVES_PER_CHAPTER, chooseDemoChapter, nextDemoChapterVictory, demoCombatSample } from './core/campaignFlow';
 import { V2_SKILL_CATEGORIES, type V2SkillCategory } from './core/buildLoadout';
 import { createDemoBuildSlots, saveDemoBuildSlot, loadDemoBuildSlot } from './core/previewBuilds';
-import {readV2LocalDemoSave,writeV2LocalDemoSave,clearV2LocalDemoSave} from './core/localDemoSave';
+import {readV2LocalDemoSave,writeV2LocalDemoSave,clearV2LocalDemoSave,v2DemoStorage} from './core/localDemoSave';
 import {
   createV2DemoProgress,applyV2DemoVictory,statsFromV2Progress,nextXp,
   equipV2Item,unequipV2Item,salvageV2Item,upgradeV2Equipped,
@@ -113,8 +113,7 @@ function ViewTile({name,icon,onClick}: {name:string;icon:string;onClick:()=>void
 }
 
 export function NextApp() {
-  const offlineSave=useMemo(()=>readV2LocalDemoSave(
-    typeof window==='undefined'?null:window.localStorage),[]);
+  const offlineSave=useMemo(()=>readV2LocalDemoSave(v2DemoStorage()),[]);
   const [saveStatus,setSaveStatus]=useState<'local'|'memory'>('local');
   const [chapter,setChapter] = useState(offlineSave?.chapter??DEMO_START_CHAPTER);
   const [highestUnlockedChapter,setHighestUnlockedChapter] = useState(offlineSave?.highestUnlockedChapter??DEMO_START_CHAPTER);
@@ -149,7 +148,7 @@ export function NextApp() {
   // payments or real rewards. Progress survives a local browser reload.
   useEffect(()=>{
     const ok=writeV2LocalDemoSave(
-      typeof window==='undefined'?null:window.localStorage,
+      v2DemoStorage(),
       {version:1,savedAt:Date.now(),chapter,wave,highestUnlockedChapter,
        encounterId,heroClass,rune,companion,speed,auto,victories,defeats,
        progress,builds:demoBuilds}
@@ -391,7 +390,7 @@ export function NextApp() {
             <p>Эта демоверсия хранит прогресс только в браузере. Она не подключена к Telegram-аккаунтам, экономике или серверам первой игры. Очистка браузера удалит демоданные.</p>
             <button className="v2-cta" type="button" onClick={()=>{
               if(window.confirm('Удалить только тестовый прогресс TERRITORY 2.0 на этом устройстве? Данные первой игры не затрагиваются.')){
-                clearV2LocalDemoSave(window.localStorage);
+                clearV2LocalDemoSave(v2DemoStorage());
                 window.location.reload();
               }
             }}>Начать демонстрацию заново</button>
