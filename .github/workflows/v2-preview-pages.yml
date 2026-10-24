@@ -39,6 +39,7 @@ jobs:
           npm run build
           test -s dist/index.html
           test -s dist/v2-preview.html
+          node scripts/check-v2-original-art-isolation.mjs --dist
           # Exact approved game entrypoint (not the legacy frontend).
           grep -q 'territory-next' dist/index.html
       - name: Ensure demo artifact contains no production project reference or leaked credentials
