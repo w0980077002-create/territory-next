@@ -34,7 +34,8 @@ create table if not exists territory_v2.characters (
   highest_unlocked_chapter integer not null default 1 check (highest_unlocked_chapter >= stage_chapter),
   revision bigint not null default 0 check (revision >= 0),
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+  unique(id,player_id)
 );
 
 create table if not exists territory_v2.currency_definitions (
@@ -106,16 +107,20 @@ create table if not exists territory_v2.item_instances (
 );
 
 create table if not exists territory_v2.equipment (
-  character_id uuid not null references territory_v2.characters(id) on delete cascade,
+  character_id uuid not null,
+  player_id uuid not null,
   slot_code text not null,
-  item_id uuid not null unique references territory_v2.item_instances(id) on delete restrict,
+  item_id uuid not null unique,
+  foreign key(character_id,player_id) references territory_v2.characters(id,player_id) on delete cascade,
+  foreign key(player_id,item_id) references territory_v2.item_instances(player_id,id) on delete restrict,
   primary key(character_id,slot_code)
 );
 
 create table if not exists territory_v2.battle_sessions (
   id uuid primary key default gen_random_uuid(),
   player_id uuid not null references territory_v2.players(id) on delete restrict,
-  character_id uuid not null references territory_v2.characters(id) on delete restrict,
+  character_id uuid not null,
+  foreign key(character_id,player_id) references territory_v2.characters(id,player_id) on delete restrict,
   stage_chapter integer not null check (stage_chapter >= 1),
   stage_wave integer not null check (stage_wave >= 1),
   combat_rules_version text not null,
@@ -163,6 +168,10 @@ begin
   end loop;
 end $$;
 
--- Service role must be used ONLY from the protected server/Edge environment.
--- Table access will be managed after staging API handlers are reviewed.
+-- Explicit privileges only for backend service role; do NOT expose this schema
+-- in Supabase Data API configuration. Never put service role key in the client.
+grant select,insert,update,delete on all tables in schema territory_v2 to service_role;
+alter default privileges in schema territory_v2
+  grant select,insert,update,delete on tables to service_role;
+-- No functions with SECURITY DEFINER or public EXECUTE are defined here.
 commit;
