@@ -38,7 +38,7 @@
     "test:clans": "node scripts/check-clans.mjs",
     "test:wheel": "node scripts/check-fortune.mjs && node scripts/check-fortune-client.mjs",
     "test:wheel:browser": "node scripts/build-fortune-preview.mjs && python scripts/check-fortune-browser.py",
-    "test:v2": "node scripts/check-v2-preview.mjs && node scripts/check-v2-combat.mjs && node scripts/check-v2-entry.mjs && node scripts/check-v2-progression.mjs && node scripts/check-v2-evidence.mjs && node scripts/check-v2-build-loadout.mjs && node scripts/check-v2-master-spec.mjs && node scripts/check-v2-campaign.mjs && node scripts/check-v2-demo-builds.mjs && node scripts/check-v2-staging-schema.mjs && node scripts/check-v2-project-isolation.mjs && node scripts/check-v2-atomic-wallet.mjs && node scripts/check-v2-verified-player-identity.mjs && node scripts/check-v2-telegram-initdata.mjs && node scripts/check-v2-screenshot-fixes.mjs",
+    "test:v2": "node scripts/check-v2-preview.mjs && node scripts/check-v2-combat.mjs && node scripts/check-v2-entry.mjs && node scripts/check-v2-progression.mjs && node scripts/check-v2-evidence.mjs && node scripts/check-v2-build-loadout.mjs && node scripts/check-v2-master-spec.mjs && node scripts/check-v2-campaign.mjs && node scripts/check-v2-demo-builds.mjs && node scripts/check-v2-staging-schema.mjs && node scripts/check-v2-project-isolation.mjs && node scripts/check-v2-atomic-wallet.mjs && node scripts/check-v2-verified-player-identity.mjs && node scripts/check-v2-telegram-initdata.mjs && node scripts/check-v2-screenshot-fixes.mjs && npm run test:server-pve",
     "test:source-evidence": "node scripts/check-v2-evidence.mjs",
     "test:build-loadout": "node scripts/check-v2-build-loadout.mjs",
     "test:master-spec": "node scripts/check-v2-master-spec.mjs",
@@ -49,7 +49,8 @@
     "test:atomic-wallet": "node scripts/check-v2-atomic-wallet.mjs",
     "test:verified-identity": "node scripts/check-v2-verified-player-identity.mjs",
     "test:telegram-initdata": "node scripts/check-v2-telegram-initdata.mjs",
-    "test:approved-screen": "node scripts/check-v2-screenshot-fixes.mjs"
+    "test:approved-screen": "node scripts/check-v2-screenshot-fixes.mjs",
+    "test:server-pve": "node scripts/check-v2-server-pve.mjs && node scripts/check-v2-pve-protocol.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
