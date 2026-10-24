@@ -57,6 +57,17 @@ assert(verifier.includes("encoder.encode('WebAppData')"),'Official Telegram HMAC
 assert(verifier.includes('TELEGRAM_INITDATA_SIGNATURE_INVALID'),'Telegram HMAC must fail closed');
 assert(!read('src/v2/main.tsx').includes('verifyInitData'),'Server-only Telegram code imported in browser');
 
+const gatewaySource=read('supabase/functions/territory-v2-api/index.ts');
+assert(gatewaySource.includes(cfg.stagingProjectRef),'V2 Edge must enforce exact staging project');
+assert(!gatewaySource.includes(cfg.production1ProjectRef),'V2 Edge must not reference live V1');
+assert(gatewaySource.includes('V2_ENABLE_TELEGRAM_GATEWAY'),'Edge auth must require explicit enablement');
+assert(gatewaySource.includes('TERRITORY_V2_BOT_TOKEN'),'Edge auth must use separate V2 bot token');
+assert(!gatewaySource.includes("Deno.env.get('BOT_TOKEN')"),'Legacy bot token must never be imported');
+assert(!read('src/v2/NextApp.tsx').includes('server/api/telegramGateway'),'Server gateway cannot be shipped in game bundle');
+const gatewayLogic=read('server/api/telegramGateway.ts');
+assert(gatewayLogic.includes('deps.verify(input.initData)'),'Gateway must verify signed raw Telegram identity');
+assert(gatewayLogic.includes('UNEXPECTED_FIELDS'),'Gateway must reject playerId and wallet injection');
+
 const workflows=readdirSync('.github/workflows').filter(n=>n.endsWith('.yml')||n.endsWith('.yaml'));
 assert(!workflows.some(n=>n==='pages.yml'),'V2 must never have auto-deploy to production Pages');
 for(const name of workflows){

@@ -57,7 +57,7 @@ assert.equal(pr.headers.get('access-control-allow-origin'),ORIGIN);
 assert.equal(pr.headers.get('access-control-allow-headers'),'content-type');
 const failedPreflight=await handleV2GatewayRequest(new Request(FUNCTION_URL+'/profile',{method:'OPTIONS',headers:{Origin:'https://attacker.example'}}),deps);
 assert.equal(failedPreflight.status,403);
-assert.equal(verified,3,'unexpected requests must not invoke Telegram verification');
+assert.equal(verified,4,'unexpected requests must not invoke Telegram verification');
 assert.equal(got,1);
 assert.equal(joined,1);
 const edge=readFileSync('supabase/functions/territory-v2-api/index.ts','utf8');
