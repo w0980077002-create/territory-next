@@ -47,7 +47,7 @@ assert.equal((await invoke('join','signed-raw-init-data',{classId:'owner'})).sta
 assert.equal((await invoke('join','signed-raw-init-data',{classId:'berserker',playerId:'victim-id'})).status,400);
 assert.equal((await invoke('profile','signed-raw-init-data',{walletDelta:1000000})).status,400);
 assert.equal((await invoke('profile','')).status,401);
-assert.equal((await invoke('profile','x'.repeat(MAX_V2_AUTH_BODY_CHARS))).status,401);
+assert.equal((await invoke('profile','x'.repeat(MAX_V2_AUTH_BODY_CHARS))).status,413);
 assert.equal((await invoke('wallet','signed-raw-init-data',{classId:'berserker'})).status,404);
 assert.equal((await invoke('join','signed-raw-init-data',{classId:'berserker'},ORIGIN,'GET')).status,405);
 const preflight=new Request(FUNCTION_URL+'/join',{method:'OPTIONS',headers:{Origin:ORIGIN,'Access-Control-Request-Method':'POST'}});
