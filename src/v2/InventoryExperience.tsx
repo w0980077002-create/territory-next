@@ -8,6 +8,7 @@ import {
 
 const asset=(path:string)=>import.meta.env.BASE_URL+path.replace(/^\//,'');
 const slots=V2_GEAR_SLOTS;
+const heroSlots:readonly V2GearSlot[]=['helmet','amulet','armor','weapon','shield','ring','boots'];
 
 export function EquipmentSlot({
   slot,item,onClick,
@@ -30,11 +31,12 @@ const allFilters=['all',...slots] as const;
 type Filter=typeof allFilters[number];
 
 export function InventoryExperience({
-  view,progress,heroArt,onView,onEquip,onUnequip,onSalvage,onUpgrade,
+  view,progress,heroArt,focusSlot,onView,onEquip,onUnequip,onSalvage,onUpgrade,
 }:{
   view:'hero'|'warehouse';
   progress:V2Progression;
   heroArt:string;
+  focusSlot:V2GearSlot;
   onView:(to:'hero'|'warehouse'|'runes'|'companions'|'skills')=>void;
   onEquip:(id:string)=>void;
   onUnequip:(slot:V2GearSlot)=>void;
@@ -43,7 +45,7 @@ export function InventoryExperience({
 }) {
   const [filter,setFilter]=useState<Filter>('all');
   const [selectedId,setSelectedId]=useState<string|null>(null);
-  const [activeSlot,setActiveSlot]=useState<V2GearSlot>('weapon');
+  const [activeSlot,setActiveSlot]=useState<V2GearSlot>(focusSlot);
   const stats=useMemo(()=>statsFromV2Progress(progress),[progress]);
   const selected=progress.inventory.find(x=>x.id===selectedId)??null;
   const shown=sortV2Inventory(progress.inventory).filter(x=>filter==='all'||x.slot===filter);
