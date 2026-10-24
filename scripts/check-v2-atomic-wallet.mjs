@@ -7,7 +7,8 @@ import { PGlite } from '@electric-sql/pglite';
 const schema=readFileSync('server/staging/territory_v2_schema.sql','utf8');
 const wallet=readFileSync('server/staging/territory_v2_atomic_wallet.sql','utf8');
 for(const s of [schema,wallet]){
-  assert(!s.includes('wmyrdpbwlkzsktnhookx'),'NO V1 production ID allowed in executable SQL');
+  const executable = s.replace(/--[^\n]*/g,'');
+  assert(!executable.includes('wmyrdpbwlkzsktnhookx'),'NO V1 production ID allowed in executable SQL');
   assert(!/drop\s+(table|schema)|truncate\s+table|alter\s+table\s+public\./i.test(s));
 }
 
@@ -52,7 +53,7 @@ try {
  assert.equal((await request(op2,-35)).rows[0].result.balanceMinor,'85');
  assert.deepEqual(await inspect(),{balance:85,revision:2,ledger:2,receipts:2});
  await assert.rejects(()=>request(op3,-10000),/INSUFFICIENT_RESOURCE/);
- await assert.rejects(()=>request(op3,9000000000000000000n),/BALANCE_OVERFLOW/);
+ await assert.rejects(()=>request(op3,9223372036854775807n),/BALANCE_OVERFLOW/);
  await assert.rejects(()=>request(op3,20,{currency:'blue_diamonds'}),/CURRENCY_DISABLED/);
  await assert.rejects(()=>request(op3,0),/INVALID_WALLET_OPERATION/);
  await assert.rejects(()=>request(op3,10,{hash:'not-a-hex-hash'}),/INVALID_WALLET_OPERATION/);
