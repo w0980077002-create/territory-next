@@ -1,0 +1,68 @@
+/* Screenshot-aligned 2026-10-24 visual templates; isolated V2 only.
+   Keep the accepted winter landscape, 2-row inventory and 5-position footer.
+   The game remains a bright snow scene with a dark wood/gold HUD, per reference. */
+.v2-shell .v2-healthrow{isolation:isolate}
+.v2-shell .v2-orb{overflow:visible}
+.v2-shell .v2-orb-percent{
+  position:absolute;z-index:5;top:-7px;left:50%;transform:translateX(-50%);
+  white-space:nowrap;min-width:31px;text-align:center;padding:1px 4px;
+  border:1px solid #f6d093;border-radius:5px;
+  background:linear-gradient(#473541,#211a2b);color:#fff3be;
+  font-size:9px;font-weight:950;text-shadow:0 1px 2px #120d13;
+  box-shadow:0 1px 2px #0008;pointer-events:none
+}
+.v2-shell .v2-orb.energy>div{border-radius:0 0 50% 50%;overflow:hidden}
+.v2-shell .v2-equipment{grid-template-rows:repeat(2,minmax(0,1fr))}
+.v2-shell .v2-bottom{position:relative;z-index:20;grid-template-columns:repeat(5,minmax(0,1fr))}
+.v2-shell .v2-bottom button[aria-current="page"]:not(.main){border-color:#f3d68e;filter:brightness(1.13)}
+.v2-shell .v2-bottom button:focus-visible,.v2-shell .v2-gear:focus-visible{outline:3px solid #80efff;outline-offset:1px}
+
+.v2-module-section{margin:12px 0 18px;padding:12px 9px;border:2px solid #b98c5f;
+ border-radius:13px;background:
+ linear-gradient(140deg,#45597a 0%,#233653 48%,#132339 100%);
+ box-shadow:inset 0 1px #ffe9ba7a,0 4px 12px #0006}
+.v2-module-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:11px;
+ border-bottom:1px solid #bda07380;padding-bottom:9px}
+.v2-module-heading h3{margin:0;color:#ffe7ab;font-size:16px;line-height:1.1;
+ text-shadow:0 2px 2px #1b1421}
+.v2-module-heading small{display:block;color:#b7d6e9;font-size:9px;letter-spacing:1.15px;
+ font-weight:900;margin-bottom:5px}
+.v2-module-tag{flex:none;align-self:start;color:#f9d7a5;border:1px solid #d2b17a;
+ border-radius:5px;background:#3c2d3bd9;padding:4px 5px;font-size:9px;font-weight:950}
+.v2-module-card-grid{display:grid;grid-template-columns:1fr;gap:8px}
+.v2-module-card{display:flex;align-items:center;gap:10px;width:100%;padding:9px 8px;
+ min-height:82px;color:#fff9eb;text-align:left;border:2px solid #b88c5d;border-radius:10px;
+ background:linear-gradient(130deg,#455b70 0%,#263b52 40%,#14253b);
+ box-shadow:inset 0 1px #b5d4ea55,0 2px 4px #0b192770}
+.v2-module-card.is-active{border-color:#ffdb87;background:linear-gradient(130deg,#615138,#2c4658 50%,#17283f);
+ box-shadow:inset 0 1px #fff1ba70,0 0 8px #eeba5680}
+.v2-module-card:active{transform:scale(.985)}
+.v2-module-icon{flex:0 0 55px;width:55px;height:55px;display:grid;place-items:center;
+ border:2px solid #f3cf8c;border-radius:12px;
+ box-shadow:inset 0 0 12px #120a27aa,0 1px 4px #0c1326;
+ background:radial-gradient(circle at 40% 25%,#d1a65e,#694038 55%,#34283d);
+ color:#ffe2a8;font-size:32px;font-weight:900;text-shadow:0 2px 4px #20152b}
+.v2-module-icon--passive{background:radial-gradient(circle at 30% 25%,#90c1cb,#315176 60%,#1b2844)}
+.v2-module-icon--aura{background:radial-gradient(circle at 30% 25%,#cbadff,#62417b 60%,#282344)}
+.v2-module-icon--companion{background:radial-gradient(circle at 30% 25%,#ffd68d,#946143 58%,#30273b)}
+.v2-module-card-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.v2-module-title{color:#ffe5aa;font-size:13px;font-weight:1000;line-height:1.16}
+.v2-module-subtitle{color:#e4f0fd;font-size:10px;font-weight:850}
+.v2-module-effect{color:#e8f0c6;font-size:10px;line-height:1.3}
+.v2-module-placeholder{color:#a5c9e6;font-size:9px;overflow-wrap:anywhere}
+.v2-module-chevron{font-size:27px;color:#f4cd7e}
+.v2-module-selected{flex:none;font-size:10px;color:#f9deaa;font-weight:900}
+.v2-module-crosslink{display:flex;align-items:center;justify-content:space-between;gap:8px;
+ width:100%;margin-top:11px;padding:11px 14px;border-radius:9px;border:2px solid #efca7b;
+ background:linear-gradient(#b7884b,#69472e);font-weight:950;color:#fff4d5;
+ text-shadow:0 1px 2px #211721}
+.v2-module-footnote{margin:10px 2px 0!important;color:#bdd5e7!important;
+ font-size:10px!important;line-height:1.4!important}
+@media(max-width:370px){
+ .v2-module-card{padding:7px 6px;gap:6px}
+ .v2-module-icon{flex-basis:44px;width:44px;height:44px;font-size:25px}
+ .v2-module-title{font-size:12px}
+ .v2-module-selected{font-size:9px}
+ .v2-module-card-text{gap:2px}
+}
+@media(prefers-reduced-motion:reduce){.v2-module-card{transition:none!important}}
