@@ -40,6 +40,8 @@
     "art:video:compare": "python3 tools/animation-review/contact_sheet.py compare",
     "qa:ui-diff": "bash tools/agent-qa/ui-diff-check.sh",
     "qa:studio-tools": "node scripts/check-v2-studio-helpers.mjs",
+    "qa:creative-addons": "node scripts/check-v2-creative-addons.mjs",
+    "art:sprite-converter": "python3 -m http.server 8765 --bind 127.0.0.1 --directory tools/3d-to-2d",
     "prebuild": "npm run art:v2",
     "pretest:v2": "npm run art:v2",
     "test:server-stage-progress": "node scripts/check-v2-pve-stage-progress.mjs"

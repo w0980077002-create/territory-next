@@ -15,7 +15,7 @@
 | [dust-horizon-template](https://github.com/studioigor/dust-horizon-template) | 3D Fallout-подобный шаблон Godot, игровые промпты/старт | LICENSE нет; чужой жанр и движок |
 | [game-exp-skills](https://github.com/studioigor/game-exp-skills) | `gauntlet-loop` и `gamemaker`: сохранение состояния, слепые A/B, один главнейший дефект за раунд | LICENSE нет; **использован общий метод** без копирования исходников и без дорогих ночных циклов |
 | [jev-rts-assets](https://github.com/studioigor/jev-rts-assets) | Крупный Unity URP-пакет 3D-моделей/анимаций, сторонние лицензии | LICENSE нет, пакет около 1.2 ГБ по данным GitHub; не переносить в лёгкую мобильную игру |
-| [3d-to-2d](https://github.com/studioigor/3d-to-2d) | Готовый браузерный конвертер GLB/GLTF/FBX-анимаций в PNG sprite sheet/ZIP | README говорит MIT, отдельного LICENSE нет; **использовать онлайн** по ссылке, не копировать приложение |
+| [3d-to-2d](https://github.com/studioigor/3d-to-2d) | Готовый браузерный конвертер GLB/GLTF/FBX-анимаций в PNG sprite sheet/ZIP | README говорит MIT, отдельного LICENSE нет; **дополнительно установлен** в изолированную мастерскую `tools/3d-to-2d/` по просьбе владельца |
 | [dust-horizon](https://github.com/studioigor/dust-horizon) | Два объёмных Godot-3D проекта постапокалиптической игры | MIT; не соответствует платформе и жанру V2 |
 | [game-plan-for-local-llm](https://github.com/studioigor/game-plan-for-local-llm) | Godot ТЗ с фазами M0–M8 + 0x72 CC0 pixel sprites | Нет LICENSE на план; чужой пиксельный стиль; структура фаз полезна как идея |
 | [open-llm-npc](https://github.com/studioigor/open-llm-npc) | Python-сервер NPC-диалогов через совместимые LLM API | LICENSE нет; требует работающий LLM/API, усложняет сервер; пока не нужен |
@@ -24,7 +24,7 @@
 | [dungeon-crawler-template](https://github.com/studioigor/dungeon-crawler-template) | Задание + набор 0x72 pixel-art ассетов для сравнения ИИ | Нет LICENSE на репозиторий; описанные 0x72 ассеты CC0, но стиль не соответствует утверждённому V2 |
 | [gpt54-gemini31pro-claude46](https://github.com/studioigor/gpt54-gemini31pro-claude46) | 9 игр из теста трёх моделей с одинаковыми заданиями | LICENSE нет; ориентир сравнения, не производственный инструмент |
 | [random-game-prompt-generator](https://github.com/studioigor/random-game-prompt-generator) | Одна HTML-страница, случайные жанр/стиль/механики и текст задания | LICENSE и README нет; V2 уже имеет точное ТЗ, случайный жанр ему навредит |
-| [lighthouse-uikit](https://github.com/studioigor/lighthouse-uikit) | Код готового web UIKit + **`reference-uikit`**: компоненты по 2 скриншотам, живой текст, адаптивность и проверка 320/390px | LICENSE нет; **применён подход**, чужой морской арт/скрипты не переносим в Vikings V2 |
+| [lighthouse-uikit](https://github.com/studioigor/lighthouse-uikit) | Код готового web UIKit + **`reference-uikit`**: компоненты по 2 скриншотам, живой текст, адаптивность и проверка 320/390px | LICENSE нет; **дополнительно установлен только навык** в `.agents/skills/reference-uikit/` по просьбе владельца; морской арт и демо UIKit не переносились в Vikings V2 |
 | [godot-tutorial-part1](https://github.com/studioigor/godot-tutorial-part1) | Godot/GDScript Pixel Dungeon урок | LICENSE нет; не наш движок |
 | [godot-tutorial-part2](https://github.com/studioigor/godot-tutorial-part2) | Godot/GDScript Pixel Dungeon урок | LICENSE нет; не наш движок |
 | [godot-tutorial-part3](https://github.com/studioigor/godot-tutorial-part3) | Godot/GDScript Pixel Dungeon урок | LICENSE нет; не наш движок |
@@ -38,7 +38,7 @@
 1. **Уже было:** MIT `ref2game` для изолированных 2D-ригов и покадровых проверок, `art:workshop:prepare`, `art:workshop:check`, GitHub Actions.
 2. **Добавлено сейчас:** MIT-скрипт `tools/animation-review/contact_sheet.py` с оригинальной лицензией. Создаёт покадровый JPEG из MP4 и наглядное сравнение двух видео. Для следующего боя/героя нет необходимости вручную ловить фазы движения на телефоне.
 3. **Добавлено сейчас:** MIT-скрипт `tools/agent-qa/ui-diff-check.sh` и `.studio/zones.conf`. ИИ, которому поручено «сделать кнопки красивее», не сможет незаметно выдать редактирование боевой логики за обычный UI без предупреждения в отчёте.
-4. **Принципы без копирования:** анализ визуального языка, гибкие рамки и живой текст (`lighthouse-uikit`); 3D→2D рендер только при наличии оригинального GLB; A/B после фиксированной камеры и с проверкой законченного игрового цикла (`gauntlet-loop`).
+4. **Дальнейшее дополнение:** отдельно импортированы браузерный конвертер `3d-to-2d` и **только скилл** `reference-uikit`. Источники и ограничения — [в специальной инструкции](STUDIOIGOR_CREATIVE_ADDONS_20261025_RU.md); чужой морской арт и 3D-модели не переносились. Принцип A/B по одной камере и законченному циклу (`gauntlet-loop`) остаётся методикой без копирования кода.
 
 Команды:
 
@@ -47,6 +47,7 @@ npm run art:video:sheet -- input.mp4 --range 1:4:0.15 --cols 5 --out .workshop/r
 npm run art:video:compare -- before.mp4 after.mp4 --out .workshop/side-by-side.mp4
 npm run qa:ui-diff -- feature-branch origin/main
 npm run qa:studio-tools
+npm run qa:creative-addons
 ```
 
 ## Риски и честные ограничения

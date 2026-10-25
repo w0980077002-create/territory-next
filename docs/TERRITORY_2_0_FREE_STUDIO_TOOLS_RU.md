@@ -31,7 +31,12 @@
 - **Покадровый разбор видео** из MIT-навыка [3d-animator-skill](https://github.com/studioigor/3d-animator-skill): без Blender и 3D можно взять уже существующий MP4 боя, сделать лист кадров или сравнить два видео. Команды `npm run art:video:sheet -- ...` и `npm run art:video:compare -- ...`. Требуются бесплатные `ffmpeg` и Pillow, которые не добавлены к игровому бандлу.
 - **Детектор опасных UI-правок** из MIT-процесса [gamestudio](https://github.com/studioigor/gamestudio): `npm run qa:ui-diff -- <ветка> <основная-ветка>`. Выводит список TS/TSX/SQL файлов вне CSS-зоны, которые нужно читать глазами, если задача была только изменить внешний вид.
 
-Ещё две полезные идеи остаются **внешними**: [3D → 2D sprite sheet](https://studioigor.github.io/3d-to-2d/) для случая появления собственного анимированного GLB и [reference-uikit](https://github.com/studioigor/lighthouse-uikit/tree/main/skills/reference-uikit) как методика создания UI по картинкам. У этих репозиториев на дату аудита не было отдельного файла `LICENSE`; чужие файлы и художественные ресурсы не копировались.
+**Дополнение 25.10.2026 по просьбе владельца:** ещё две находки установлены в отдельном виде, с указанием авторства и исходных ревизий:
+
+- [3D → 2D Sprite Sheet](https://studioigor.github.io/3d-to-2d/) скопирован как **самостоятельный браузерный инструмент** в `tools/3d-to-2d/`, запускается командой `npm run art:sprite-converter`. Отдельная мастерская **не публикуется** вместе с игрой. README автора объявляет MIT, отдельного файла LICENSE у проекта нет.
+- `reference-uikit` из [lighthouse-uikit](https://github.com/studioigor/lighthouse-uikit/tree/main/skills/reference-uikit) установлен в `.agents/skills/reference-uikit/` вместе с инструкциями и скриптом проверки архива. Это **навык для работы по нашим экранным эталонам**, не перенос демонстрационного морского дизайна. В исходном репозитории отдельного файла LICENSE нет; пользователь сообщил о разрешении автора.
+
+Детали, ссылки и команды — в [документе двух установленных инструментов](STUDIOIGOR_CREATIVE_ADDONS_20261025_RU.md). Целостность проверяется `npm run qa:creative-addons` и CI.
 
 ## Как оживить персонажа
 

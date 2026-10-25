@@ -42,6 +42,12 @@ jobs:
           npm run qa:studio-tools
           bash -n tools/agent-qa/ui-diff-check.sh
           python3 -c "import ast,pathlib; ast.parse(pathlib.Path('tools/animation-review/contact_sheet.py').read_text())"
+      - name: Verify Studio Igor sprite converter and reference UIKit skill
+        run: |
+          npm run qa:creative-addons
+          node --check tools/3d-to-2d/js/app.js
+          for script in tools/3d-to-2d/js/modules/*.js; do node --check "$script"; done
+          python3 -c "import ast,pathlib; ast.parse(pathlib.Path('.agents/skills/reference-uikit/scripts/audit_bundle.py').read_text())"
       - name: Live staging Edge HTTP smoke (read-only, no credentials)
         run: node scripts/check-v2-edge-health.mjs
       - name: Build against fake offline endpoint only
