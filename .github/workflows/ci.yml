@@ -37,6 +37,11 @@ jobs:
           node --check .agents/skills/ref2game/scripts/render.mjs
           node --check .agents/skills/ref2game/scripts/livecheck.mjs
           node --check scripts/prepare-v2-art-workshop.mjs
+      - name: Verify extra free Studio Igor development helpers
+        run: |
+          npm run qa:studio-tools
+          bash -n tools/agent-qa/ui-diff-check.sh
+          python3 -c "import ast,pathlib; ast.parse(pathlib.Path('tools/animation-review/contact_sheet.py').read_text())"
       - name: Live staging Edge HTTP smoke (read-only, no credentials)
         run: node scripts/check-v2-edge-health.mjs
       - name: Build against fake offline endpoint only

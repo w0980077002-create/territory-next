@@ -36,6 +36,10 @@
     "art:v2": "node scripts/generate-v2-original-art.mjs",
     "art:workshop:prepare": "node scripts/prepare-v2-art-workshop.mjs",
     "art:workshop:check": "node scripts/check-v2-art-workshop.mjs",
+    "art:video:sheet": "python3 tools/animation-review/contact_sheet.py sheet",
+    "art:video:compare": "python3 tools/animation-review/contact_sheet.py compare",
+    "qa:ui-diff": "bash tools/agent-qa/ui-diff-check.sh",
+    "qa:studio-tools": "node scripts/check-v2-studio-helpers.mjs",
     "prebuild": "npm run art:v2",
     "pretest:v2": "npm run art:v2",
     "test:server-stage-progress": "node scripts/check-v2-pve-stage-progress.mjs"
