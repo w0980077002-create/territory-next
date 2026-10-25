@@ -1,7 +1,15 @@
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { motionForCombatant } from '../src/v2/animation/motionState.ts';
+import ts from 'typescript';
+
+// CI uses Node 20, which cannot import TypeScript directly. Verify the same
+// production source after TypeScript's standard ES module transpilation.
+const motionSource = readFileSync('src/v2/animation/motionState.ts', 'utf8');
+const motionJs = ts.transpileModule(motionSource, {
+  compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2020 },
+}).outputText;
+const { motionForCombatant } = await import('data:text/javascript;base64,' + Buffer.from(motionJs).toString('base64'));
 
 const registry = JSON.parse(readFileSync('src/v2/animation/motionManifest.json', 'utf8'));
 assert.equal(registry.schema, 'territory-v2-motion-1');
