@@ -40,6 +40,7 @@ for(const file of [
   'server/staging/territory_v2_atomic_wallet.sql',
   'server/staging/territory_v2_verified_player_identity.sql',
   'server/staging/territory_v2_pve_protocol.sql',
+  'server/staging/territory_v2_pve_stage_progress.sql',
 ]){
   const sql=read(file);
   const executable=sql.replace(/--[^\n]*/g,'');

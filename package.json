@@ -35,7 +35,8 @@
     "test:v2-owner-video": "node scripts/check-v2-owner-video-audit.mjs",
     "art:v2": "node scripts/generate-v2-original-art.mjs",
     "prebuild": "npm run art:v2",
-    "pretest:v2": "npm run art:v2"
+    "pretest:v2": "npm run art:v2",
+    "test:server-stage-progress": "node scripts/check-v2-pve-stage-progress.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.4",
