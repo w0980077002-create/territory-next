@@ -29,5 +29,8 @@ const preparer = readFileSync(join(root, 'scripts', 'prepare-v2-art-workshop.mjs
 assert.match(preparer, /\.workshop/);
 assert.match(preparer, /flag: 'wx'/);
 assert.match(preparer, /--dry-run/);
+assert.match(preparer, /MOTION_PROMPTS\.md/);
+assert.match(preparer, /RUN-IN-PLACE/);
+assert.ok(existsSync(join(root, 'docs', 'TERRITORY_2_0_MOTION_PIPELINE_RU.md')));
 
 console.log('V2 art workshop: MIT skill present, rig QA hooks and isolated briefs verified.');

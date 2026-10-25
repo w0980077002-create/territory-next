@@ -28,6 +28,8 @@ import {
   equipV2Item,unequipV2Item,salvageV2Item,upgradeV2Equipped,
   V2_GEAR_SLOTS,type V2Progression,type V2GearSlot,
 } from './core/progression';
+import { MotionActor } from './animation/MotionActor';
+import { motionForCombatant } from './animation/motionState';
 import './next.css';
 import './navigation.css';
 import './approved-ui.css';
@@ -37,6 +39,7 @@ import './visual/inner-panels.css';
 import './visual/reference-templates.css';
 import './visual/reference-audit-fixes.css';
 import './visual/boss-encounters.css';
+import './animation/motion.css';
 
 /**
  * Self-contained playable staging UI for TERRITORY 2.0.
@@ -268,6 +271,12 @@ export function NextApp() {
   const energyPct=Math.max(0,100*battle.mana/battle.maxMana);
   const latestHit = [...battle.events].reverse().find(e=>e.target==='enemy' && e.amount>0);
   const currentStage=stageAt(campaign.currentStage);
+  const foeArt=artForStage(currentStage.id,currentStage.kind);
+  const foeId=foeArt.split('/').pop()?.replace(/\.svg$/,'')??'goblin';
+  const foeMotion=motionForCombatant(currentStage.kind==='boss'?'boss':'enemy',battle.finished,auto,battle.events);
+  const heroMotion=motionForCombatant('hero',battle.finished,auto,battle.events);
+  const companionMotion=motionForCombatant('companion',battle.finished,auto,battle.events);
+  const heroStrike=auto&&battle.events.some(e=>e.target==='enemy'&&['attack','crit'].includes(e.kind));
    const currentBoss=bossForStage(currentStage.id);
    const bossPhase=bossPhaseAt(currentStage.id,battle.enemyHp,config.enemy.hp);
    const combatMessage=[...battle.events].reverse()
@@ -330,18 +339,21 @@ export function NextApp() {
       </div>
       <div className={'v2-combatants'+(!auto?' paused':'')}>
         <div className="v2-follow">
-          <img src={companionArt[companion]} alt="Спутник"/>
+          <MotionActor actorId={companion} poster={companionArt[companion]} alt="Спутник"
+            motion={companionMotion} epoch={battle.tick} active={auto||!!battle.finished} speed={speed}/>
 
         </div>
         <div className="v2-warrior">
-          <img src={altHeroAssets[heroClass]} alt="Викинг"/>
-          <span className="v2-swipe" aria-hidden="true"/>
+          <MotionActor actorId={heroClass} poster={altHeroAssets[heroClass]} alt="Викинг"
+            motion={heroMotion} epoch={battle.tick} active={auto||!!battle.finished} speed={speed}/>
+          {heroStrike&&<span className="v2-swipe" aria-hidden="true" key={battle.tick}/>}
         </div>
         <div className={'v2-foe'+(currentStage.kind==='boss'?' boss':currentStage.kind==='elite'?' elite':'')}>
           {currentBoss?<span className="v2-boss-title">{currentBoss.name}</span>:
             currentStage.kind==='elite'?<span className="v2-elite-title">✦ ЭЛИТА</span>:null}
           <div className="v2-foe-hp"><span style={{width:enemyHpPct+'%'}}/></div>
-          <img src={asset(artForStage(currentStage.id,currentStage.kind))} alt={config.enemyName}/>
+          <MotionActor actorId={foeId} poster={asset(foeArt)} alt={config.enemyName}
+            motion={foeMotion} epoch={battle.tick} active={auto||!!battle.finished} speed={speed}/>
           {currentBoss&&<span className="v2-boss-phase" data-phase={bossPhase.phase}
             aria-label={'Фаза босса '+bossPhase.phase+' из 3'}>
             Фаза {bossPhase.phase}/3 · {bossPhase.label}

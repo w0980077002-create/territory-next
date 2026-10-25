@@ -1,0 +1,29 @@
+{
+  "schema": "territory-v2-motion-1",
+  "actors": {
+    "berserker": { "role": "hero", "facing": "right", "clips": {} },
+    "runemage": { "role": "hero", "facing": "right", "clips": {} },
+    "ranger": { "role": "hero", "facing": "right", "clips": {} },
+    "guardian": { "role": "companion", "facing": "right", "clips": {} },
+    "warrior": { "role": "companion", "facing": "right", "clips": {} },
+    "healer": { "role": "companion", "facing": "right", "clips": {} },
+    "hunter": { "role": "companion", "facing": "right", "clips": {} },
+    "mage": { "role": "companion", "facing": "right", "clips": {} },
+    "warcow": { "role": "companion", "facing": "right", "clips": {} },
+    "wolf": { "role": "enemy", "facing": "left", "clips": {} },
+    "goblin": { "role": "enemy", "facing": "left", "clips": {} },
+    "bandit": { "role": "enemy", "facing": "left", "clips": {} },
+    "troll": { "role": "enemy", "facing": "left", "clips": {} },
+    "giant": { "role": "enemy", "facing": "left", "clips": {} },
+    "giant_king": { "role": "boss", "facing": "left", "clips": {} },
+    "northern_jarl": { "role": "boss", "facing": "left", "clips": {} },
+    "storm_lord": { "role": "boss", "facing": "left", "clips": {} },
+    "undead_king": { "role": "boss", "facing": "left", "clips": {} },
+    "fire_lord": { "role": "boss", "facing": "left", "clips": {} },
+    "barrow_guardian": { "role": "boss", "facing": "left", "clips": {} },
+    "dark_priest": { "role": "boss", "facing": "left", "clips": {} },
+    "bandit_chief": { "role": "boss", "facing": "left", "clips": {} },
+    "chaos_shadow": { "role": "boss", "facing": "left", "clips": {} },
+    "abyss_demon": { "role": "boss", "facing": "left", "clips": {} }
+  }
+}
