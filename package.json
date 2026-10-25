@@ -34,6 +34,8 @@
     "test:v2-gameplay-overhaul": "node scripts/check-v2-gameplay-overhaul.mjs",
     "test:v2-owner-video": "node scripts/check-v2-owner-video-audit.mjs",
     "art:v2": "node scripts/generate-v2-original-art.mjs",
+    "art:workshop:prepare": "node scripts/prepare-v2-art-workshop.mjs",
+    "art:workshop:check": "node scripts/check-v2-art-workshop.mjs",
     "prebuild": "npm run art:v2",
     "pretest:v2": "npm run art:v2",
     "test:server-stage-progress": "node scripts/check-v2-pve-stage-progress.mjs"

@@ -23,3 +23,6 @@ dist-ssr
 .env
 
 dist-monopoly-test
+
+# Temporary art prototypes built using the MIT ref2game workshop.
+.workshop/

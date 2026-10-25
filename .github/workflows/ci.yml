@@ -30,6 +30,13 @@ jobs:
         run: npm run typecheck
       - name: V2 isolated UI and combat checks
         run: npm run test:v2
+      - name: Verify free 2D art workshop and agent guardrails
+        run: |
+          npm run art:workshop:check
+          node --check .agents/skills/ref2game/scripts/qa.mjs
+          node --check .agents/skills/ref2game/scripts/render.mjs
+          node --check .agents/skills/ref2game/scripts/livecheck.mjs
+          node --check scripts/prepare-v2-art-workshop.mjs
       - name: Live staging Edge HTTP smoke (read-only, no credentials)
         run: node scripts/check-v2-edge-health.mjs
       - name: Build against fake offline endpoint only
