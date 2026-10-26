@@ -13,12 +13,18 @@ const {
   v2DemoQuestPeriods,recordV2DemoQuestVictory,
   listV2DemoQuests,claimV2DemoQuest,parseV2DemoQuestState,
 }=await import(data(source));
-const moment=Date.parse('2026-10-24T11:30:00Z'); // Saturday in Kyiv
-const sun=Date.parse('2026-10-25T11:30:00Z'); // Sunday, new weekly period
+const moment=Date.parse('2026-10-24T11:30:00Z'); // Saturday UTC
+const sun=Date.parse('2026-10-25T11:30:00Z'); // Sunday UTC, new weekly period
 const mon=Date.parse('2026-10-26T11:30:00Z');
 const original=createV2DemoQuestState(moment);
 assert.equal(original.dayKey,'2026-10-24');
-assert.equal(original.weekKey,'2026-10-18','week starts Sunday, Kyiv');
+assert.equal(original.weekKey,'2026-10-18','week starts Sunday at 00:00 UTC');
+assert.deepEqual(v2DemoQuestPeriods(Date.parse('2026-10-24T23:59:59.999Z')),
+ {day:'2026-10-24',week:'2026-10-18'});
+assert.deepEqual(v2DemoQuestPeriods(Date.parse('2026-10-25T00:00:00.000Z')),
+ {day:'2026-10-25',week:'2026-10-25'});
+assert.deepEqual(v2DemoQuestPeriods(Date.parse('2026-03-29T00:00:00Z')),
+ {day:'2026-03-29',week:'2026-03-29'},'DST must never affect UTC reset');
 assert.deepEqual(v2DemoQuestPeriods(sun),{day:'2026-10-25',week:'2026-10-25'});
 assert.deepEqual(v2DemoQuestPeriods(mon),{day:'2026-10-26',week:'2026-10-25'});
 assert.throws(()=>v2DemoQuestPeriods(NaN),RangeError);
@@ -94,4 +100,4 @@ const drawer=readFileSync('src/v2/QuestExperience.tsx','utf8');
 assert(drawer.includes('onClaim(d.id)')&&drawer.includes('disabled={!row.ready}'));
 assert(drawer.includes('mode===\'events\'')&&drawer.includes('mode===\'rewards\''));
 assert(!drawer.includes('gold+')&&!drawer.includes('setProgress('),'Quest receipt must not mint fake currency');
-console.log('OK: V2 story/daily/weekly quests, Sunday in Kyiv, single claim, idempotent kills, rollover, browser persistence, zero wallet access');
+console.log('OK: V2 story/daily/weekly quests, Sunday at 00:00 UTC, single claim, idempotent kills, rollover, browser persistence, zero wallet access');

@@ -29,7 +29,7 @@ assert(stages.includes('disabled={!available}')&&stages.includes('stage.id<=stat
 assert(stages.includes('aria-selected={viewingChapter===chapter}'));
 assert(stages.includes('state.highScores[String(active.id)]'));
 assert(stages.includes('onSelect(stage.id)')&&stages.includes('onFight'));
-assert(features.includes('setReadMail')&&features.includes('setMarkedMail'));
+assert(features.includes('onMailAction(')&&features.includes('mailState.read')&&features.includes('v2-mail-filters'));
 assert(features.includes('onNavigate(\'adventure\')'));
 assert(!features.includes('Math.random(')&&!features.includes('fetch('));
 assert(!features.includes('supabase-js')&&!features.includes('localStorage')&&!features.includes('service_role'));

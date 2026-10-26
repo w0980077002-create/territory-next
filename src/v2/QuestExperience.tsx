@@ -117,7 +117,7 @@ export function QuestExperience({
       </div>
       <div className="v2-quest-period">
         {selected==='story'?'Основной путь героя':
-          selected==='daily'?'День: '+period.day:'Неделя от воскресенья: '+period.week}
+          selected==='daily'?'День: '+period.day+' · сброс 00:00 UTC':'Неделя от воскресенья: '+period.week+' · 00:00 UTC'}
       </div>
     </>}
 
@@ -134,7 +134,7 @@ export function QuestExperience({
         <h3>Активности героя</h3>
         <span>Демо-расписание</span>
       </div>
-      <div className="v2-quest-period">День {period.day} · Неделя {period.week}</div>
+      <div className="v2-quest-period">День {period.day} · Неделя {period.week} · сброс 00:00 UTC</div>
       <p className="v2-quest-context">Ежедневные и недельные цели учитываются отдельно. Для будущих ограниченных событий потребуются серверные сроки начала и завершения.</p>
     </>}
 

@@ -17,6 +17,7 @@ const buildURL=asURL(code('src/v2/core/previewBuilds.ts'));
 const questsURL=asURL(code('src/v2/core/demoQuests.ts'));
 const portURL=asURL(code('src/v2/core/demoPort.ts'));
 const skillsURL=asURL(code('src/v2/core/demoSkills.ts'));
+const mailURL=asURL(code('src/v2/core/demoMail.ts'));
 
 let module=code('src/v2/core/localDemoSave.ts');
 module=module.replace(/from ['"]\.\/progression['"]/, "from '"+progressURL+"'");
@@ -24,10 +25,12 @@ module=module.replace(/from ['"]\.\/previewBuilds['"]/, "from '"+buildURL+"'");
 module=module.replace(/from ['"]\.\/demoQuests['"]/, "from '"+questsURL+"'");
 module=module.replace(/from ['"]\.\/demoPort['"]/, "from '"+portURL+"'");
 module=module.replace(/from ['"]\.\/demoSkills['"]/, "from '"+skillsURL+"'");
+module=module.replace(/from ['"]\.\/demoMail['"]/, "from '"+mailURL+"'");
 const {
   createV2DemoProgress,
   applyV2DemoVictory,
 }=await import(progressURL);
+const {createV2DemoMailState,recordV2DemoMailBattle}=await import(mailURL);
 const {
   V2_LOCAL_DEMO_SAVE_KEY,
   V2_LOCAL_DEMO_SAVE_VERSION,
@@ -50,6 +53,7 @@ const payload={
   version:1,savedAt:Date.now(),chapter:6,wave:3,highestUnlockedChapter:6,
   encounterId:2,heroClass:'berserker',rune:'frost',companion:'warcow',
   speed:2,auto:false,victories:1,defeats:0,progress,
+  mail:recordV2DemoMailBattle(createV2DemoMailState(),'v2-demo-encounter-1',5,Date.parse('2026-10-26T12:00:00Z')),
   builds:[
     {slot:1,build:{heroClass:'berserker',rune:'frost',companion:'warcow'}},
     {slot:2,build:null},{slot:3,build:null}
@@ -69,6 +73,7 @@ assert.equal(loaded.progress.receipts[0],'v2-demo-encounter-1');
 assert.equal(applyV2DemoVictory(loaded.progress,'v2-demo-encounter-1',6,2,.99),loaded.progress,
   'Refresh/replay must not regrant even demo victory');
 assert.equal(loaded.progress.latestLoot,null,'Never accept stored loot claims');
+assert.equal(loaded.mail.reports.length,1,'Mail history must survive browser reload');
 const copy=JSON.parse(encodeV2LocalDemoSave(payload));
 const invalid=[
   {...copy,version:2},
@@ -76,6 +81,8 @@ const invalid=[
   {...copy,encounterId:-1},
   {...copy,heroClass:'hacker'},
   {...copy,auto:'yes'},
+  {...copy,mail:{...copy.mail,read:['not-a-real-mail']}},
+  {...copy,mail:{...copy.mail,reports:[...copy.mail.reports,copy.mail.reports[0]]}},
   {...copy,skills:{version:1,levels:{basic:20,core:0,control:0,ultimate:0,passive:0}}},
   {...copy,progress:{...copy.progress,gold:-1}},
   {...copy,progress:{...copy.progress,gems:1e18}},
@@ -100,6 +107,10 @@ dup.progress.inventory.push(dup.progress.equipped.weapon);
 assert.equal(decodeV2LocalDemoSave(JSON.stringify(dup)),null,'Duplicate equipped/warehouse item');
 assert.equal(decodeV2LocalDemoSave('not-json'),null);
 assert.equal(decodeV2LocalDemoSave('x'.repeat(400001)),null);
+const oldSave=JSON.parse(encodeV2LocalDemoSave(payload));
+delete oldSave.mail;
+assert.equal(decodeV2LocalDemoSave(JSON.stringify(oldSave)).mail,undefined,
+ 'Old saves without mail must continue to load');
 assert.equal(readV2LocalDemoSave({getItem(){throw Error('browser disabled')}}),null);
 assert.equal(writeV2LocalDemoSave({setItem(){throw Error('quota')}},payload),false);
 assert.equal(clearV2LocalDemoSave(storage),true);
@@ -109,6 +120,7 @@ assert.equal(values.get('territory-v1-live-player'),'keep-forever',
 const app=readFileSync('src/v2/NextApp.tsx','utf8');
 assert(app.includes('readV2LocalDemoSave(v2DemoStorage())'));
 assert(app.includes('writeV2LocalDemoSave('));
+assert(app.includes('mail:mailState')&&app.includes('recordV2DemoMailBattle('));
 assert(app.includes('clearV2LocalDemoSave(v2DemoStorage())'));
 assert(app.includes('window.confirm('));
 assert(!app.includes('import { supabase }'));

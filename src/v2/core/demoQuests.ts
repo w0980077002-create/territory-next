@@ -49,20 +49,13 @@ const DATE_KEY=/^\d{4}-\d{2}-\d{2}$/;
 const nonnegative=(n:unknown,max=1e7):n is number=>
   typeof n==='number'&&Number.isSafeInteger(n)&&n>=0&&n<=max;
 
-function kyivDay(date:Date):string{
-  const tokens=new Intl.DateTimeFormat('en-GB',{
-    timeZone:'Europe/Kyiv',year:'numeric',month:'2-digit',day:'2-digit',
-  }).formatToParts(date);
-  const d=(type:string)=>tokens.find(x=>x.type===type)?.value??'';
-  return d('year')+'-'+d('month')+'-'+d('day');
-}
+/** All V2 daily and weekly quests reset at 00:00 UTC (device timezone independent). */
 export function v2DemoQuestPeriods(epochMs:number):{day:string;week:string}{
   if(!Number.isFinite(epochMs)||epochMs<0||epochMs>8.64e15)
     throw new RangeError('INVALID_QUEST_CLOCK');
-  const day=kyivDay(new Date(epochMs));
-  const [y,m,d]=day.split('-').map(Number);
-  const today=new Date(Date.UTC(y,m-1,d));
-  const sunday=new Date(Date.UTC(y,m-1,d-today.getUTCDay()));
+  const day=new Date(epochMs).toISOString().slice(0,10);
+  const today=new Date(day+'T00:00:00.000Z');
+  const sunday=new Date(today.getTime()-today.getUTCDay()*86400000);
   return {day,week:sunday.toISOString().slice(0,10)};
 }
 export function createV2DemoQuestState(nowMs=Date.now()):V2DemoQuestState{
