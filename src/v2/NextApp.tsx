@@ -18,6 +18,7 @@ import { QuestExperience } from './QuestExperience';
 import { PortExperience } from './PortExperience';
 import {createV2DemoMiningState,beginV2DemoMining,claimV2DemoMining,cancelV2DemoMining,type V2DemoResource} from './core/demoPort';
 import {createV2DemoQuestState,recordV2DemoQuestVictory,claimV2DemoQuest,type V2DemoQuestId} from './core/demoQuests';
+import {createV2DemoMailState,recordV2DemoMailBattle,updateV2DemoMail} from './core/demoMail';
 import { DEMO_START_CHAPTER, DEMO_WAVES_PER_CHAPTER, chooseDemoChapter, nextDemoChapterVictory, demoCombatSample } from './core/campaignFlow';
 import { V2_SKILL_CATEGORIES, type V2SkillCategory } from './core/buildLoadout';
 import {createV2DemoSkillState,learnV2DemoSkill,availableV2DemoSkills,V2_SKILL_TRAINING} from './core/demoSkills';
@@ -191,6 +192,7 @@ export function NextApp() {
     ...g,progress:typeof action==='function'?action(g.progress):action
   }));
   const [questState,setQuestState] = useState(()=>offlineSave?.quests??createV2DemoQuestState());
+  const [mailState,setMailState] = useState(()=>offlineSave?.mail??createV2DemoMailState());
   const [miningState,setMiningState] = useState(()=>offlineSave?.mining??createV2DemoMiningState());
   const [encounterId,setEncounterId] = useState(offlineSave?.encounterId??1);
   const [gearFocus,setGearFocus] = useState<V2GearSlot>('weapon');
@@ -219,11 +221,11 @@ export function NextApp() {
       v2DemoStorage(),
       {version:1,savedAt:Date.now(),chapter,wave,highestUnlockedChapter,
        encounterId,heroClass,rune,companion,speed,auto,victories,defeats,
-       progress,builds:demoBuilds,quests:questState,mining:miningState,skills:demoSkills}
+       progress,builds:demoBuilds,quests:questState,mining:miningState,skills:demoSkills,mail:mailState}
     );
     setSaveStatus(ok?'local':'memory');
   },[chapter,wave,highestUnlockedChapter,encounterId,heroClass,rune,
-     companion,speed,auto,victories,defeats,progress,demoBuilds,questState,miningState,demoSkills]);
+     companion,speed,auto,victories,defeats,progress,demoBuilds,questState,miningState,demoSkills,mailState]);
   useEffect(()=>{
     if(!auto || battle.finished) return;
     const interval = window.setInterval(()=>{
@@ -252,6 +254,7 @@ export function NextApp() {
         });
         setVictories(v=>v+1);
         setQuestState(q=>recordV2DemoQuestVictory(q,'v2-demo-encounter-'+encounterId,wave===DEMO_WAVES_PER_CHAPTER,Date.now()));
+        setMailState(m=>recordV2DemoMailBattle(m,'v2-demo-encounter-'+encounterId,campaign.currentStage,Date.now()));
         const outcome=nextDemoChapterVictory({chapter,wave},highestUnlockedChapter);
         setHighestUnlockedChapter(outcome.highestUnlockedChapter);
         setChapter(outcome.nextRoute.chapter);
@@ -264,7 +267,7 @@ export function NextApp() {
       setNotice('');
     },1350);
     return ()=>window.clearTimeout(timeout);
-  },[battle.finished,battle.tick,battle.heroHp,config,wave,chapter,encounterId,highestUnlockedChapter]);
+  },[battle.finished,battle.tick,battle.heroHp,config,wave,chapter,encounterId,highestUnlockedChapter,campaign.currentStage]);
 
   const heroHpPct=Math.max(0,100*battle.heroHp/config.hero.hp);
   const enemyHpPct=Math.max(0,100*battle.enemyHp/config.enemy.hp);
@@ -523,7 +526,9 @@ export function NextApp() {
           />}
           {overlay!=='menu'&&featureScreens.includes(overlay)&&
             <FeaturePanelExperience mode={overlay as FeaturePanelId}
-              progress={progress} campaign={campaign} onNavigate={open}/>}
+              progress={progress} campaign={campaign} mailState={mailState}
+               onMailAction={(action,id)=>setMailState(m=>updateV2DemoMail(m,action,id))}
+               onNavigate={open}/>}
           {overlay==='ranking'&&<><h3>Рейтинг похода · локальная демонстрация</h3><div className="v2-info-row">Победы <b>{victories}</b></div><div className="v2-info-row">Боссы <b>{progress.bosses}</b></div><div className="v2-info-row">Поражения <b>{defeats}</b></div><p>Настоящий рейтинг появится после подключения независимого серверного учёта матчей.</p></>}
           {overlay==='settings'&&<div className="v2-feature-cards">
             <h3>Настройки демоверсии</h3>
