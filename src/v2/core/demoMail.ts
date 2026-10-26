@@ -115,9 +115,12 @@ export function parseV2DemoMailState(raw:unknown):V2DemoMailState|null{
  const check=(arr:unknown[]):arr is string[]=>
   arr.length<=V2_DEMO_MAIL_LIMIT+STATIC_IDS.length&&
   arr.every(id=>validId(id)&&allowed.has(id))&&unique(arr as string[]);
- if(!check(x.read)||!check(x.reviewed)||!check(x.archived)||
-   !x.reviewed.every(id=>x.read.includes(id))||
-   !x.archived.every(id=>x.read.includes(id)))return null;
- return {version:1,read:[...x.read],reviewed:[...x.reviewed],
-  archived:[...x.archived],reports};
+ const read=x.read as unknown[];
+ const reviewed=x.reviewed as unknown[];
+ const archived=x.archived as unknown[];
+ if(!check(read)||!check(reviewed)||!check(archived)||
+   !reviewed.every(id=>read.includes(id))||
+   !archived.every(id=>read.includes(id)))return null;
+ return {version:1,read:[...read],reviewed:[...reviewed],
+  archived:[...archived],reports};
 }
