@@ -155,3 +155,16 @@
  .v2-drawer[data-v2-screen="menu"] .v2-view-tile b{height:55px}
  .v2-drawer[data-v2-screen="menu"] .v2-view-tile img{height:54px}
 }
+
+/* V2 local mail: persistent inbox, unread folder and archived reports. */
+.v2-mail-filters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.v2-mail-filters button{min-height:38px;min-width:0;border:2px solid #ab8b61;border-radius:9px;
+ background:linear-gradient(#4d6681,#273e56);color:#ffefcf;font-size:11px;font-weight:900}
+.v2-mail-filters button.selected{border-color:#ffe2a1;background:linear-gradient(#a5774c,#58403c)}
+.v2-mail-row .v2-mail-reviewed{flex:0 0 auto;max-width:20px;color:#a8f2bf;font-weight:900}
+.v2-mail-row small{overflow-wrap:anywhere}
+.v2-mail-empty{padding:17px;text-align:center;border:1px dashed #8ca3b5;border-radius:9px;
+ color:#c5d5e5;font-size:12px}
+.v2-mail-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:9px}
+.v2-mail-actions .v2-inner-action{min-width:0;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:360px){.v2-mail-actions{grid-template-columns:1fr}}

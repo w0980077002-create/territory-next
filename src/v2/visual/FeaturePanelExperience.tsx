@@ -2,6 +2,7 @@ import {useState} from 'react';
 import type {V2ScreenId} from '../interfaceContract';
 import type {V2Progression} from '../core/progression';
 import type {V2StageCampaign} from '../core/gameplayOverhaul';
+import {listV2DemoMail,type V2DemoMailState} from '../core/demoMail';
 import './inner-panels.css';
 
 export type FeaturePanelId=Extract<V2ScreenId,
@@ -9,14 +10,6 @@ export type FeaturePanelId=Extract<V2ScreenId,
   'specialMarket'|'welcomeBundle'|'seaBundle'|'clan'>;
 
 const asset=(path:string)=>import.meta.env.BASE_URL+path.replace(/^\//,'');
-const mailItems=[
-  {id:'welcome',title:'Добро пожаловать на Север',from:'Летописец TERRITORY',
-   image:'art/icons/mail.svg',body:'Ты открываешь отдельную тестовую TERRITORY 2.0. Здесь можно проверять экраны и прокачку, не затрагивая настоящих игроков.'},
-  {id:'expedition',title:'Отчёт о походах',from:'Совет северных земель',
-   image:'art/icons/quests.svg',body:'Все результаты кампании и предметы сохраняются лишь в демоданных этого браузера. Серверная выдача наград в почте пока не подключена.'},
-  {id:'supplies',title:'Подарки и посылки',from:'Кладовщик',
-   image:'art/icons/rewards.svg',body:'В релизе здесь появятся вложения писем, получение одной или нескольких наград и защита от повторной выдачи. Пока это только интерактивная демонстрация.'},
-] as const;
 const trials=[
  {stage:10,name:'Страж ледяной крепости',image:'art/bosses/giant_king.svg'},
  {stage:20,name:'Северный ярл',image:'art/bosses/northern_jarl.svg'},
@@ -39,49 +32,66 @@ function HallTitle({eyebrow,title,detail,image}:{
  </div>;
 }
 
-export function FeaturePanelExperience({mode,progress,campaign,onNavigate}:{
+export function FeaturePanelExperience({mode,progress,campaign,mailState,onMailAction,onNavigate}:{
  mode:FeaturePanelId;
  progress:V2Progression;
  campaign:V2StageCampaign;
+ mailState:V2DemoMailState;
+ onMailAction:(action:'read'|'review'|'archive'|'restore'|'read-all',id?:string)=>void;
  onNavigate:(id:V2ScreenId)=>void;
 }){
  const [openedMail,setOpenedMail]=useState<string>('welcome');
- const [readMail,setReadMail]=useState<readonly string[]>([]);
- const [markedMail,setMarkedMail]=useState<readonly string[]>([]);
+ const [mailFilter,setMailFilter]=useState<'inbox'|'unread'|'archive'>('inbox');
  const [selectedBoss,setSelectedBoss]=useState<number>(10);
  const [clanTab,setClanTab]=useState<'overview'|'roster'|'missions'>('overview');
- const unreads=mailItems.filter(m=>!readMail.includes(m.id)).length;
- const mail=mailItems.find(m=>m.id===openedMail)??mailItems[0];
- const markRead=(id:string)=>setReadMail(old=>old.includes(id)?old:[...old,id]);
+ const mailItems=listV2DemoMail(mailState);
+ const unreads=mailItems.filter(m=>!mailState.read.includes(m.id)&&!mailState.archived.includes(m.id)).length;
+ const visibleMail=mailItems.filter(m=>mailFilter==='archive'?mailState.archived.includes(m.id):
+   !mailState.archived.includes(m.id)&&(mailFilter!=='unread'||!mailState.read.includes(m.id)));
+ const mail=visibleMail.find(m=>m.id===openedMail)??visibleMail[0]??null;
 
  if(mode==='mail')return <section className="v2-inner-screen" data-screen="mail">
   <HallTitle eyebrow="КОРОЛЕВСКАЯ ПОЧТА" title="Письма героя" detail={'Непрочитано: '+unreads}
    image="art/icons/mail.svg"/>
   <div className="v2-inner-toolbar">
-   <span>{mailItems.length} письма · пример интерфейса</span>
-   <button type="button" disabled={unreads===0} onClick={()=>setReadMail(mailItems.map(m=>m.id))}>Прочитать все</button>
+   <span>{mailItems.length} писем · история боёв сохраняется в браузере</span>
+   <button type="button" disabled={unreads===0} onClick={()=>onMailAction('read-all')}>Прочитать все</button>
+  </div>
+  <div className="v2-mail-filters" role="group" aria-label="Папки почты">
+   {([{id:'inbox',label:'Входящие'},{id:'unread',label:'Непрочитанные'},{id:'archive',label:'Архив'}] as const)
+    .map(filter=><button type="button" key={filter.id} aria-pressed={mailFilter===filter.id}
+      className={mailFilter===filter.id?'selected':''}
+      onClick={()=>setMailFilter(filter.id)}>{filter.label}</button>)}
   </div>
   <div className="v2-mail-layout">
-   <div className="v2-mail-list" role="group" aria-label="Входящие письма">
-    {mailItems.map(m=><button type="button" key={m.id} className={'v2-mail-row'+(openedMail===m.id?' selected':'')}
-       aria-pressed={openedMail===m.id} onClick={()=>{setOpenedMail(m.id);markRead(m.id)}}>
-      <img src={asset(m.image)} alt=""/><span><strong>{m.title}</strong><small>{m.from}</small></span>
-      {!readMail.includes(m.id)&&<em>НОВОЕ</em>}
+   <div className="v2-mail-list" role="group" aria-label="Письма в выбранной папке">
+    {visibleMail.map(m=><button type="button" key={m.id} className={'v2-mail-row'+(mail?.id===m.id?' selected':'')}
+       aria-pressed={mail?.id===m.id} onClick={()=>{setOpenedMail(m.id);onMailAction('read',m.id)}}>
+      <img src={asset(m.image)} alt=""/><span><strong>{m.title}</strong><small>{m.from} · {m.sentAt}</small></span>
+      {!mailState.read.includes(m.id)&&<em>НОВОЕ</em>}
+      {mailState.reviewed.includes(m.id)&&<span className="v2-mail-reviewed" aria-label="Просмотрено">✓</span>}
      </button>)}
+    {visibleMail.length===0&&<div className="v2-mail-empty">В этой папке пока нет писем.</div>}
    </div>
-   <article className="v2-inner-parchment">
-    <small>ПИСЬМО · ДЕМОВЕРСИЯ</small><h4>{mail.title}</h4>
+   {mail&&<article className="v2-inner-parchment">
+    <small>ПИСЬМО · ДЕМО · {mail.sentAt}</small><h4>{mail.title}</h4>
     <p>{mail.body}</p>
     <div className="v2-inner-reward-demo"><img src={asset('art/icons/rewards.svg')} alt=""/>
-     <div><strong>Посылка без предметов</strong><small>Серверное начисление отключено</small></div>
+     <div><strong>{mail.attachmentLabel}</strong><small>Серверное начисление отключено</small></div>
     </div>
-    <button type="button" className="v2-inner-action" disabled={markedMail.includes(mail.id)}
-     onClick={()=>{markRead(mail.id);setMarkedMail(old=>old.includes(mail.id)?old:[...old,mail.id])}}>
-      {markedMail.includes(mail.id)?'✓ Отмечено в демо':'Отметить просмотренным'}
-    </button>
-   </article>
+    <div className="v2-mail-actions">
+     <button type="button" className="v2-inner-action" disabled={mailState.reviewed.includes(mail.id)}
+      onClick={()=>onMailAction('review',mail.id)}>
+       {mailState.reviewed.includes(mail.id)?'✓ Просмотрено':'Отметить просмотренным'}
+     </button>
+     <button type="button" className="v2-inner-action"
+      onClick={()=>onMailAction(mailState.archived.includes(mail.id)?'restore':'archive',mail.id)}>
+       {mailState.archived.includes(mail.id)?'Вернуть во входящие':'В архив'}
+     </button>
+    </div>
+   </article>}
   </div>
-  <p className="v2-inner-disclaimer">Кнопки работают только на этом экране. Никакие предметы, VIP и валюты не выдаются.</p>
+  <p className="v2-inner-disclaimer">Письма и отметки сохраняются только в этой тестовой игре. Никакие предметы, VIP и валюты не выдаются.</p>
  </section>;
 
  if(mode==='trials') {
