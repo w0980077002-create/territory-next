@@ -5,8 +5,8 @@
  * V2_ENABLE_TELEGRAM_GATEWAY=yes are configured on staging.
  * The caller's Telegram identity is taken solely from raw signed initData.
  *
- * NOT a general rewards API; GET profile and first-time class registration
- * are the only permitted operations.
+ * NOT a rewards API. Authenticated profile and campaign reads, plus first-time
+ * class registration, are the only permitted operations.
  */
 export interface V2VerifiedTelegramUser {
   telegramUserId:number;
@@ -23,6 +23,16 @@ export interface V2GatewaySnapshot {
   }|null;
   wallets?:ReadonlyArray<{currency:string;amountMinor:string;revision:string}>;
 }
+export interface V2CampaignSnapshot {
+  readonly registered:boolean;
+  readonly chapter?:number;
+  readonly wave?:number;
+  readonly highestUnlockedChapter?:number;
+  readonly revision?:string;
+  readonly clearedCount?:number;
+  readonly campaignCompleted?:boolean;
+  readonly recentClears?:ReadonlyArray<{chapter:number;wave:number;clearedAt:string}>;
+}
 export type GatewayDeps={
   readonly enabled:boolean;
   readonly allowOrigin:string;
@@ -30,6 +40,7 @@ export type GatewayDeps={
   /** Atomic account-based budget, invoked only after authentic HMAC verification. */
   readonly enforceRateLimit:(user:V2VerifiedTelegramUser,action:'profile'|'join')=>Promise<boolean>;
   readonly getProfile:(user:V2VerifiedTelegramUser)=>Promise<V2GatewaySnapshot>;
+  readonly getCampaign:(user:V2VerifiedTelegramUser)=>Promise<V2CampaignSnapshot>;
   readonly register:(user:V2VerifiedTelegramUser,classId:'berserker'|'runemage'|'ranger')=>Promise<V2GatewaySnapshot>;
 };
 export const MAX_V2_AUTH_BODY_CHARS=9000;
@@ -55,8 +66,8 @@ export async function handleV2GatewayRequest(request:Request,deps:GatewayDeps):P
   const origin=request.headers.get('Origin');
   const corsOrigin=origin===deps.allowOrigin?origin:undefined;
   const path=new URL(request.url).pathname.replace(/\/$/,'');
-  const action=path.endsWith('/health')?'health'
-    :path.endsWith('/profile')?'profile':path.endsWith('/join')?'join':'not_found';
+  // Match a whole endpoint name, not a suffix like /fake-profile.
+  const action=path.match(/\/territory-v2-api\/(health|profile|join|campaign)$/)?.[1]??'not_found';
   if(action==='not_found')return response({error:'NOT_FOUND'},404,corsOrigin);
   if(origin && !corsOrigin)return response({error:'ORIGIN_NOT_ALLOWED'},403);
   if(request.method==='OPTIONS'){
@@ -96,7 +107,8 @@ export async function handleV2GatewayRequest(request:Request,deps:GatewayDeps):P
     let user:V2VerifiedTelegramUser;
     try{user=await deps.verify(input.initData);}
     catch{return response({error:'INVALID_TELEGRAM_SIGNATURE'},401,corsOrigin);}
-    if(!(await deps.enforceRateLimit(user,action)))
+    // Campaign reads share the profile budget: no second quota to abuse.
+    if(!(await deps.enforceRateLimit(user,action==='join'?'join':'profile')))
       return response({error:'RATE_LIMITED'},429,corsOrigin);
     if(action==='join'){
       const klass=input.classId;
@@ -104,6 +116,10 @@ export async function handleV2GatewayRequest(request:Request,deps:GatewayDeps):P
         return response({error:'UNSUPPORTED_V2_CLASS'},422,corsOrigin);
       const profile=await deps.register(user,klass);
       return response({data:profile},200,corsOrigin);
+    }
+    if(action==='campaign'){
+      const campaign=await deps.getCampaign(user);
+      return response({data:campaign},200,corsOrigin);
     }
     const profile=await deps.getProfile(user);
     return response({data:profile},200,corsOrigin);

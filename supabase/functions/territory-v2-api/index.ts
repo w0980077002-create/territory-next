@@ -5,6 +5,7 @@
 import postgres from 'npm:postgres@3.4.3';
 import {handleV2GatewayRequest, type V2VerifiedTelegramUser, type V2GatewaySnapshot} from '../../../server/api/telegramGateway.ts';
 import {verifyV2TelegramInitData} from '../../../server/telegram/verifyInitData.ts';
+import {V2_CAMPAIGN_SNAPSHOT_QUERY,toV2CampaignSnapshot} from '../../../server/api/campaignSnapshot.ts';
 
 const EXPECTED_URL='https://ksikzkrvuuhermhnbycn.supabase.co';
 const ALLOWED_ORIGIN='https://w0980077002-create.github.io';
@@ -70,6 +71,13 @@ const deps={
     return rows[0]?.allowed===true;
   },
   getProfile,
+  // Read-only, parameterized SQL: identity comes exclusively from signed initData.
+  // No client-supplied playerId, chapter, receipt, rewards or wallet changes.
+  getCampaign:async(user:V2VerifiedTelegramUser)=>{
+    if(!sql)throw new Error('V2_GATEWAY_NOT_CONFIGURED');
+    const rows=await sql.unsafe(V2_CAMPAIGN_SNAPSHOT_QUERY,[user.telegramUserId.toString()]);
+    return toV2CampaignSnapshot(rows[0]??null);
+  },
   register:async(user:V2VerifiedTelegramUser,classId:'berserker'|'runemage'|'ranger')=>{
     if(!sql)throw new Error('V2_GATEWAY_NOT_CONFIGURED');
     await sql.begin(async tx=>{
