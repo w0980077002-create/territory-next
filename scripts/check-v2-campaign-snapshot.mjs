@@ -32,9 +32,10 @@ try{
       (operation_id,player_id,action_code,request_hash,status,ruleset_version,completed_at)
       values($1,$2,'pve.stage_clear',$3,'settled','test',now())`,
       [receipt,player,'a'.repeat(64)]);
+    // Historical battles must not occupy the unique active-battle slot.
     await db.query(`insert into territory_v2.battle_sessions
       (id,player_id,character_id,stage_chapter,stage_wave,combat_rules_version,status)
-      values($1,$2,$3,$4,$5,'test','ready')`,
+      values($1,$2,$3,$4,$5,'test','expired')`,
       [battle,player,char,chapter,wave]);
     await db.query(`insert into territory_v2.pve_stage_clears
       (battle_id,player_id,character_id,chapter,wave,clear_operation_id,next_chapter,next_wave,cleared_at)
