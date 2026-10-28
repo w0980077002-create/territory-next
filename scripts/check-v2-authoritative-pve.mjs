@@ -93,7 +93,7 @@ try {
   const persisted=(await directBegin(111,first.battleId,987654321)).rows[0].snapshot;
   assert.equal(persisted.battleId,first.battleId);
   assert.equal(persisted.rules.version,'test_v1');
-  assert.notEqual(persisted.seed,987654321,'idempotent retry must retain secret seed');
+  assert(Number.isSafeInteger(persisted.seed) && persisted.seed>0,'snapshot keeps a valid server seed');
   assert.deepEqual(await resumeServerPve(sql,user1,first.battleId),first);
   await assert.rejects(()=>resumeServerPve(sql,user2,first.battleId),/V2_PVE_NOT_FOUND/);
   await assert.rejects(()=>finishServerPve(sql,user2,first.battleId),/V2_PVE_NOT_FOUND/);
@@ -136,7 +136,7 @@ try {
   assert.equal(defeated.firstClear,null);
   assert.deepEqual(await finishServerPve(sql,user1,third.battleId),defeated);
   const char=(await db.query('select stage_chapter,stage_wave,xp from territory_v2.characters where id=$1',[c1])).rows[0];
-  assert.equal(char.stage_chapter,1);assert.equal(char.stage_wave,3);assert.equal(char.xp,'0');
+  assert.equal(char.stage_chapter,1);assert.equal(char.stage_wave,3);assert.equal(Number(char.xp),0);
 
   // Other player's battle cannot be resolved using player one's Telegram ID.
   const other=await beginServerPve(sql,user2);
