@@ -1,9 +1,20 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {PGlite} from '@electric-sql/pglite';
+import ts from 'typescript';
 
 // No network, no Supabase credentials: real PostgreSQL semantics in PGlite.
+const transpile=file=>ts.transpileModule(readFileSync(file,'utf8'),{
+  compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}
+}).outputText;
+const combatUrl='data:text/javascript;base64,'+
+  Buffer.from(transpile('server/combat/resolvePve.ts')).toString('base64');
+const orchestratorJs=transpile('server/combat/runAuthoritativePve.ts')
+  .replace(/from ['"]\\.\\/resolvePve\\.ts['"]/, 'from "'+combatUrl+'"');
+const {inspectServerPveLifecycle}=await import('data:text/javascript;base64,'+
+  Buffer.from(orchestratorJs).toString('base64'));
 const db=new PGlite();
+const sql={unsafe:async(query,params)=>(await db.query(query,[...params])).rows};
 const read=file=>readFileSync(file,'utf8');
 const uid=n=>n.toString(16).padStart(8,'0')+'-0000-4000-8000-'+n.toString(16).padStart(12,'0');
 const [p1,p2,p3,c1,c2,c3,b1,b2,b3,b4,b5]=
@@ -63,6 +74,10 @@ try{
     (singleton,min_duration_seconds,max_duration_seconds) values(true,3,20)`);
   assert.equal((await open(p1,c1,b1)).rows[0].id,b1);
   assert.equal((await readLifecycle(111,b1)).rows[0].result.status,'running');
+  assert.deepEqual(await inspectServerPveLifecycle(sql,{telegramUserId:111},b1),
+    {battleId:b1,status:'running'});
+  await assert.rejects(()=>inspectServerPveLifecycle(sql,{telegramUserId:222},b1),
+    /V2_PVE_NOT_FOUND/);
   assert.equal((await readLifecycle(222,b1)).rows[0].result,null,'other user cannot inspect battle');
   await assert.rejects(()=>finish(b1,uid(100)),/PVE_SESSION_TOO_EARLY/);
   assert.equal(await status(b1),'running');
@@ -82,6 +97,8 @@ try{
   assert.equal((await open(p2,c2,b4)).rows[0].id,b4,'different player remains independent');
   await db.query(`update territory_v2.battle_sessions
     set started_at=clock_timestamp()-interval '25 seconds' where id=$1`,[b2]);
+  assert.deepEqual(await inspectServerPveLifecycle(sql,{telegramUserId:111},b2),
+    {battleId:b2,status:'expired'},'safe server status masks stale session');
   assert.equal((await readLifecycle(111,b2)).rows[0].result.status,'expired',
     'stale status is visible without mutating DB');
   assert.equal(await status(b2),'running');
