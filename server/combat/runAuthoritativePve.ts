@@ -129,3 +129,33 @@ export async function finishServerPve(
     throw new Error('V2_PVE_SETTLEMENT_MISMATCH');
   return {battle:result,firstClear:receipt.clear??null,awardsGranted:false};
 }
+
+/** Status-only recovery read for an HMAC-verified V2 player.
+ * No seed, rules, hero stats or economic state ever leaves the server.
+ * Requires the private territory_v2_pve_lifecycle.sql migration.
+ */
+export type V2PveLifecycleStatus =
+  'ready'|'running'|'result_pending'|'settled'|'expired'|'cancelled'|'unavailable';
+export interface V2PveLifecycleView {
+  readonly battleId:string;
+  readonly status:V2PveLifecycleStatus;
+}
+export async function inspectServerPveLifecycle(
+  sql:V2PrivateSql,identity:VerifiedV2PveIdentity,battleId:string,
+):Promise<V2PveLifecycleView>{
+  assertIdentity(identity);assertBattleId(battleId);
+  const rows=await sql.unsafe(
+    'select territory_v2.read_pve_lifecycle($1::bigint,$2::uuid) as result',
+    [String(identity.telegramUserId),battleId]);
+  const value=rows[0]?.result;
+  if(!value||typeof value!=='object'||Array.isArray(value))
+    throw new Error('V2_PVE_NOT_FOUND');
+  const result=value as Record<string,unknown>;
+  const allowed:readonly string[]=[
+    'ready','running','result_pending','settled','expired','cancelled','unavailable'
+  ];
+  if(result.battleId!==battleId||typeof result.status!=='string'||
+     !allowed.includes(result.status))
+    throw new Error('V2_PVE_INVALID_LIFECYCLE');
+  return {battleId,status:result.status as V2PveLifecycleStatus};
+}
