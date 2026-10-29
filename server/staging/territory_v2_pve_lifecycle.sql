@@ -107,7 +107,7 @@ for each row execute function territory_v2.audit_pve_session_expiration();
 -- as expired even before the next start performs transactional cleanup.
 create or replace function territory_v2.read_pve_lifecycle(
   p_telegram_user_id bigint,p_battle_id uuid
-) returns jsonb language plpgsql stable security invoker
+) returns jsonb language plpgsql volatile security invoker
 set search_path=pg_catalog as $v2$
 declare
   v_battle territory_v2.battle_sessions%rowtype;
