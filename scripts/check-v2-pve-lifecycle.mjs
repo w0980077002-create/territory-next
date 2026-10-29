@@ -10,7 +10,7 @@ const transpile=file=>ts.transpileModule(readFileSync(file,'utf8'),{
 const combatUrl='data:text/javascript;base64,'+
   Buffer.from(transpile('server/combat/resolvePve.ts')).toString('base64');
 const orchestratorJs=transpile('server/combat/runAuthoritativePve.ts')
-  .replace(/from ['"]\\.\\/resolvePve\\.ts['"]/, 'from "'+combatUrl+'"');
+  .replace(/from ['"]\.\/resolvePve\.ts['"]/, 'from "'+combatUrl+'"');
 const {inspectServerPveLifecycle}=await import('data:text/javascript;base64,'+
   Buffer.from(orchestratorJs).toString('base64'));
 const db=new PGlite();
